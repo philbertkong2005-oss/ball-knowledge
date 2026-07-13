@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "starting_debt": 500000,
+  "weekly_debt_interest": 0.10,
+  "catch_vig": 0.30,
+  "bookmaker_overround": 1.10,
+  "league_avg_goals": 1.35,
+  "home_advantage": 0.25,
+  "validation_targets": {
+    "blind_roi": -0.08,
+    "informed_win_rate_min": 0.55,
+    "informed_win_rate_max": 0.60
+  }
+}

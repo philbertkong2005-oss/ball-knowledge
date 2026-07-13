@@ -1,0 +1,42 @@
+* text=auto
+
+*.md text eol=lf working-tree-encoding=UTF-8
+*.json text eol=lf working-tree-encoding=UTF-8
+*.py text eol=lf working-tree-encoding=UTF-8
+*.yml text eol=lf working-tree-encoding=UTF-8
+*.yaml text eol=lf working-tree-encoding=UTF-8
+*.txt text eol=lf working-tree-encoding=UTF-8
+
+*.meta text eol=lf
+*.unity text eol=lf
+*.prefab text eol=lf
+*.asset text eol=lf
+*.mat text eol=lf
+*.anim text eol=lf
+*.controller text eol=lf
+*.asmdef text eol=lf
+*.asmref text eol=lf
+*.sh text eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.bmp binary
+*.tga binary
+*.psd binary
+*.tif binary
+*.tiff binary
+*.fbx binary
+*.blend binary
+*.wav binary
+*.mp3 binary
+*.ogg binary
+*.mp4 binary
+*.mov binary
+*.ttf binary
+*.otf binary
+*.zip binary
+*.dll binary
+*.so binary
+*.dylib binary

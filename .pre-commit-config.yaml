@@ -1,0 +1,10 @@
+repos:
+  - repo: local
+    hooks:
+      - id: validate-constants
+        name: Validate Ball Knowledge constants
+        entry: ./.venv/Scripts/python.exe
+        args:
+          - tools/validate_constants.py
+        language: system
+        files: ^design/constants\.json$

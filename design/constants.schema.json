@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ball-knowledge.local/design/constants.schema.json",
+  "title": "Ball Knowledge Constants",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "starting_debt",
+    "weekly_debt_interest",
+    "catch_vig",
+    "bookmaker_overround",
+    "league_avg_goals",
+    "home_advantage",
+    "validation_targets"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Schema version for this JSON file format. Integer only."
+    },
+    "starting_debt": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Starting debt in in-game dollars. Whole-number currency amount."
+    },
+    "weekly_debt_interest": {
+      "type": "number",
+      "description": "Weekly debt interest rate as a decimal fraction, not a percentage. Example: 0.10 means 10% per week."
+    },
+    "catch_vig": {
+      "type": "number",
+      "description": "Collector catch vig as a decimal fraction, not a percentage. Example: 0.30 means 30%."
+    },
+    "bookmaker_overround": {
+      "type": "number",
+      "description": "Bookmaker overround as a multiplier, not a percentage. Example: 1.10 means a 110% book."
+    },
+    "league_avg_goals": {
+      "type": "number",
+      "description": "League average expected goals PER TEAM per match (Poisson lambda baseline), as a positive decimal. Example: 1.35 per team implies roughly 2.7 total goals per match."
+    },
+    "home_advantage": {
+      "type": "number",
+      "description": "Home-team goal advantage in expected-goals units, not a percentage."
+    },
+    "validation_targets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "blind_roi",
+        "informed_win_rate_min",
+        "informed_win_rate_max"
+      ],
+      "description": "Validation targets for future simulation checks. Rates remain decimal fractions, not percentages.",
+      "properties": {
+        "blind_roi": {
+          "type": "number",
+          "description": "Expected blind betting return on investment as a decimal fraction. Example: -0.08 means -8%."
+        },
+        "informed_win_rate_min": {
+          "type": "number",
+          "description": "Lower bound for informed betting win rate as a decimal fraction. Example: 0.55 means 55%."
+        },
+        "informed_win_rate_max": {
+          "type": "number",
+          "description": "Upper bound for informed betting win rate as a decimal fraction. Example: 0.60 means 60%."
+        }
+      }
+    }
+  }
+}
