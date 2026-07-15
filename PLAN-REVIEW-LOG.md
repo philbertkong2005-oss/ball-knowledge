@@ -234,3 +234,12 @@ Accepted both:
 2. Expanded Build Task 0 into a complete config inventory grouped (simulation / factors / odds & markets / validation) covering every parameter the spec references.
 
 Both were pure completeness fixes with no design disagreement. Running one final confirmation resume (the convergence has been monotone: 15 → 7 → 5 → 3 → 2 findings, each round strictly smaller and non-controversial).
+
+## Round 6 — Codex confirmation
+
+No new material implementation blockers remain. Spec defines causal model, factor sampling/effects, market settlement/margining, validation gate, Unity-reuse boundary, and required config surface tightly enough that Codex should not need to invent core behavior. Minor note: some Chinese summary lines look stale vs final English gate details, but the authoritative contract is clear and measurable.
+
+VERDICT: APPROVED
+
+---
+Converged: Phase 1 spec APPROVED after 5 review rounds (findings 15 -> 7 -> 5 -> 3 -> 2 -> 0). docs/phase1-match-engine.md is the frozen build contract. Awaiting user sign-off before build.
