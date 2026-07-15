@@ -61,7 +61,7 @@ New engine parameters (all live in `constants.json`, all tuned to hit Gate 1):
 
 To price HT/FT correctly, each match is simulated as **two halves** (2nd half scaled by `second_half_factor`); halftime score = 1st-half result, full-time = sum. Per half, per team:
 
-1. **Effective strengths:** `atk_eff = ATK × formation.atkMult × teamForm × conditionMods × factorMods`; `def_eff = DEF × formation.defMult × teamForm × factorMods`. Home team applies `home_advantage`. Availability factors (below) alter the lineup **before** this step.
+1. **Effective strengths:** computed by the exact formulas in "Rating formulas & aggregation" below — `atk_eff` via the attacking-pool `attackScale` (which subsumes condition + availability), `def_eff` via `factorDefMods`; the home team applies `home_advantage`. Availability factors alter the lineup **before** this step. (This line is a summary; the formula section below is authoritative.)
 2. **Shots:** `shotsExp = shot_base_half × (atk_eff / opp_def_eff) × formation.shotMult`; `shots ~ Poisson(shotsExp)`.
 3. **Shooter per shot (fixes causality):** for **each** shot, first draw the shooter from the team's eligible attackers weighted by `involvement × conditionMod` (named players + the generic pool). This shooter's `finishing` then drives that shot's on-target and goal resolution — so attribution is causally upstream, not bolted on after.
 4. **On target:** shot is on-target with `p = on_target_base × f(shooter finishing)`.
@@ -127,6 +127,8 @@ The spec fixes these exact forms so Codex does not guess; the numeric coefficien
 | derby | mod | match | both teams `atk_eff` · − (tighter, lower-scoring) |
 | dead rubber | mod | match | both teams `atk_eff` · − (sloppy, lower-scoring) |
 
+**Selection rules (deterministic given the match seed):** `cup rotation` removes the team's highest-`involvement` named attacker (most impactful and most newsworthy) and promotes a generic sub; `surprise formation` picks a seeded-pseudorandom formation from the 10 that differs from the team's `baseFormation`.
+
 **Intel source → factor mapping** (this IS the information economy; `major` factors sit behind the far/expensive sources): training ground → fitness/form/injuries/bust-ups; groundskeeper → pitch/rotation; café → morale/streaks/rumours; insider → the `major` availability secrets.
 
 **Engine principle (Phase 3 sabotage hook, free):** a factor's *source* may be a player action, applied identically to a random roll. Phase 1 rolls factors randomly only.
@@ -159,7 +161,7 @@ A console command runs a fixed Monte-Carlo over a **fixed 100,000 simulated fixt
 - **Informed bettor policy:** knows the fixture's hidden factors. In each market computes true probability (factors included) vs board-implied (factors excluded) and, if the best selection's **edge = trueProb × oddsDecimal − 1 > `edge_threshold`**, stakes 1 unit on that one selection. Report **ROI (primary metric)** — pass band **informed ROI ≥ +0.05**.
 - **Win-rate metric (secondary, correct usage):** reported **only on the near-even-money subset** (decimal odds ∈ [1.8, 2.2]); target **55–60%**. NOT applied to correct-score/accumulator books. **This metric only gates when the qualifying subset has ≥ `min_even_money_bets` (default 2,000) bets** — below that the bootstrap CI is too wide, so the metric is reported but declared "not gateable" and Gate 1 rests on the ROI bands.
 
-**Gate 1 passes iff:** blind ROI in band AND informed ROI ≥ +0.05 AND informed even-money win rate 55–60%, all with fixture-clustered bootstrap 95% CIs inside the bands. If missed, tune `constants.json`; do not proceed to Phase 2. (`edge_threshold`, fixture count, bands, and the derived `blind_roi` all live in `constants.json`.)
+**Gate 1 passes iff:** blind ROI in band **AND** informed ROI ≥ +0.05, both with fixture-clustered bootstrap 95% CIs inside their bands. The even-money win-rate 55–60% condition is applied **only when** the qualifying subset has ≥ `min_even_money_bets` bets; below that threshold it is reported but NOT required, and Gate 1 rests on the two ROI criteria alone. If a required criterion is missed, tune `constants.json`; do not proceed to Phase 2. (`edge_threshold`, fixture count, bands, `min_even_money_bets`, and the derived `blind_roi` all live in `constants.json`.)
 
 中文摘要：定量驗證——平注1單位、固定 N=100,000、報95%信賴區間。盲賭策略：1X2隨機選，ROI應∈[−0.10,−0.06]。有情報策略：按 edge>門檻下注，**主指標ROI≥+0.05**；勝率只在接近均注（賠率1.8–2.2）子集報，目標55–60%。三者連CI都達標才過Gate 1。
 

@@ -204,3 +204,18 @@ Accepted all 5:
 3. Availability now promotes a generic substitute (XI stays 11, downgrade not man-short); named player still void in scorer/assist books.
 4. Win-rate gate now requires ≥ min_even_money_bets (default 2,000) or it's reported-but-not-gateable; Gate 1 rests on ROI bands otherwise.
 5. Split margin tests: probability-sum check for closed non-push books, EV-margin check for push-capable handicap books.
+
+## Round 4 — Codex (Phase 1 spec)
+
+3 findings (consistency/specification):
+1. Gate 1 pass rule still required the win-rate metric unconditionally despite the "not gateable below min" clause.
+2. Two divergent atk_eff/def_eff definitions (chain summary vs exact formula section).
+3. cup rotation / surprise formation didn't define WHICH starter is rotated or WHICH alternate formation is chosen.
+VERDICT: REVISE
+
+### Claude's response (Phase 1, Round 4)
+
+Accepted all 3:
+1. Pass rule rewritten: Gate 1 = two ROI criteria; win-rate 55-60% applies ONLY when subset ≥ min_even_money_bets, else reported-not-required.
+2. Earlier chain-summary strength line replaced with a pointer to the authoritative formula section (no divergent duplicate).
+3. Added deterministic selection rules: cup rotation removes highest-involvement named attacker; surprise formation picks a seeded formation ≠ baseline.
