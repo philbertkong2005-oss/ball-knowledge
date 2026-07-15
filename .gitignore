@@ -1,6 +1,7 @@
 # Repo-level secrets and Python tooling
 .env
 .venv/
+unity/.vscode/
 .pre-commit-cache/
 __pycache__/
 *.py[cod]

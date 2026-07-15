@@ -21,7 +21,7 @@ This repository is the Phase 0 pre-production scaffold for the game: docs, valid
 - Project virtual environment: `.venv`
 - Python package pins used for verification: `jsonschema 4.26.0`, `pre-commit 4.6.0`
 - Python requirement constraints in version control: `jsonschema >=4,<5`, `pre-commit >=4,<5`
-- Unity Editor: pending manual install; the authoritative editor pin must be the committed `unity/ProjectSettings/ProjectVersion.txt`
+- Unity Editor: `6000.3.19f1` (Unity 6.3 LTS); the authoritative editor pin is the committed `unity/ProjectSettings/ProjectVersion.txt`
 - Unity template requirement: built-in `3D` template only, not `Universal 3D` or any URP template
 
 ## Constants Workflow
