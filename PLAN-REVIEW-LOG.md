@@ -185,3 +185,22 @@ Accepted all 7 new findings:
 5. CI bug fixed: at most one bet per market per fixture (highest-edge selection); CIs are fixture-clustered bootstrap, not per-bet (bets on one fixture are correlated).
 6. Blind ROI target corrected from eyeballed -8% to exact 1/1.10-1 = -0.0909 (-9.09%); updated constants.json blind_roi + guide; band [-0.10,-0.08].
 7. design-doc.md "Match Engine" section rewritten to point at docs/phase1-match-engine.md as the authoritative contract (removed obsolete direct-Poisson + 1,000-bet win-rate gate).
+
+## Round 3 — Codex (Phase 1 spec)
+
+5 new findings:
+1. Factor-count draw distribution P(0..max) unspecified.
+2. Each factor's exact target field/sign/magnitude unspecified (wind/pitch/derby/etc. still guesses).
+3. Availability drops player from livePool → team plays a man short instead of subbing a generic.
+4. Even-money win-rate subset has no minimum count → bootstrap CI can be arbitrarily unstable.
+5. Testing section says "per-market overround ≈ 1.10" for ALL markets, conflicting with EV-based push margining.
+VERDICT: REVISE
+
+### Claude's response (Phase 1, Round 3)
+
+Accepted all 5:
+1. Added explicit factor_count_weights PMF (default 0.30/0.40/0.22/0.08) to spec + constants.
+2. Added a full factor effect table: every factor → exact target field(s), sign, kind (stat/avail/match), plus the magnitude application rule ((1±m) from tier).
+3. Availability now promotes a generic substitute (XI stays 11, downgrade not man-short); named player still void in scorer/assist books.
+4. Win-rate gate now requires ≥ min_even_money_bets (default 2,000) or it's reported-but-not-gateable; Gate 1 rests on ROI bands otherwise.
+5. Split margin tests: probability-sum check for closed non-push books, EV-margin check for push-capable handicap books.

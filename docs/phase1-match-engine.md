@@ -86,7 +86,7 @@ The spec fixes these exact forms so Codex does not guess; the numeric coefficien
   - `livePool = Σ(available named attacker.involvement × conditionMod) + genericInvolvement`
   - `attackScale = livePool / basePool`
   - `atk_eff = ATK × formation.atkMult × teamForm × attackScale × factorAtkMods × (home_advantage if home)`
-  - A removed (availability) player simply drops out of `livePool`, lowering `attackScale` — condition and availability use the **same** mechanism. `def_eff = DEF × formation.defMult × teamForm × factorDefMods`.
+  - An availability factor **replaces** the named player with a generic substitute: the named player's `involvement × conditionMod` leaves `livePool` and the generic sub's (baseline-derived, weaker) `involvement` enters it, so the XI stays 11 and the effect is a downgrade — not a man-short team. `def_eff = DEF × formation.defMult × teamForm × factorDefMods`.
 - **Shooter draw:** per shot, shooter ∝ `involvement × conditionMod` over available named attackers + the generic pool.
 - **Half allocation:** `firstHalfWeight = 1/(1+second_half_factor)`, `secondHalfWeight = second_half_factor/(1+second_half_factor)`; `shot_base_half = shot_base × (weight for that half)`; identically for `corner_base_half`. Weights sum to 1, so full-match totals are unchanged.
 - **Height factor:** `heightFactor = clamp(0.5 + team.height/100, 0.5, 1.5)`, applied to `cornersExp` only (Phase 1).
@@ -96,13 +96,36 @@ The spec fixes these exact forms so Codex does not guess; the numeric coefficien
 
 ## Hidden factors — ~18 rows, 3 tiers, with exact sampling + two kinds
 
-**Sampling (fixes the "brute-force tunable" gap):** per match, draw the number of active factors from `0..max_factors_per_match` (default 0–3), then select that many distinct factors by normalized rarity weights **without replacement**. **At most one factor per player and one per team** (no stacking). Match-condition factors apply to the whole fixture.
+**Sampling (fixes the "brute-force tunable" gap):** per match, draw the number of active factors from an explicit PMF `factor_count_weights` in `constants.json` — default `P(0)=0.30, P(1)=0.40, P(2)=0.22, P(3)=0.08` (must sum to 1; length = `max_factors_per_match`+1). Then select that many distinct factors by normalized rarity weights **without replacement**. **At most one factor per player and one per team** (no stacking). Match-condition factors apply to the whole fixture.
+
+**Magnitude application rule:** each stat-modifier factor uses its tier magnitude `m` from `factor_tier_magnitudes`; a `−` factor multiplies its target field by `(1 − m)`, a `+` factor by `(1 + m)`. Availability factors ignore magnitude (they swap a player, below).
 
 **Two kinds (fixes "ruled out ≠ multiplier"):**
-- **Stat-modifier factors** — adjust an input via the tiered magnitude (knock, hungover keeper, morale, wind, pitch, derby, etc.).
-- **Availability factors** — **remove a player from the lineup and from all scorer/assist markets** (striker ruled out, playmaker suspended, cup rotation drops a starter). Their scoring intensity redistributes to remaining eligible players.
+- **Stat-modifier factors** — adjust the exact field(s) in the table below.
+- **Availability factors** — **remove the named player from scorer/assist market eligibility AND promote a generic substitute into the XI so the side stays 11-a-side** (not man-short). The named starter's contribution leaves `livePool`; the generic sub's (weaker, baseline-derived) contribution enters it — net effect is a *downgrade*, correctly. The removed player is void in scorer/assist books.
 
-Catalogue (tier in brackets): striker knock `min` · striker ruled out `maj/avail` · keeper hungover `mod` · keeper elite form `mod` · playmaker suspended `mod/avail` · hot streak `min` · cold streak `min` · training bust-up `mod` · model pro `min` · winning morale `mod` · losing crisis `mod` · cup rotation `maj/avail` · surprise formation `mod` · new-manager bounce `min` · pay dispute `mod` · waterlogged pitch `maj` · high wind `min` · derby `mod` · dead rubber `mod`.
+**Exact factor table** (target field, sign, kind):
+| Factor | Tier | Kind | Target field · sign |
+|---|---|---|---|
+| striker knock | min | stat | that striker `finishing` & `involvement` · − |
+| striker ruled out | maj | avail | remove striker; promote generic sub |
+| keeper hungover | mod | stat | keeper `reliability` · − |
+| keeper elite form | mod | stat | keeper `reliability` · + |
+| playmaker suspended | mod | avail | remove playmaker; promote generic sub |
+| hot streak | min | stat | player `conditionMod` · + |
+| cold streak | min | stat | player `conditionMod` · − |
+| training bust-up | mod | stat | player `conditionMod` · − |
+| model pro | min | stat | player `conditionMod` · + |
+| winning morale | mod | stat | team `ATK` & `DEF` · + |
+| losing crisis | mod | stat | team `ATK` & `DEF` · − |
+| cup rotation | maj | avail | remove one named starter; promote generic sub |
+| surprise formation | mod | stat | team plays a non-baseline formation (swap `formation_mods` row) |
+| new-manager bounce | min | stat | team `ATK` & `DEF` · + |
+| pay dispute | mod | stat | team `ATK` & `DEF` · − |
+| waterlogged pitch | maj | match | both teams `shotsExp` & `conversion_base` · − |
+| high wind | min | match | both teams `on_target_base` · − |
+| derby | mod | match | both teams `atk_eff` · − (tighter, lower-scoring) |
+| dead rubber | mod | match | both teams `atk_eff` · − (sloppy, lower-scoring) |
 
 **Intel source → factor mapping** (this IS the information economy; `major` factors sit behind the far/expensive sources): training ground → fitness/form/injuries/bust-ups; groundskeeper → pitch/rotation; café → morale/streaks/rumours; insider → the `major` availability secrets.
 
@@ -134,7 +157,7 @@ A console command runs a fixed Monte-Carlo over a **fixed 100,000 simulated fixt
 
 - **Blind bettor policy:** each fixture, pick a **uniformly random selection** in the 1X2 market, stake 1 unit at board odds, settle. Under proportional margining, EV per unit = `1/overround`, so **target blind ROI = 1/overround − 1 = 1/1.10 − 1 ≈ −0.0909 (−9.09%)**, derived exactly from the margin (not an eyeballed −8%). Pass band: **blind ROI ∈ [−0.10, −0.08]**, 95% CI within band. This exact target is stored as `blind_roi` in `constants.json` (= −0.0909).
 - **Informed bettor policy:** knows the fixture's hidden factors. In each market computes true probability (factors included) vs board-implied (factors excluded) and, if the best selection's **edge = trueProb × oddsDecimal − 1 > `edge_threshold`**, stakes 1 unit on that one selection. Report **ROI (primary metric)** — pass band **informed ROI ≥ +0.05**.
-- **Win-rate metric (secondary, correct usage):** reported **only on the near-even-money subset** (decimal odds ∈ [1.8, 2.2]); target **55–60%**. NOT applied to correct-score/accumulator books.
+- **Win-rate metric (secondary, correct usage):** reported **only on the near-even-money subset** (decimal odds ∈ [1.8, 2.2]); target **55–60%**. NOT applied to correct-score/accumulator books. **This metric only gates when the qualifying subset has ≥ `min_even_money_bets` (default 2,000) bets** — below that the bootstrap CI is too wide, so the metric is reported but declared "not gateable" and Gate 1 rests on the ROI bands.
 
 **Gate 1 passes iff:** blind ROI in band AND informed ROI ≥ +0.05 AND informed even-money win rate 55–60%, all with fixture-clustered bootstrap 95% CIs inside the bands. If missed, tune `constants.json`; do not proceed to Phase 2. (`edge_threshold`, fixture count, bands, and the derived `blind_roi` all live in `constants.json`.)
 
@@ -152,7 +175,7 @@ Authentic 90s local sportscaster voice, generated from the event timeline via ~5
 
 ## Testing & verification (per workflow.md)
 
-Automated tests (`prototype/Tests/`, xUnit): distribution sanity (Poisson/Binomial means), chain invariants (goals ≤ SoT ≤ shots; every goal has a scorer; availability factors remove players from scorer books), per-market overround ≈ 1.10 including residual outcomes, factor sampling respects the cap/no-stack rules, HT/FT consistency (HT ≤ FT componentwise in the sampled realization), and the seeded tone checklist. Non-visual proof artifacts: (1) one seeded readable match with commentary; (2) the 100k-bet validation report with CIs.
+Automated tests (`prototype/Tests/`, xUnit): distribution sanity (Poisson/Binomial means), chain invariants (goals ≤ SoT ≤ shots; every goal has a scorer; availability factors remove named players from scorer books while keeping the XI at 11 via a generic sub), **margin checks split by book type** — a **probability-sum** check (implied probs sum to ≈ `overround`) for closed non-push books (1X2, O/U, correct score incl. `Any Other Score`, HT/FT, BTTS, scorer incl. `Other Player`/`No Goalscorer`), and an **EV-margin** check (bettor at true probs returns ≈ `1/overround` per unit) for push-capable handicap books — factor sampling respects the PMF/cap/no-stack rules, HT/FT consistency (HT ≤ FT componentwise in the sampled realization), and the seeded tone checklist. Non-visual proof artifacts: (1) one seeded readable match with commentary; (2) the 100k-bet validation report with CIs.
 
 ## Key decisions & tradeoffs
 
