@@ -102,17 +102,19 @@ The calendar is a single global system that broadcasts events; every other syste
 
 中文摘要：日曆是唯一的全域廣播系統（「而家係週六三點」→ 球場開門、電台開播），其他系統只負責收聽。每週節奏＝遊戲心跳。
 
-## Poisson Match Engine and Bookmaker Odds
+## Match Engine and Bookmaker Odds
 
-The load-bearing system, prototyped text-only in Phase 1 before anything else:
+The load-bearing system, prototyped text-only in Phase 1 before anything else. **The authoritative, buildable engine contract is [`docs/phase1-match-engine.md`](phase1-match-engine.md)** — that spec supersedes this summary in any conflict (it replaced the earlier simple direct-Poisson model with a fuller causal shot-chain, prices odds from the same engine with factors removed, and defines an exact measurable Gate 1).
 
-- **Teams:** 8 fictional teams; visible ATK/DEF stats, hidden weekly-drifting form, 0–3 hidden per-match factors (keeper drinking, star injured, waterlogged pitch, dressing-room fight).
-- **Goal model:** per-team expected goals `λ = league_avg_goals × (ATK / opp DEF) × form + home_advantage`, factors modify λ; goals sampled from Poisson(λ) and scattered across 90 simulated minutes — that event list **is** the radio commentary script.
-- **Odds:** the shop computes 1X2 / Asian handicap / correct score from the Poisson score matrix using **yesterday's public information only** (no hidden factors), multiplied by `bookmaker_overround` (1.10) so blind betting slowly loses. The correct-score matrix provides the jackpot bet for free.
-- **Validation gate (pass/fail):** 1,000 simulated bets each way — blind ≈ `blind_roi` (−8%); fully informed hits `informed_win_rate_min`–`max` (55–60%) with clearly positive returns. If those numbers hold, the intel economy works mathematically before a single street is built.
-- All numbers live in `design/constants.json` — never hard-coded.
+Summary of the approach:
 
-中文摘要：泊松入球模型＋含抽水的賠率（只用昨日公開資訊計算）。驗證標準：盲賭約輸8%、全情報55–60%勝率。所有數字放調參檔，永不寫死。
+- **Teams & players:** 8 fictional teams (visible ATK/DEF/height, hidden weekly form) with Tier B named players; 0–3 hidden per-match factors are the private edge the player hunts.
+- **Causal shot-chain:** effective strengths → shots (Poisson) → shots-on-target (per-shot, shooter drawn first) → goals/saves → scorer & assist attribution; corners parallel. The event timeline **is** the radio script.
+- **Odds:** priced from the **same engine run Monte-Carlo with hidden factors removed** (public-information view) × `bookmaker_overround` (1.10), so blind betting loses only the vig.
+- **Gate 1 (exact):** a 100,000-fixture Monte-Carlo harness with fixture-clustered bootstrap CIs — blind ROI ≈ `blind_roi` (**−9.09%**, derived from the 1.10 book), informed ROI ≥ +5% (primary), and 55–60% win rate on the near-even-money subset (secondary). See the spec for the full definition.
+- All numbers live in `design/constants.json` (schema v2 for the shot-chain model) — never hard-coded.
+
+中文摘要：承重引擎，Phase 1 純文字原型。**權威可建規格見 [`docs/phase1-match-engine.md`](phase1-match-engine.md)，衝突以它為準**（已用完整因果射門鏈取代早期簡單泊松、賠率用同引擎去因素計算、Gate 1 可量度）。賠率＝同引擎去除隱藏因素蒙地卡羅×110%抽水。Gate 1：10萬場、fixture叢集bootstrap CI——盲賭ROI≈−9.09%、有情報ROI≥+5%（主）、近均注子集55–60%勝率（次）。
 
 ## Narrative Authoring Track (parallel to engine work)
 

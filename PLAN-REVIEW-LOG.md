@@ -162,3 +162,16 @@ Accepted ALL 15 findings — the review found real statistical/architecture gaps
 13. Architecture fixed: MatchEngine does NO file I/O — takes an injected EngineConfig DTO; Console reads JSON, Unity supplies the same DTO. "Unchanged in Unity" now actually holds.
 14. Tone review converted to a seeded, reproducible checklist SEPARATE from the numeric Gate 1 (satisfies workflow.md's written-expected-result rule).
 15. Promo-token contradiction resolved: deferred in BOTH the spec and design-doc.md (Phase 3 shop feature; no Phase 1 token validation).
+
+## Round 2 — Codex (Phase 1 spec)
+[Codex confirmed 15 R1 findings addressed; 7 new material findings — see below]
+### Claude's response (Phase 1, Round 2)
+
+Accepted all 7 new findings:
+1. Added a "Rating formulas & aggregation" section with exact forms: sm(S)=clamp(0.5+S/100,...), pOnTarget/pGoal formulas, and a unified "attacking pool" (livePool/basePool) that handles condition AND availability by one mechanism. No more f/g/h guesswork.
+2. Defined shot_base_half/corner_base_half (half-weight split summing to 1), heightFactor (0.5+height/100 → corners only), passMult (multiplies effective assist_rate + assister draw). No undefined/unused params.
+3. First/anytime goalscorer books now have explicit "Other Player" (generic pool) outcome; "No Goalscorer" reserved for 0-0 only.
+4. Push-capable handicaps priced in expected-return terms (EV = 1/overround per unit), NOT naive implied-prob sum; margin test is EV-based.
+5. CI bug fixed: at most one bet per market per fixture (highest-edge selection); CIs are fixture-clustered bootstrap, not per-bet (bets on one fixture are correlated).
+6. Blind ROI target corrected from eyeballed -8% to exact 1/1.10-1 = -0.0909 (-9.09%); updated constants.json blind_roi + guide; band [-0.10,-0.08].
+7. design-doc.md "Match Engine" section rewritten to point at docs/phase1-match-engine.md as the authoritative contract (removed obsolete direct-Poisson + 1,000-bet win-rate gate).

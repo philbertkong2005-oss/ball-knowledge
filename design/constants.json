@@ -7,7 +7,7 @@
   "league_avg_goals": 1.35,
   "home_advantage": 0.25,
   "validation_targets": {
-    "blind_roi": -0.08,
+    "blind_roi": -0.0909,
     "informed_win_rate_min": 0.55,
     "informed_win_rate_max": 0.60
   }

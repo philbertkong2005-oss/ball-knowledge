@@ -74,6 +74,26 @@ All coefficients live in `constants.json`; the spec fixes the *structure*, tunin
 
 中文摘要：每場分兩半模擬（次半乘 `second_half_factor`），半場＝上半結果，全場＝相加。修正因果：**每一腳射門先抽射手**（按參與度加權），該射手的射術驅動射正與入球，歸屬在上游而非事後補。入球≤射正≤射門為受測不變量。
 
+## Rating formulas & aggregation (concrete defaults — coefficients tunable in constants.json)
+
+The spec fixes these exact forms so Codex does not guess; the numeric coefficients are `constants.json` values tuned to hit Gate 1. All ratings are 1–100 with **50 = league-neutral (multiplier 1.0)**.
+
+- **Soft stat multiplier:** `sm(S) = clamp(0.5 + S/100, 0.2, 2.0)` → S=50→1.0, S=100→1.5, S=0→0.5.
+- **On-target:** `pOnTarget = clamp(on_target_base × sm(shooter.finishing), 0.05, 0.95)`.
+- **Goal vs save:** `pGoal = clamp(conversion_base × sm(shooter.finishing) × (1.5 − sm(keeper.reliability × keeperConditionMod)/2), 0.02, 0.98)`; the complement of an on-target shot is a save credited to the keeper. (Neutral point: finishing=reliability=50 → `pGoal = conversion_base`.)
+- **Player → team aggregation (unifies condition AND availability via one "attacking pool"):**
+  - `basePool = Σ(named attacker.involvement) + genericInvolvement`
+  - `livePool = Σ(available named attacker.involvement × conditionMod) + genericInvolvement`
+  - `attackScale = livePool / basePool`
+  - `atk_eff = ATK × formation.atkMult × teamForm × attackScale × factorAtkMods × (home_advantage if home)`
+  - A removed (availability) player simply drops out of `livePool`, lowering `attackScale` — condition and availability use the **same** mechanism. `def_eff = DEF × formation.defMult × teamForm × factorDefMods`.
+- **Shooter draw:** per shot, shooter ∝ `involvement × conditionMod` over available named attackers + the generic pool.
+- **Half allocation:** `firstHalfWeight = 1/(1+second_half_factor)`, `secondHalfWeight = second_half_factor/(1+second_half_factor)`; `shot_base_half = shot_base × (weight for that half)`; identically for `corner_base_half`. Weights sum to 1, so full-match totals are unchanged.
+- **Height factor:** `heightFactor = clamp(0.5 + team.height/100, 0.5, 1.5)`, applied to `cornersExp` only (Phase 1).
+- **Pass/assist:** effective assist rate `= clamp(assist_rate × formation.passMult, 0, 1)`; assister drawn ∝ `passing` over the team's playmakers/named attackers.
+
+中文摘要：明確定死公式（係數放 constants.json 調校），50＝中性。射正/入球用 `sm(S)=0.5+S/100`。球員→球隊用單一「攻擊池」統一處理狀態與缺陣（缺陣＝退出 livePool）。半場配重、身高係數、傳球乘數全部給出明確式子。
+
 ## Hidden factors — ~18 rows, 3 tiers, with exact sampling + two kinds
 
 **Sampling (fixes the "brute-force tunable" gap):** per match, draw the number of active factors from `0..max_factors_per_match` (default 0–3), then select that many distinct factors by normalized rarity weights **without replacement**. **At most one factor per player and one per team** (no stacking). Match-condition factors apply to the whole fixture.
@@ -100,8 +120,8 @@ Odds are computed by running the **same simulation, Monte-Carlo, with all hidden
 - **Correct score:** enumerated scores up to a cap **plus `Any Other Score`** to close the book.
 - **HT/FT:** the 9 combinations, from the halftime + full-time matrices.
 - **Both teams to score:** yes/no.
-- **Asian handicap:** only **half and whole lines** (e.g. −2, −1.5, −1, −0.5, 0, +0.5, …); whole-line exact ties **push/void** (stake returned); no quarter lines in Phase 1.
-- **First goalscorer / anytime goalscorer:** named eligible players **plus mandatory `No Goalscorer`** (settles 0–0 and generic-only games); ruled-out players are void/removed.
+- **Asian handicap:** only **half and whole lines** (e.g. −2, −1.5, −1, −0.5, 0, +0.5, …); whole-line exact ties **push/void** (stake returned); no quarter lines in Phase 1. **Push-capable markets are priced in expected-return terms, NOT by a naive implied-probability sum:** compute fair win/push/lose probabilities, then set each side's odds so a bettor staking at true probabilities has expected return exactly `1/overround` per unit (push returns stake). The margin test for these markets checks that EV, not a probability sum.
+- **First goalscorer / anytime goalscorer:** named eligible players **plus an `Other Player` outcome** (covers goals scored by the generic pool) **plus `No Goalscorer`** (reserved for 0–0 only); ruled-out (availability) players are void/removed and their book renormalized.
 - **Accumulator:** **independent cross-match legs only** (never same-match, to avoid correlation); odds = product of leg odds; settles all-win.
 
 Margin (overround) is verified **per market**, each as its own closed set including residuals.
@@ -110,13 +130,13 @@ Margin (overround) is verified **per market**, each as its own closed set includ
 
 ## The validation harness (Gate 1 — exact, measurable)
 
-A console command runs a fixed Monte-Carlo and prints a report with **95% confidence intervals**. Two bettors, **flat 1-unit stakes**, over a **fixed N = 100,000 simulated bets** each (tight CIs):
+A console command runs a fixed Monte-Carlo over a **fixed 100,000 simulated fixtures** and prints a report with **fixture-clustered bootstrap 95% confidence intervals** (resample fixtures, not individual bets — because multiple bets on one fixture are correlated, so naive per-bet CIs would be wrong). Two bettors, **flat 1-unit stakes**, **at most one bet per market per fixture** (the single highest-edge selection in each market) to keep correlation bounded:
 
-- **Blind bettor policy:** each simulated fixture, pick a **uniformly random selection** in the 1X2 market, stake 1 unit at board odds, settle. Expected ROI ≈ **−(overround margin) ≈ −8%**. Pass band: **blind ROI ∈ [−0.10, −0.06]** (95% CI within band).
-- **Informed bettor policy:** knows the match's hidden factors. Computes true probability (factors included) vs board-implied (factors excluded); stakes 1 unit on every selection whose **edge = trueProb × oddsDecimal − 1 > `edge_threshold`** (a tuned constant). Report **ROI (primary metric)** across all its bets — pass band **informed ROI ≥ +0.05**.
-- **Win-rate metric (secondary, correct usage):** win rate is reported **only on the near-even-money subset** (selections with decimal odds ∈ [1.8, 2.2]); target **55–60%** there. Win rate is NOT applied to correct-score/accumulator markets (where a profitable strategy wins far below 50%).
+- **Blind bettor policy:** each fixture, pick a **uniformly random selection** in the 1X2 market, stake 1 unit at board odds, settle. Under proportional margining, EV per unit = `1/overround`, so **target blind ROI = 1/overround − 1 = 1/1.10 − 1 ≈ −0.0909 (−9.09%)**, derived exactly from the margin (not an eyeballed −8%). Pass band: **blind ROI ∈ [−0.10, −0.08]**, 95% CI within band. This exact target is stored as `blind_roi` in `constants.json` (= −0.0909).
+- **Informed bettor policy:** knows the fixture's hidden factors. In each market computes true probability (factors included) vs board-implied (factors excluded) and, if the best selection's **edge = trueProb × oddsDecimal − 1 > `edge_threshold`**, stakes 1 unit on that one selection. Report **ROI (primary metric)** — pass band **informed ROI ≥ +0.05**.
+- **Win-rate metric (secondary, correct usage):** reported **only on the near-even-money subset** (decimal odds ∈ [1.8, 2.2]); target **55–60%**. NOT applied to correct-score/accumulator books.
 
-**Gate 1 passes iff:** blind ROI in band AND informed ROI ≥ +0.05 AND informed even-money win rate 55–60%, all within 95% CI. If missed, tune `constants.json`; do not proceed to Phase 2. (Exact `edge_threshold`, N, and bands live in `constants.json` so they're tunable.)
+**Gate 1 passes iff:** blind ROI in band AND informed ROI ≥ +0.05 AND informed even-money win rate 55–60%, all with fixture-clustered bootstrap 95% CIs inside the bands. If missed, tune `constants.json`; do not proceed to Phase 2. (`edge_threshold`, fixture count, bands, and the derived `blind_roi` all live in `constants.json`.)
 
 中文摘要：定量驗證——平注1單位、固定 N=100,000、報95%信賴區間。盲賭策略：1X2隨機選，ROI應∈[−0.10,−0.06]。有情報策略：按 edge>門檻下注，**主指標ROI≥+0.05**；勝率只在接近均注（賠率1.8–2.2）子集報，目標55–60%。三者連CI都達標才過Gate 1。
 
