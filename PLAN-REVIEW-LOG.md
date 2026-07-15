@@ -164,7 +164,17 @@ Accepted ALL 15 findings — the review found real statistical/architecture gaps
 15. Promo-token contradiction resolved: deferred in BOTH the spec and design-doc.md (Phase 3 shop feature; no Phase 1 token validation).
 
 ## Round 2 — Codex (Phase 1 spec)
-[Codex confirmed 15 R1 findings addressed; 7 new material findings — see below]
+
+Codex confirmed the 15 Round-1 findings were addressed, then raised 7 new material findings:
+1. Core math (f/g/h rating→prob, player→team aggregation) still unspecified → Codex guesswork.
+2. shot_base_half/corner_base_half/heightFactor/passMult referenced but undefined.
+3. "Other player" bucket omitted from scorer books; No Goalscorer wrongly covering generic-only games.
+4. Overround math undefined for whole-line handicap push/void (implied-prob sum invalid).
+5. Informed bettor staking every positive-edge selection → correlated same-fixture bets → 95% CIs wrong.
+6. Blind target "-8%" arithmetically wrong for a 1.10 book (should be 1/1.10-1 = -9.09%).
+7. design-doc.md still described the obsolete direct-Poisson engine + 1,000-bet win-rate gate (conflicting spec).
+VERDICT: REVISE
+
 ### Claude's response (Phase 1, Round 2)
 
 Accepted all 7 new findings:
