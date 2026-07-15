@@ -124,3 +124,17 @@ The story, characters, unique events, dialogue, quests, and relationship/choice 
 **Scope guardrail:** writing may grow freely at any time, but *integrating* narrative into Unity stays behind Gate 3 (the core day loop must be proven fun first). A rich branching quest tree is worthless if one day of the core loop isn't fun yet.
 
 中文摘要：故事／角色／對白／任務／關係分支是設計者（Phil）的主要創作貢獻與遊戲賣點，分兩階段：**創作**（現在起，用免費視覺化的 Twine 寫，無需代碼或 Unity，原始檔放 `narrative/` 的 `.twee`）；**接入遊戲**（第3–5階段，用專門敘事工具，傾向 articy:draft X 或 Ink／Yarn Spinner；xNode 已評估並否決，因為它需要程式員自建系統）。護城河守則：寫作可隨時擴張，但接入 Unity 要留在第三關卡之後——核心循環未證明好玩前，再靚的任務樹都等於零。
+
+## Match Manipulation / Fixing System (Act 3 mechanic — design logged, built late)
+
+The player can eventually *change* match outcomes, not just predict them: poisoning a key player's food, pickpocketing/stealing kit, intimidation or assault — actions that cause a major player (striker / playmaker / keeper) to be absent or play in bad form, which can hugely swing the result the player then bets on. This is the mechanical expression of the Act 3 "fixer" fantasy (predict the truth → set the odds → **change the truth**).
+
+**Engine principle for Phase 1 (costs nothing now, enables everything later):** a hidden factor's *source* may be a player action, not only a random roll. A poisoned striker and a naturally-injured striker hit the match engine identically — sabotage is simply a new source that sets an existing factor. Build the factor system this way from the start; the sabotage world (a Phase 3+ loop/world system) then plugs in for free.
+
+**Guardrails (mandatory, or this breaks the betting game):**
+1. **Escalate across acts — not available in Act 1.** A broke nobody in a shelter cannot poison a star striker. Petty-at-most in Act 1 (if anything), real leverage in Act 2 (spike a drink, intimidate — the player now has muscle), full fixing in Act 3 (poison, bribe, assault, buy the ref/league). Protects the power-fantasy curve and gives a reason to climb.
+2. **Must be risky, costly, detectable.** If sabotage is reliable and cheap, the prediction game dies — why ever just predict? Sabotage must be expensive, limited, and carry real catch-risk (police, retaliation, a rising suspicion meter). Reading the truth stays cheaper/safer; changing it is the high-cost, high-reward option.
+
+**Consistency with pillar 4 ("nothing buys better luck"):** sabotage is not buying a better dice roll — it changes the real state the dice roll from. Still must never trivialise the information game (see guardrail 2).
+
+中文摘要：玩家最終能*改變*而非只預測賽果——落毒、偷球具、恐嚇／襲擊關鍵球員（前鋒／組織核心／門將），令其缺陣或差狀態，大幅左右賽果。這是第三幕「操盤者」幻想的機制化（預測真相→制定賠率→改變真相）。第一階段引擎原則（現在零成本、日後全解鎖）：隱藏因素的來源可以是玩家行動，不只是隨機；落毒的前鋒與自然受傷的前鋒對引擎一模一樣，破壞只是設定現有因素的新來源。兩條強制護欄：①跨幕升級，第一幕不提供②必須高風險高成本可偵測，否則預測遊戲死。與支柱四一致：破壞不是買更好的骰子，是改變骰子所依據的真實狀態，但絕不可令情報遊戲失去意義。
