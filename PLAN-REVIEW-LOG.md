@@ -108,3 +108,57 @@ All exit criteria met:
 - Developer personally executed BOTH rollback drills: unpushed junk edit -> git reset --hard to tag (learned bare `git reset` != `--hard` on the way); pushed junk commit b37ef65 -> git revert faf509d, both pushed
 
 Phase 0 CLOSED. Next: Phase 1 — text-only Python match engine in prototype/ (separate plan).
+
+## Round 1 — Codex (Phase 1 spec)
+
+**Findings**
+
+- [phase1-match-engine.md](/C:/Users/philb/Projects/ball-knowledge/docs/phase1-match-engine.md:92) lines 92-97 make Gate 1 statistically unmeasurable because they never define stake sizing, bettor selection policy, skip/no-bet rules, or a confidence interval, so `1,000+` bets can pass or fail by noise alone; fix: specify an exact staking rule, an exact bet-selection algorithm for blind and informed bettors, a fixed sample size, and numeric pass bands with confidence intervals.
+
+- [phase1-match-engine.md](/C:/Users/philb/Projects/ball-knowledge/docs/phase1-match-engine.md:94) makes “55-60% informed win rate” a bad target because win rate is meaningless across mixed-price markets like correct score and accumulators, where a profitable strategy can win far below 50%; fix: replace the primary informed target with ROI/CLV by market and only use win rate on a narrowly defined even-money subset.
+
+- [phase1-match-engine.md](/C:/Users/philb/Projects/ball-knowledge/docs/phase1-match-engine.md:44) lines 44-52 define the true match as a shots→SoT→goals chain, but [phase1-match-engine.md](/C:/Users/philb/Projects/ball-knowledge/docs/phase1-match-engine.md:76) still prices from a separate Poisson score matrix, so blind ROI will reflect model mismatch as much as hidden info; fix: price odds from the same engine with hidden factors removed, either analytically from the chain or via Monte Carlo.
+
+- [phase1-match-engine.md](/C:/Users/philb/Projects/ball-knowledge/docs/phase1-match-engine.md:80) includes HT/FT, but the plan has no first-half intensity model and only scatters events after full-match outcomes, so halftime prices will be arbitrary; fix: add an explicit first-half/second-half split model and derive HT/FT from a halftime score matrix.
+
+- [phase1-match-engine.md](/C:/Users/philb/Projects/ball-knowledge/docs/phase1-match-engine.md:80) includes first-goalscorer and anytime-goalscorer, but there is no starting-XI model, no replacement rule when a player is ruled out, no player goal-intensity formula, and no `No Goalscorer` outcome for 0-0; fix: define lineup selection, absence replacement, player scoring intensities, and mandatory `No Goalscorer`/void settlement rules.
+
+- [phase1-match-engine.md](/C:/Users/philb/Projects/ball-knowledge/docs/phase1-match-engine.md:80) says “Asian handicap” and “accumulator” without line-selection or settlement rules, and same-game leg multiplication is wrong under correlation; fix: enumerate supported handicap lines and settlement mechanics, and restrict accumulators to independent cross-match legs only.
+
+- [design-doc.md](/C:/Users/philb/Projects/ball-knowledge/docs/design-doc.md:109) says matches have `0-3 hidden per-match factors`, but [phase1-match-engine.md](/C:/Users/philb/Projects/ball-knowledge/docs/phase1-match-engine.md:56) turns this into ~18 independent factor rows with rarity and no cap, which can wildly change edge frequency and make Gate 1 tunable by brute force; fix: define the exact sampling process, including max active factors, rarity normalization, and whether factors can stack on the same team/player.
+
+- [phase1-match-engine.md](/C:/Users/philb/Projects/ball-knowledge/docs/phase1-match-engine.md:58) treats all factor effects as standardized magnitudes, but factors like “striker ruled out” and “playmaker suspended” are lineup-state changes, not just mild multipliers; fix: split factors into stat modifiers versus availability modifiers, with availability removing the player from lineup and scorer markets.
+
+- [phase1-match-engine.md](/C:/Users/philb/Projects/ball-knowledge/docs/phase1-match-engine.md:46) says SoT depends on the shooting players’ finishing and [phase1-match-engine.md](/C:/Users/philb/Projects/ball-knowledge/docs/phase1-match-engine.md:48) assigns scorers only after goals are sampled, which breaks the stated causality; fix: sample shooter identity per shot before SoT/goal resolution, or explicitly aggregate player skill into team-level rates and use the same weights consistently for attribution.
+
+- [phase1-match-engine.md](/C:/Users/philb/Projects/ball-knowledge/docs/phase1-match-engine.md:29) gives generic attackers no stats, but [phase1-match-engine.md](/C:/Users/philb/Projects/ball-knowledge/docs/phase1-match-engine.md:48) includes them in scorer weights, so Codex will invent defaults; fix: either generate explicit generic-player stats from team baselines or exclude unnamed players from scorer markets entirely.
+
+- [phase1-match-engine.md](/C:/Users/philb/Projects/ball-knowledge/docs/phase1-match-engine.md:107) says “odds sum to ~110% overround,” but that is undefined for truncated correct-score books, first-goalscorer without a no-scorer bucket, and handicap markets with push states; fix: define each closed book exactly, include residual outcomes like `Any Other Score`, and test margin per market with explicit settlement states.
+
+- [constants.json](/C:/Users/philb/Projects/ball-knowledge/design/constants.json:7) and [constants-guide.md](/C:/Users/philb/Projects/ball-knowledge/design/constants-guide.md:6) still define `league_avg_goals` and `home_advantage` in direct expected-goals units from the older Poisson model, while [phase1-match-engine.md](/C:/Users/philb/Projects/ball-knowledge/docs/phase1-match-engine.md:44) repurposes the engine into a shot-chain with many new coefficients; fix: rewrite the constants schema/guide around the new model and define the units and role of every new parameter before implementation.
+
+- [phase1-match-engine.md](/C:/Users/philb/Projects/ball-knowledge/docs/phase1-match-engine.md:19) promises runtime loading from repo `design/constants.json`, which breaks the “same validated code, unchanged” Unity claim because Unity builds will not have that repo-relative file path; fix: make the engine consume a config/data object interface and let the console read JSON while Unity supplies the same DTO from its own asset pipeline.
+
+- [phase1-match-engine.md](/C:/Users/philb/Projects/ball-knowledge/docs/phase1-match-engine.md:97) makes transcript quality part of pass/fail, but [workflow.md](/C:/Users/philb/Projects/ball-knowledge/docs/workflow.md:10) requires a written expected result for non-visual proof and “feels tense” is not reproducible; fix: move tone review out of Gate 1 or convert it to a concrete checklist tied to seeded transcripts.
+
+- [design-doc.md](/C:/Users/philb/Projects/ball-knowledge/docs/design-doc.md:89) says promo tokens must pass the Phase 1 validation harness, but [phase1-match-engine.md](/C:/Users/philb/Projects/ball-knowledge/docs/phase1-match-engine.md:128) omits them entirely, leaving a design-doc contradiction that Codex will ignore; fix: explicitly defer tokens in the design doc too, or add a minimal token model and blind-with-token validation target now.
+
+VERDICT: REVISE
+### Claude's response (Phase 1, Round 1)
+
+Accepted ALL 15 findings — the review found real statistical/architecture gaps. Key revisions to docs/phase1-match-engine.md:
+1. Gate 1 made measurable: flat 1-unit stakes, fixed N=100,000, exact blind (random 1X2) + informed (edge>threshold) policies, 95% CIs, numeric pass bands.
+2. Win rate demoted to secondary metric on even-money subset (odds 1.8-2.2) only; ROI is now the primary Gate-1 metric.
+3. Odds now priced from the SAME engine with factors removed (Monte-Carlo), killing model mismatch — blind ROI reflects vig only.
+4. Added two-half simulation so HT/FT prices are non-arbitrary.
+5. Scorer markets fully specified: starting XI, availability removal, per-shot shooter draw, No Goalscorer residual, named-eligible + generic "Other" bucket.
+6. Asian handicap restricted to half/whole lines with push settlement; accumulators cross-match independent legs only.
+7. Factor sampling defined exactly: 0-max cap (default 3), rarity-weighted without replacement, one-per-player/team no-stack.
+8. Factors split into stat-modifier vs availability (availability removes player from lineup + scorer books, redistributes intensity).
+9. Causality fixed: shooter drawn per shot BEFORE on-target/goal resolution; attribution upstream.
+10. Generic players get stats derived from team baseline; pooled into "Other player" scorer bucket (not invented ad hoc).
+11. Each market defined as a closed book with residual outcomes (Any Other Score, No Goalscorer, handicap push); overround verified per market.
+12. Constants rewritten for the shot-chain model (schema_version 2) as BUILD TASK 0, with a full new-parameter table (units/roles); old xG-unit params replaced.
+13. Architecture fixed: MatchEngine does NO file I/O — takes an injected EngineConfig DTO; Console reads JSON, Unity supplies the same DTO. "Unchanged in Unity" now actually holds.
+14. Tone review converted to a seeded, reproducible checklist SEPARATE from the numeric Gate 1 (satisfies workflow.md's written-expected-result rule).
+15. Promo-token contradiction resolved: deferred in BOTH the spec and design-doc.md (Phase 3 shop feature; no Phase 1 token validation).

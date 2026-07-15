@@ -1,134 +1,163 @@
 # Phase 1 Spec — Match Engine (standalone C#)
-_Frozen build spec for "Ball Knowledge". Locked via grill by Claude + Phil, 2026-07-15._
+_Frozen build spec for "Ball Knowledge". Locked via grill by Claude + Phil; hardened via Codex adversarial review, 2026-07-15._
 
 ## Goal
 
-Build a standalone, text-only **C# match engine** that simulates fictional football matches, sets bookmaker odds, produces authentic 90s radio-style commentary, and — most importantly — **proves the information economy works mathematically** via a Monte-Carlo validation harness, before any Unity/graphics work exists. The engine is written as a **pure C# class library with zero Unity dependencies**, so the *same validated code* is later referenced by the Unity game (Phase 3) with no rewrite and no translation risk.
+Build a standalone, text-only **C# match engine** that simulates fictional football matches, sets bookmaker odds **from its own simulation**, produces authentic 90s radio-style commentary, and **proves the information economy works mathematically** via a Monte-Carlo validation harness, before any Unity/graphics work exists. The engine is a **pure C# class library with zero Unity dependencies**, configured through an injected config object (not a file path), so the *same validated code* is later referenced by the Unity game (Phase 3) with no rewrite.
 
-中文摘要：獨立、純文字的 C# 比賽引擎——模擬虛構足球賽、開賠率、產生90年代電台旁述，並用蒙地卡羅驗證證明情報經濟數學成立。純 C# 類別庫、零 Unity 依賴，之後 Unity（第三階段）直接引用同一份代碼，零重寫。
+中文摘要：獨立純文字 C# 比賽引擎——模擬賽事、用**自己的模擬**開賠率、產生90年代旁述、用蒙地卡羅驗證證明情報經濟成立。純 C# 類別庫、零 Unity 依賴、透過注入的設定物件配置（非檔案路徑），Phase 3 的 Unity 直接引用同一份代碼。
 
 ## Architecture
 
 ```
-BallKnowledge.MatchEngine   (pure C# class library — NO Unity references, just logic + data)
-   ├── referenced by → BallKnowledge.Console   (text playthrough + 1,000-bet validation harness)  ← Phase 1 deliverable
-   └── referenced by → the Unity game (unity/)                                                     ← Phase 3, unchanged
+BallKnowledge.MatchEngine   (pure C# class library — NO Unity refs, NO file I/O; configured via an EngineConfig object)
+   ├── referenced by → BallKnowledge.Console   (reads design/constants.json → builds EngineConfig; runs playthrough + validation)  ← Phase 1
+   └── referenced by → the Unity game          (builds the SAME EngineConfig from its own asset pipeline)                          ← Phase 3
 ```
 
-- Target framework: **.NET 8** (LTS) console + classlib. Solution/projects live in `prototype/` (e.g. `prototype/BallKnowledge.sln`, `prototype/MatchEngine/`, `prototype/Console/`, `prototype/Tests/`).
-- All tunable numbers load from the repo `design/constants.json` at runtime (via `System.Text.Json`). The engine must never hard-code a tunable value. New Phase-1 constants are added to `constants.json` + its schema + guide (validated by the existing pre-commit hook).
-- No Unity, no graphics, no networking. Output is console text + a validation report.
+- **Config injection (fixes the Unity-reuse bug):** `MatchEngine` never reads a file. It takes an immutable `EngineConfig` record (a plain DTO holding every tunable). The **Console** project reads `design/constants.json` + `design/teams.json` via `System.Text.Json` and constructs `EngineConfig`. Unity later constructs the identical `EngineConfig` from `StreamingAssets`. The engine is therefore genuinely reusable unchanged.
+- Target framework: **.NET 8** (LTS). Solution in `prototype/` (`prototype/BallKnowledge.sln`, `MatchEngine/`, `Console/`, `Tests/`).
+- **Deterministic:** the engine takes an injected RNG seed; the same seed → the same match. Required for reproducible tests and playtests.
 
-中文摘要：純類別庫 + console + 測試三個專案，放 `prototype/`，用 .NET 8。所有可調數字從 `design/constants.json` 讀取，永不寫死。無 Unity、無圖像。
+中文摘要：引擎不讀檔，只收一個 `EngineConfig` DTO；Console 讀 JSON 建 config，Unity 之後用同樣方式建同一個 config——真正可重用。.NET 8，可注入亂數種子（同種子＝同一場）。
+
+## Constants rewrite (BUILD TASK 0 — before any engine code)
+
+The current `design/constants.json` holds `league_avg_goals`/`home_advantage` in **old direct-xG units** that do not fit the new shot-chain model. First task: **rewrite `constants.json` + its schema + guide (bump `schema_version` to 2)**, keeping the debt/vig/overround values, replacing the goal-model values, and adding every new parameter below with explicit units. The pre-commit validator must pass on the new file.
+
+New engine parameters (all live in `constants.json`, all tuned to hit Gate 1):
+| Param | Role / unit |
+|---|---|
+| `shot_base` | league baseline shots per team per match (count) |
+| `on_target_base` | baseline P(a shot is on target), 0–1 |
+| `conversion_base` | baseline P(an on-target shot is a goal before keeper adjust), 0–1 |
+| `corner_base` | baseline corners per team per match (count) |
+| `assist_rate` | P(a goal has a named assister), 0–1 |
+| `second_half_factor` | multiplier on 2nd-half scoring vs 1st (≈1.0–1.2) |
+| `home_advantage` | multiplier on home attacking strength (e.g. 1.10) |
+| `formation_mods` | table: per formation → {atkMult, defMult, shotMult, cornerMult, passMult} |
+| `factor_tier_magnitudes` | {minor, moderate, major} standardized effect sizes |
+| `max_factors_per_match` | integer cap (default 3, per design doc's "0–3") |
+| `bookmaker_overround` | already present (1.10) |
 
 ## Data model
 
-### Team
-`name`, `nameZh`, `ATK` (1–100), `DEF` (1–100), `height` (1–100), `baseFormation`, `teamForm` (0.7–1.3, drifts weekly), plus a squad of named players. The 8-team strawman league in `docs/design-doc.md` is the seed data (Harbour FC, Eastport Rovers, Victoria Athletic, Stonecutters FC, Tai Fung SC, Central United, Kowloon Quarry, Aberdeen Fishermen), authored into `design/teams.json`.
+### Team (`design/teams.json`, seeded from the 8-team strawman in design-doc.md)
+`name`, `nameZh`, `ATK` (1–100), `DEF` (1–100), `height` (1–100), `baseFormation`, `teamForm` (0.7–1.3, weekly drift), squad.
 
-### Player (Tier B — role-based, 3–5 named per team; rest are flavour names with no stats)
-- **Striker/attacker:** `finishing` (1–100), `involvement` (1–100).
+### Player (Tier B — role-based; each team fields a fixed starting XI)
+- **Attacker:** `finishing` (1–100), `involvement` (1–100).
 - **Playmaker:** `passing` (1–100).
 - **Keeper:** `reliability` (1–100).
-- **Condition (all named players):** a single per-player weekly modifier channel with two news flavours — **form** (natural drift + streaks) and **discipline** (news events: training-ground bust-up / missed training → debuff; model professional → buff). Implemented as ONE multiplier on the player's effective stats. **Constraint: discipline modifies pre-match stats only — it must NOT trigger in-match red cards that alter the live simulation (deferred with the player-booking market).**
+- **Named vs generic:** 3–5 **named** players carry stats. Remaining XI slots are **generic** players who get **stats derived deterministically from the team's ATK/DEF baseline** (so nothing is invented ad hoc). Generic outfielders are eligible to score but pool into an **"Other player"** bucket for scorer markets (see Scorer markets).
+- **Condition channel:** one per-named-player weekly multiplier with two news flavours (form / discipline). Multiplies effective stats. **Discipline modifies pre-match stats ONLY — never triggers in-match red cards (deferred with the player-booking market).**
 
-### Formations (10 preset modifier packages — linear, NO matchup matrix)
-`4-4-2, 4-3-3, 5-3-2, 4-2-3-1, 3-4-2-1, 4-5-1, 4-1-4-1, 3-5-2, 4-2-2-2, 3-4-3`. Each is a package of multipliers on the team's numbers (ATK, DEF, shot volume, corner tendency, passing/assist tendency). Formations never interact with each other — each is a flat modifier set. Values live in `constants.json`.
+### Formations (10 flat modifier packages — linear, NO matchup matrix)
+`4-4-2, 4-3-3, 5-3-2, 4-2-3-1, 3-4-2-1, 4-5-1, 4-1-4-1, 3-5-2, 4-2-2-2, 3-4-3`. Each = a `formation_mods` row. Formations never interact.
 
-中文摘要：球隊有攻/守/身高/陣式/狀態＋陣容。Tier B 球員按位置帶數值＋一條 form/discipline 狀態通道（紀律只改賽前數值，不觸發賽中紅牌）。10個陣式＝線性修正包，無相剋矩陣。
+中文摘要：球隊有攻/守/身高/陣式/狀態。3–5名具名球員帶數值，其餘 generic 由球隊基準推導（不憑空捏造），generic 入球歸入「其他球員」桶。狀態通道只改賽前數值。10陣式＝線性修正包。
 
-## Simulation — the causal output chain
+## Simulation — the causal output chain (per half, then summed)
 
-One consistent match produces goals, shots, shots-on-target, saves, corners, scorers, and assisters — all at once, chained so the numbers stay honest (cannot have more goals than shots on target):
+To price HT/FT correctly, each match is simulated as **two halves** (2nd half scaled by `second_half_factor`); halftime score = 1st-half result, full-time = sum. Per half, per team:
 
-1. **Effective strengths:** `atk_eff = ATK × formation.atkMult × teamForm × conditionMults`; `def_eff = DEF × formation.defMult × teamForm`. Home team gets `home_advantage`. Hidden factors modify the relevant inputs at this step.
-2. **Shots:** `shotsExp = shotBase × (atk_eff / opp_def_eff) × formation.shotMult`; sample `shots ~ Poisson(shotsExp)`.
-3. **Shots on target:** each shot is on-target with a rate driven by the shooting players' `finishing`; `SoT ~ Binomial(shots, onTargetRate)`.
-4. **Goals vs saves:** each SoT resolves to a **goal** with probability driven by shooter `finishing` vs opponent keeper `reliability` (× keeper condition); otherwise it's a **save** credited to the keeper.
-5. **Attribution:** each goal is assigned a **scorer** (weighted by `finishing × involvement` across the team's named + generic attackers) and, with an assist rate, an **assister** (weighted by `passing`).
-6. **Corners (parallel track):** `cornersExp = cornerBase × (atk_eff / opp_def_eff) × heightFactor × formation.cornerMult`; sample `corners ~ Poisson(cornersExp)`.
-7. **Timeline:** all events (goals, notable saves, near-misses, corners, factor "leaks") are scattered across 90 simulated minutes → this ordered event list **is** the radio commentary script.
+1. **Effective strengths:** `atk_eff = ATK × formation.atkMult × teamForm × conditionMods × factorMods`; `def_eff = DEF × formation.defMult × teamForm × factorMods`. Home team applies `home_advantage`. Availability factors (below) alter the lineup **before** this step.
+2. **Shots:** `shotsExp = shot_base_half × (atk_eff / opp_def_eff) × formation.shotMult`; `shots ~ Poisson(shotsExp)`.
+3. **Shooter per shot (fixes causality):** for **each** shot, first draw the shooter from the team's eligible attackers weighted by `involvement × conditionMod` (named players + the generic pool). This shooter's `finishing` then drives that shot's on-target and goal resolution — so attribution is causally upstream, not bolted on after.
+4. **On target:** shot is on-target with `p = on_target_base × f(shooter finishing)`.
+5. **Goal vs save:** an on-target shot is a **goal** with `p = conversion_base × g(shooter finishing) × (1 − h(opp keeper reliability × keeper conditionMod))`; otherwise a **save** credited to the keeper. (Goals ≤ SoT ≤ shots is a tested invariant.)
+6. **Assist:** each goal has a named assister with probability `assist_rate`, drawn by `passing`; else no assist / generic.
+7. **Corners (parallel):** `cornersExp = corner_base_half × (atk_eff/opp_def_eff) × heightFactor × formation.cornerMult`; `corners ~ Poisson(cornersExp)`.
+8. **Timeline:** all events across 90 minutes (goals with scorer/assister, notable saves, near-misses, corners, factor leaks, kickoff/HT/FT) → the ordered event list that **is** the radio script.
 
-All coefficients (`shotBase`, `onTargetRate` baseline, conversion base, `cornerBase`, assist rate, home_advantage, etc.) live in `constants.json` and are **tuned to hit the Gate 1 validation target** — the spec fixes the *structure*, tuning fixes the *numbers*.
+All coefficients live in `constants.json`; the spec fixes the *structure*, tuning fixes the *numbers*.
 
-中文摘要：因果鏈：有效攻防→射門(Poisson)→射正(Binomial)→入球或撲救→歸屬射手/助攻→角球(平行)。事件散落90分鐘＝旁述稿。所有係數放 constants.json，調校去達到 Gate 1 目標。
+中文摘要：每場分兩半模擬（次半乘 `second_half_factor`），半場＝上半結果，全場＝相加。修正因果：**每一腳射門先抽射手**（按參與度加權），該射手的射術驅動射正與入球，歸屬在上游而非事後補。入球≤射正≤射門為受測不變量。
 
-## Hidden factors (the intel core) — ~18 factors, 3 severity tiers
+## Hidden factors — ~18 rows, 3 tiers, with exact sampling + two kinds
 
-Each factor is a data row: what it **attaches to** (player / team / match), its **effect** (modifies a chain input), a **severity tier** (`minor` / `moderate` / `major` — standardized magnitudes, so balancing 18 factors = tuning 3 magnitudes + assigning tiers), a **rarity %**, and which **intel source** can reveal it.
+**Sampling (fixes the "brute-force tunable" gap):** per match, draw the number of active factors from `0..max_factors_per_match` (default 0–3), then select that many distinct factors by normalized rarity weights **without replacement**. **At most one factor per player and one per team** (no stacking). Match-condition factors apply to the whole fixture.
 
-- **Player:** striker knock `minor`, striker ruled out `major`, keeper hungover `moderate`, keeper elite form `moderate`, playmaker suspended `moderate`, hot streak `minor`, cold streak `minor`, training-ground bust-up `moderate`, model professional `minor`.
-- **Team:** winning-streak morale `moderate`, losing crisis `moderate`, squad rotation for cup `major`, surprise formation `moderate`, new-manager bounce `minor`, pay-dispute unrest `moderate`.
-- **Match conditions:** waterlogged pitch `major`, high wind `minor`, derby/high-stakes `moderate`, dead rubber `moderate`.
+**Two kinds (fixes "ruled out ≠ multiplier"):**
+- **Stat-modifier factors** — adjust an input via the tiered magnitude (knock, hungover keeper, morale, wind, pitch, derby, etc.).
+- **Availability factors** — **remove a player from the lineup and from all scorer/assist markets** (striker ruled out, playmaker suspended, cup rotation drops a starter). Their scoring intensity redistributes to remaining eligible players.
 
-**Intel source → factor mapping** (this IS the information economy; `major` factors sit behind the expensive/far sources so the training-ground trek pays off):
-- **Training ground** (far, reliable): player fitness, form, injuries, bust-ups.
-- **Groundskeeper**: pitch condition, rotation hints.
-- **Café gossip** (cheap, unreliable): morale, streaks, rumours.
-- **Insider** (expensive, limited uses): the `major` secrets (confirmed suspensions, cup rotation).
+Catalogue (tier in brackets): striker knock `min` · striker ruled out `maj/avail` · keeper hungover `mod` · keeper elite form `mod` · playmaker suspended `mod/avail` · hot streak `min` · cold streak `min` · training bust-up `mod` · model pro `min` · winning morale `mod` · losing crisis `mod` · cup rotation `maj/avail` · surprise formation `mod` · new-manager bounce `min` · pay dispute `mod` · waterlogged pitch `maj` · high wind `min` · derby `mod` · dead rubber `mod`.
 
-**Engine principle (enables the Phase 3 fixing/sabotage system for free):** a factor's *source* may be a player action, not only a random roll — the engine applies a factor identically regardless of source. Phase 1 only rolls factors randomly; the hook exists for later.
+**Intel source → factor mapping** (this IS the information economy; `major` factors sit behind the far/expensive sources): training ground → fitness/form/injuries/bust-ups; groundskeeper → pitch/rotation; café → morale/streaks/rumours; insider → the `major` availability secrets.
 
-中文摘要：約18個因素，分3級（輕微/中等/重大，只調3個標準幅度）。情報源→因素對應＝情報經濟本身，重大因素鎖在昂貴/遠情報源後。引擎原則：因素來源可以是玩家行動（為第三幕造馬預留，零成本）。
+**Engine principle (Phase 3 sabotage hook, free):** a factor's *source* may be a player action, applied identically to a random roll. Phase 1 rolls factors randomly only.
 
-## Odds generation
+中文摘要：每場抽 0–3 個因素，按稀有度不重複抽，每名球員/每隊最多一個（不疊加）。兩類：數值修正 vs 可用性（後者把球員移出陣容與射手市場，強度重分配）。情報源對應＝經濟本身。
 
-The shop prices every market from the Poisson score matrix computed using **yesterday's public information only** — i.e. team/player base stats WITHOUT the hidden factors (the factors are exactly the private edge the player hunts). Implied probabilities are then inflated by `bookmaker_overround` (1.10) so a blind bettor slowly loses. The player's entire edge is knowing today's factor modifiers before the board does.
+## Odds generation (priced from the SAME engine — fixes model mismatch)
 
-## Bet markets — Wave 1 (built + validated in Phase 1)
+Odds are computed by running the **same simulation, Monte-Carlo, with all hidden factors removed** (public-information view): simulate the fixture N times (e.g. 50k) sans factors, tally outcome frequencies → fair probabilities, then apply `bookmaker_overround` (1.10) to each **closed book**. Blind ROI then reflects only the vig, not model mismatch. (An analytic derivation may replace Monte-Carlo only if it provably matches the same distribution.)
 
-1X2 (home/draw/away), Asian handicap, over/under total goals, correct score (jackpot), HT/FT, both-teams-to-score, **first goalscorer**, **anytime goalscorer**, and **accumulator** (combine legs, multiply odds). Each market computes its odds from the same score/scorer matrices.
+**Each market is a closed book with residual outcomes and explicit settlement:**
+- **1X2:** home/draw/away.
+- **Over/Under goals:** at defined lines (e.g. 1.5/2.5/3.5).
+- **Correct score:** enumerated scores up to a cap **plus `Any Other Score`** to close the book.
+- **HT/FT:** the 9 combinations, from the halftime + full-time matrices.
+- **Both teams to score:** yes/no.
+- **Asian handicap:** only **half and whole lines** (e.g. −2, −1.5, −1, −0.5, 0, +0.5, …); whole-line exact ties **push/void** (stake returned); no quarter lines in Phase 1.
+- **First goalscorer / anytime goalscorer:** named eligible players **plus mandatory `No Goalscorer`** (settles 0–0 and generic-only games); ruled-out players are void/removed.
+- **Accumulator:** **independent cross-match legs only** (never same-match, to avoid correlation); odds = product of leg odds; settles all-win.
 
-**Wave 2 (logged, NOT built in Phase 1 — added one at a time post-Gate-1):** over/under corners, over/under team shots & shots-on-target, player shots, assists, keeper saves. The engine already *produces* these outputs; Wave 2 is mostly adding each market's odds line + running the harness.
+Margin (overround) is verified **per market**, each as its own closed set including residuals.
 
-中文摘要：賠率用「昨日公開資訊」（無隱藏因素）＋110%抽水計算。Wave 1 市場：主客和、讓球、大小球、波膽、半全場、雙方入球、首名/任何射手、串關。Wave 2（記低不建）：角球、射門、射正、球員射門、助攻、撲救。
+中文摘要：賠率用**同一引擎、去除隱藏因素、蒙地卡羅**模擬得出公平機率，再乘110%抽水——盲賭ROI只反映抽水，非模型不符。每個市場是含殘餘結果（Any Other Score、No Goalscorer、讓球push）的封閉盤，逐市場核對抽水。串關只限跨場獨立腿。
 
-## Radio commentary
+## The validation harness (Gate 1 — exact, measurable)
 
-Authentic 90s local sportscaster voice — grounded, period-accurate, warm-not-cartoonish, tense at goals. Commentary is generated from the match event timeline via templates. Crucially, **hidden factors must "leak" into the commentary** (e.g. a hungover keeper visibly flaps at a cross), so an informed player hears their intel confirmed live while a blind bettor just hears "a save." Provide ~50–60 template lines tagged by event type (goal, miss, save, corner, momentum, factor-reveal, kickoff, half-time, full-time). Commentary is text (a future TTS-through-radio-EQ pass is out of scope).
+A console command runs a fixed Monte-Carlo and prints a report with **95% confidence intervals**. Two bettors, **flat 1-unit stakes**, over a **fixed N = 100,000 simulated bets** each (tight CIs):
 
-## The validation harness (Gate 1 — pass/fail)
+- **Blind bettor policy:** each simulated fixture, pick a **uniformly random selection** in the 1X2 market, stake 1 unit at board odds, settle. Expected ROI ≈ **−(overround margin) ≈ −8%**. Pass band: **blind ROI ∈ [−0.10, −0.06]** (95% CI within band).
+- **Informed bettor policy:** knows the match's hidden factors. Computes true probability (factors included) vs board-implied (factors excluded); stakes 1 unit on every selection whose **edge = trueProb × oddsDecimal − 1 > `edge_threshold`** (a tuned constant). Report **ROI (primary metric)** across all its bets — pass band **informed ROI ≥ +0.05**.
+- **Win-rate metric (secondary, correct usage):** win rate is reported **only on the near-even-money subset** (selections with decimal odds ∈ [1.8, 2.2]); target **55–60%** there. Win rate is NOT applied to correct-score/accumulator markets (where a profitable strategy wins far below 50%).
 
-A console command runs a Monte-Carlo simulation and prints an ROI/win-rate report:
-- **Blind bettor** (bets off the odds board with no factor knowledge): target ROI ≈ `blind_roi` (−0.08 / −8%) over 1,000+ simulated bets.
-- **Fully-informed bettor** (knows all of today's hidden factors): target win rate **55–60%** (`informed_win_rate_min/max`) with clearly positive ROI.
-- Report both, per market where practical, so tuning can target the gap.
+**Gate 1 passes iff:** blind ROI in band AND informed ROI ≥ +0.05 AND informed even-money win rate 55–60%, all within 95% CI. If missed, tune `constants.json`; do not proceed to Phase 2. (Exact `edge_threshold`, N, and bands live in `constants.json` so they're tunable.)
 
-**Gate 1 passes only if:** blind ≈ −8%, informed lands 55–60% with positive returns, AND a human read-through of ~5 match transcripts feels tense (a late equalizer should land emotionally even in plain text). If the numbers miss, tune `constants.json` — do not proceed to Phase 2 until they hold.
+中文摘要：定量驗證——平注1單位、固定 N=100,000、報95%信賴區間。盲賭策略：1X2隨機選，ROI應∈[−0.10,−0.06]。有情報策略：按 edge>門檻下注，**主指標ROI≥+0.05**；勝率只在接近均注（賠率1.8–2.2）子集報，目標55–60%。三者連CI都達標才過Gate 1。
 
-中文摘要：Monte-Carlo 驗證：盲賭 ROI≈−8%、全情報 55–60% 勝率且正回報，且人手讀5份旁述稿覺得緊張。不達標就調 constants.json，未過不入第二階段。
+## Radio commentary + a SEPARATE tone check (not part of numeric Gate 1)
+
+Authentic 90s local sportscaster voice, generated from the event timeline via ~50–60 templates tagged by event type. Hidden factors must **leak** into commentary (hungover keeper flaps at a cross) so informed players hear their intel confirmed. Commentary is text (TTS out of scope).
+
+**Tone acceptance (concrete, seeded — replaces the unmeasurable "feels tense"):** with fixed seeds, generate 5 transcripts and check a reproducible checklist: (a) every active factor produces at least one leak line; (b) a goal in the 80th minute or later produces an escalation/late-drama line; (c) HT and FT summary lines are present with correct scores; (d) no template placeholder leaks unrendered. This checklist is a required test but is **separate from the statistical Gate 1**.
 
 ## League & season
 
-8 teams (the strawman), double round-robin = 14 rounds; the console can simulate a full 10-week slice season and/or single matches on demand. Team/player names are placeholders the designer will reskin — names do not block the build.
+8 teams (strawman), double round-robin (14 rounds); the console can run a single match, a full 10-week slice season, or the validation harness. Names are placeholder — reskinning does not block the build.
 
-## Testing & verification (per repo workflow.md)
+## Testing & verification (per workflow.md)
 
-- Automated tests (`prototype/Tests/`, xUnit or similar) for: Poisson/Binomial sampling sanity, the causal-chain invariants (goals ≤ SoT ≤ shots; every goal has a scorer), odds sum to ~110% overround, factor application, and the validation-harness math.
-- Non-visual verification: the console prints (a) a single readable match with commentary, and (b) the 1,000-bet validation report. Both are the Phase 1 proof artifacts.
-- Deterministic seed option (pass a seed → reproducible match) so tests and playtests are repeatable.
+Automated tests (`prototype/Tests/`, xUnit): distribution sanity (Poisson/Binomial means), chain invariants (goals ≤ SoT ≤ shots; every goal has a scorer; availability factors remove players from scorer books), per-market overround ≈ 1.10 including residual outcomes, factor sampling respects the cap/no-stack rules, HT/FT consistency (HT ≤ FT componentwise in the sampled realization), and the seeded tone checklist. Non-visual proof artifacts: (1) one seeded readable match with commentary; (2) the 100k-bet validation report with CIs.
 
 ## Key decisions & tradeoffs
 
-- **C# standalone (pure class library) over Python** — eliminates the Phase-3 rewrite/translation step; same validated engine runs in the console harness and later in Unity. Small cost: install the .NET 8 SDK.
-- **Tier B players + one condition channel** — concrete human intel (the core pillar) without the Tier C full-squad simulation swamp. Discipline is pre-match-modifier only; in-match cards deferred.
-- **10 formations as flat modifier packages** — linear cost; a matchup matrix (quadratic) was explicitly rejected.
-- **Full causal output chain now (goals/shots/SoT/saves/corners/scorers/assists)** — biggest single chunk of Phase 1, accepted because it's the load-bearing system AND it powers concrete intel; Wave-2 markets then come almost free.
-- **Anti-repetition systems (context-dependent factors, unreliable intel, market-prices-public-info) DEFERRED** to post-Gate-1 — ship the simplest provable engine first.
-- **Odds priced off stale public info only** — the hidden factors ARE the edge; this is fixed by the design pillars, not a tunable.
-- **Structure fixed in spec, numbers tuned to the target** — coefficients live in `constants.json` and are tuned to hit Gate 1 rather than guessed up front.
+- **Odds priced from the same engine (factors removed)** — the single most important fix: blind ROI must reflect vig only, not a second model's mismatch.
+- **ROI is the primary Gate-1 metric; win-rate only on an even-money subset** — win rate is meaningless across mixed-price books.
+- **Config injected as an `EngineConfig` DTO, engine does no file I/O** — makes the "unchanged in Unity" claim actually true.
+- **Constants rewritten for the shot-chain model (schema v2) as build task 0** — the old xG-unit constants don't fit; do this before engine code.
+- **Shooter drawn per shot, before resolution** — attribution is causally correct, not post-hoc.
+- **Factors split into stat-modifier vs availability** with an explicit capped, no-stack sampling process — prevents brute-forcing Gate 1 and models "ruled out" correctly.
+- **Closed books with residual outcomes** (`Any Other Score`, `No Goalscorer`, handicap push) and half/whole handicap lines only — makes every market's overround well-defined and settleable.
+- **Two-half simulation** — required for non-arbitrary HT/FT pricing.
+- **Tone check is a seeded checklist, separate from statistical Gate 1** — keeps Gate 1 reproducible per workflow.md.
+- **Anti-repetition systems, sabotage world, promo tokens, Wave-2 markets: deferred** (see Out of scope).
 
 ## Risks / open questions
 
-- **Tuning to hit 55–60% may take several iterations** — the harness is the backstop; budget tuning time, and keep coefficients in `constants.json` for fast iteration.
-- **Correlation realism** — the causal chain must keep outputs consistent (goals ≤ SoT ≤ shots); tested as an invariant.
-- **No human code review** (beginner + Codex) — mitigated by automated tests + the validation harness + deterministic seeds.
-- **Radio tone is subjective** — the read-aloud check is the acceptance test; iterate templates if flat.
+- **Tuning to hit the bands may take several iterations** — the harness + `constants.json` fast-iteration loop is the backstop.
+- **Monte-Carlo odds cost** — pricing every fixture by 50k sims × a full season × the 100k-bet harness must stay fast; cache per-fixture fair odds, keep the engine allocation-light. Acceptable on a dev machine; revisit if slow.
+- **No human code review** — mitigated by tests, invariants, deterministic seeds, and the statistical harness.
 
 ## Out of scope (Phase 1)
 
-- Unity, graphics, the walkable world, the day loop, debt clock, intel-gathering UI (all Phase 2–3).
-- Wave-2 bet markets (corners/shots/player-shots/assists/saves) — engine produces the data, markets added post-Gate-1.
-- The anti-repetition systems and the sabotage/fixing world system (design logged; built later).
-- In-match cards / player-booking market.
-- TTS/audio, localization of commentary, Acts 2–3.
+- Unity, graphics, the walkable world, day loop, debt clock, intel-gathering UI (Phase 2–3).
+- **Promo tokens** — explicitly deferred here AND to be marked deferred in `design-doc.md` (they are a Phase 3 shop feature; no token validation in Phase 1).
+- Wave-2 bet markets (corners/shots/player-shots/assists/saves) — engine produces the data; markets added post-Gate-1.
+- Anti-repetition systems (context-dependent factors, unreliable intel, market-prices-public-info) — post-Gate-1.
+- Sabotage/fixing world system (design logged; the engine hook is free, the world is Phase 3).
+- In-match cards / player-booking market; quarter handicap lines; TTS/audio; commentary localization; Acts 2–3.

@@ -87,7 +87,7 @@ Relationships are long-term investments that glue the three acts into one game:
 Era-appropriate paper vouchers the betting shop hands out — the industry's real hooks, presented honestly:
 
 - **Free bet voucher** (stake refunded on loss — given after losing streaks, the classic hook), **odds boost stamp** (+20% payout on one slip — loyalty reward), **insurance slip** (half stake back — bought at the counter), **accumulator ticket** (unlocks combo bets — shop-trust milestone).
-- **Rules:** tokens amplify reward, never probability (pillar 4). Token supply must pass the Phase 1 validation harness — blind betting *with* tokens still loses long-term. In Act 2 the player hands these same vouchers to their own clients, completing the lesson.
+- **Rules:** tokens amplify reward, never probability (pillar 4). Tokens are a Phase 3 shop feature and are **out of scope for the Phase 1 match engine** — no token model or token validation exists in Phase 1. When tokens are built, their supply must be validated so that blind betting *with* tokens still loses long-term. In Act 2 the player hands these same vouchers to their own clients, completing the lesson.
 - **No real-money purchases. Ever.** (Permanently out of scope.)
 
 中文摘要：遊戲內紙質促銷券（免費注、賠率加成、保險單、過關飛）——只放大回報、永不改變機率，且必須通過驗證數學。永遠沒有真錢課金。
