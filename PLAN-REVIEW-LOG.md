@@ -243,3 +243,18 @@ VERDICT: APPROVED
 
 ---
 Converged: Phase 1 spec APPROVED after 5 review rounds (findings 15 -> 7 -> 5 -> 3 -> 2 -> 0). docs/phase1-match-engine.md is the frozen build contract. Awaiting user sign-off before build.
+
+## Act 3 — Build (Phase 1 engine)
+
+Codex (gpt-5.4, thread 019f67cb) built the full C# solution from docs/phase1-match-engine.md. Claude verified in the real environment (Codex ran sandboxed).
+
+Build + fix round 1:
+- Fix 1 (CRITICAL, model mismatch): informed "true" markets were priced by a fast deterministic estimator while bets settled against the Monte-Carlo shot-chain, manufacturing a fake +51% informed ROI. Fixed: informed view now priced by the SAME Monte-Carlo chain as the board, differing only in factors included(true)/excluded(board). Reduced pricing_sim_count=1000 / validation_fixture_count=10000 for runtime.
+- Fix 2: replaced hand-rolled test shim with real xUnit (dotnet test now runs 8/8).
+- Fix 3: teams.json re-authored to the 8-team strawman.
+
+Claude verification (real env): dotnet build clean; dotnet test 8/8 pass; validate reproduces deterministically. Post-fix numbers: even-money win rate 55.94% (in 55-60% band) => intel model structurally CORRECT. Blind ROI -5.78% (want -9.09%) and informed overall ROI +53% (want modest) remain => CALIBRATION, not bugs. Claude took over from the fix loop (remaining work is constants tuning + a design decision on intel power, not code).
+
+Cleanup by Claude before commit: removed sandbox artifacts (.venv_local_backup, .venv_old, prototype/.dotnet, .templateengine, AppData, vendored .nuget feed, Directory.Build.props); switched to standard online NuGet restore; added .NET .gitignore rules; reinstalled pre-commit into .venv.
+
+Committed 2594a2a, tag good-20260715-1948. Gate 1 tuning is the next step, on top of this correct engine.
