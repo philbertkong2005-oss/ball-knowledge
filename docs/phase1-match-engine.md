@@ -25,7 +25,9 @@ BallKnowledge.MatchEngine   (pure C# class library — NO Unity refs, NO file I/
 
 The current `design/constants.json` holds `league_avg_goals`/`home_advantage` in **old direct-xG units** that do not fit the new shot-chain model. First task: **rewrite `constants.json` + its schema + guide (bump `schema_version` to 2)**, keeping the debt/vig/overround values, replacing the goal-model values, and adding every new parameter below with explicit units. The pre-commit validator must pass on the new file.
 
-New engine parameters (all live in `constants.json`, all tuned to hit Gate 1):
+**Complete config inventory** (every parameter the rest of this spec references — Task 0 must add all of them so no schema field is omitted). All live in `constants.json`, all tuned to hit Gate 1:
+
+_Simulation model:_
 | Param | Role / unit |
 |---|---|
 | `shot_base` | league baseline shots per team per match (count) |
@@ -36,9 +38,29 @@ New engine parameters (all live in `constants.json`, all tuned to hit Gate 1):
 | `second_half_factor` | multiplier on 2nd-half scoring vs 1st (≈1.0–1.2) |
 | `home_advantage` | multiplier on home attacking strength (e.g. 1.10) |
 | `formation_mods` | table: per formation → {atkMult, defMult, shotMult, cornerMult, passMult} |
-| `factor_tier_magnitudes` | {minor, moderate, major} standardized effect sizes |
-| `max_factors_per_match` | integer cap (default 3, per design doc's "0–3") |
-| `bookmaker_overround` | already present (1.10) |
+
+_Hidden factors:_
+| `factor_tier_magnitudes` | {minor, moderate, major} standardized effect sizes (the `m` in (1±m)) |
+| `max_factors_per_match` | integer cap (default 3) |
+| `factor_count_weights` | PMF over 0..max active factors (default [0.30,0.40,0.22,0.08]; sums to 1) |
+| `factor_rarity` | per-factor selection weight used for without-replacement draw |
+
+_Odds & markets:_
+| `bookmaker_overround` | book margin multiplier (1.10) |
+| `pricing_sim_count` | Monte-Carlo sims per fixture for fair-odds pricing (e.g. 50000) |
+| `correct_score_cap` | max enumerated goals per side before `Any Other Score` (e.g. 6) |
+| `over_under_lines` | offered O/U goal lines (e.g. [1.5, 2.5, 3.5]) |
+| `handicap_lines` | offered half/whole Asian lines (e.g. [-2,-1.5,-1,-0.5,0,0.5,1,1.5,2]) |
+
+_Validation (Gate 1):_
+| `validation_fixture_count` | fixtures per Monte-Carlo harness run (e.g. 100000) |
+| `edge_threshold` | min edge for the informed bettor to stake |
+| `blind_roi` | derived target −0.0909 (= 1/overround − 1) |
+| `blind_roi_band` | pass band, e.g. [-0.10, -0.08] |
+| `informed_roi_min` | pass floor, e.g. 0.05 |
+| `even_money_odds_range` | odds window for the win-rate subset (e.g. [1.8, 2.2]) |
+| `informed_win_rate_min/max` | 0.55 / 0.60 (already present) |
+| `min_even_money_bets` | min subset size for the win-rate gate to apply (e.g. 2000) |
 
 ## Data model
 
@@ -137,7 +159,7 @@ The spec fixes these exact forms so Codex does not guess; the numeric coefficien
 
 ## Odds generation (priced from the SAME engine — fixes model mismatch)
 
-Odds are computed by running the **same simulation, Monte-Carlo, with all hidden factors removed** (public-information view): simulate the fixture N times (e.g. 50k) sans factors, tally outcome frequencies → fair probabilities, then apply `bookmaker_overround` (1.10) to each **closed book**. Blind ROI then reflects only the vig, not model mismatch. (An analytic derivation may replace Monte-Carlo only if it provably matches the same distribution.)
+Odds are computed by running the **same simulation, Monte-Carlo, with all hidden factors removed** (public-information view): simulate the fixture `pricing_sim_count` times (e.g. 50k) sans factors, tally outcome frequencies → fair probabilities `fairProb_i`, then apply `bookmaker_overround` (1.10) to each **closed book**. **Exact margining for closed non-push books:** `impliedProb_i = fairProb_i × bookmaker_overround`, `odds_i = 1 / impliedProb_i` for every outcome in the book (including residuals). This proportional rule is exactly what makes the blind-ROI = `1/overround − 1` derivation hold. **Push-capable handicap books use the EV-based rule instead** (below). Blind ROI then reflects only the vig, not model mismatch. (An analytic derivation may replace Monte-Carlo only if it provably matches the same distribution.)
 
 **Each market is a closed book with residual outcomes and explicit settlement:**
 - **1X2:** home/draw/away.

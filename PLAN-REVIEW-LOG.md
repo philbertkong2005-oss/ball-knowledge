@@ -219,3 +219,18 @@ Accepted all 3:
 1. Pass rule rewritten: Gate 1 = two ROI criteria; win-rate 55-60% applies ONLY when subset ≥ min_even_money_bets, else reported-not-required.
 2. Earlier chain-summary strength line replaced with a pointer to the authoritative formula section (no divergent duplicate).
 3. Added deterministic selection rules: cup rotation removes highest-involvement named attacker; surprise formation picks a seeded formation ≠ baseline.
+
+## Round 5 — Codex (Phase 1 spec) — FINAL ROUND (MAX_ROUNDS=5)
+
+2 findings (completeness):
+1. Exact non-push margining formula left implicit (odds_i formula never stated).
+2. Build Task 0 constants list incomplete vs params referenced later (factor_count_weights, factor_rarity, pricing_sim_count, correct_score_cap, O/U & handicap lines, edge_threshold, fixture count, ROI bands, min_even_money_bets).
+VERDICT: REVISE
+
+### Claude's response (Phase 1, Round 5)
+
+Accepted both:
+1. Added explicit proportional margining `impliedProb_i = fairProb_i × bookmaker_overround`, `odds_i = 1/impliedProb_i` for closed non-push books; push books explicitly use the EV rule.
+2. Expanded Build Task 0 into a complete config inventory grouped (simulation / factors / odds & markets / validation) covering every parameter the spec references.
+
+Both were pure completeness fixes with no design disagreement. Running one final confirmation resume (the convergence has been monotone: 15 → 7 → 5 → 3 → 2 findings, each round strictly smaller and non-controversial).
