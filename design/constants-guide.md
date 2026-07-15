@@ -1,12 +1,32 @@
 # Constants Guide
 
-- `schema_version`: File-format version for `design/constants.json`; change this only when the structure changes.
+- `schema_version`: File-format version for `design/constants.json`; the Phase 1 shot-chain schema is locked to `2`.
 - `starting_debt`: Starting debt in in-game dollars; use a whole number such as `500000`.
 - `weekly_debt_interest`: Weekly debt interest as a decimal fraction, so `0.10` means `10%`, not `10`.
 - `catch_vig`: Collector vig as a decimal fraction, so `0.30` means `30%`, not `30`.
-- `bookmaker_overround`: Bookmaker overround as a multiplier, so `1.10` means a `110%` book, not `10%`.
-- `league_avg_goals`: League average goals **per team** per match (the Poisson baseline), so `1.35` means each team scores about 1.35 goals on average — roughly `2.7` total goals per match.
-- `home_advantage`: Home advantage in expected-goals units, written as a decimal number, not a percentage.
-- `validation_targets.blind_roi`: Expected blind betting ROI as a decimal fraction. Derived exactly from the overround: `1/1.10 - 1 = -0.0909` (−9.09%), not an eyeballed −8%.
-- `validation_targets.informed_win_rate_min`: Lower bound for informed win rate as a decimal fraction, so `0.55` means `55%`.
-- `validation_targets.informed_win_rate_max`: Upper bound for informed win rate as a decimal fraction, so `0.60` means `60%`.
+- `bookmaker_overround`: Bookmaker overround as a multiplier, so `1.10` means a `110%` book.
+- `shot_base`: League baseline shots per team per match before team-strength, formation, and factor adjustments.
+- `on_target_base`: Baseline probability that one shot is on target, as a decimal between `0` and `1`.
+- `conversion_base`: Baseline probability that one on-target shot becomes a goal before the keeper adjustment.
+- `corner_base`: League baseline corners per team per match before strength, height, and formation adjustments.
+- `assist_rate`: Baseline probability that a goal gets a named assister instead of falling into the unassisted or generic bucket.
+- `second_half_factor`: Relative second-half attacking intensity. `1.12` means the second half carries 12% more attacking weight than the first.
+- `home_advantage`: Home attacking multiplier inside `atk_eff`. `1.08` means an 8% boost, not `0.08`.
+- `formation_mods`: One modifier package per supported formation, each with `atkMult`, `defMult`, `shotMult`, `cornerMult`, and `passMult`.
+- `factor_tier_magnitudes`: Standardized hidden-factor effect sizes. A tier magnitude `m` is applied as `(1 - m)` for negative factors and `(1 + m)` for positive factors.
+- `max_factors_per_match`: Hard cap on active hidden factors in one fixture.
+- `factor_count_weights`: Probability mass function over `0..max_factors_per_match` active factors. The array length must be exactly `max_factors_per_match + 1` and must sum to `1`.
+- `factor_rarity`: Relative weights used when drawing distinct hidden factors without replacement.
+- `pricing_sim_count`: Monte-Carlo simulation count used for public-information odds pricing.
+- `correct_score_cap`: Highest exact scoreline enumerated per side before the residual collapses into `Any Other Score`.
+- `over_under_lines`: Goal-totals lines offered in the Over/Under market.
+- `handicap_lines`: Supported Asian handicap lines. Phase 1 allows half and whole lines only, so values must be whole numbers or end in `.5`.
+- `validation_fixture_count`: Number of fixtures simulated in the validation harness.
+- `edge_threshold`: Minimum expected-value edge required before the informed bettor places a 1-unit bet.
+- `blind_roi`: Exact blind betting target. It should match `1 / bookmaker_overround - 1`, so a `1.10` book implies about `-0.0909`.
+- `blind_roi_band`: Inclusive ROI band for the blind bettor gate, written as `[lower, upper]`.
+- `informed_roi_min`: Minimum acceptable ROI for the informed bettor.
+- `even_money_odds_range`: Inclusive decimal-odds window used for the near-even-money win-rate subset.
+- `informed_win_rate_min`: Lower bound for the near-even-money informed win-rate subset.
+- `informed_win_rate_max`: Upper bound for the near-even-money informed win-rate subset.
+- `min_even_money_bets`: Minimum qualifying bet count before the even-money win-rate gate becomes binding; below this, the metric is still reported but is not a pass/fail gate.

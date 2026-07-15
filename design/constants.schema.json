@@ -10,15 +10,37 @@
     "weekly_debt_interest",
     "catch_vig",
     "bookmaker_overround",
-    "league_avg_goals",
+    "shot_base",
+    "on_target_base",
+    "conversion_base",
+    "corner_base",
+    "assist_rate",
+    "second_half_factor",
     "home_advantage",
-    "validation_targets"
+    "formation_mods",
+    "factor_tier_magnitudes",
+    "max_factors_per_match",
+    "factor_count_weights",
+    "factor_rarity",
+    "pricing_sim_count",
+    "correct_score_cap",
+    "over_under_lines",
+    "handicap_lines",
+    "validation_fixture_count",
+    "edge_threshold",
+    "blind_roi",
+    "blind_roi_band",
+    "informed_roi_min",
+    "even_money_odds_range",
+    "informed_win_rate_min",
+    "informed_win_rate_max",
+    "min_even_money_bets"
   ],
   "properties": {
     "schema_version": {
       "type": "integer",
-      "minimum": 1,
-      "description": "Schema version for this JSON file format. Integer only."
+      "const": 2,
+      "description": "Schema version for this JSON file format. Phase 1 shot-chain model is schema version 2."
     },
     "starting_debt": {
       "type": "integer",
@@ -37,36 +59,229 @@
       "type": "number",
       "description": "Bookmaker overround as a multiplier, not a percentage. Example: 1.10 means a 110% book."
     },
-    "league_avg_goals": {
+    "shot_base": {
       "type": "number",
-      "description": "League average expected goals PER TEAM per match (Poisson lambda baseline), as a positive decimal. Example: 1.35 per team implies roughly 2.7 total goals per match."
+      "description": "League baseline shots per team per match."
+    },
+    "on_target_base": {
+      "type": "number",
+      "description": "Baseline probability that a shot is on target, as a decimal between 0 and 1."
+    },
+    "conversion_base": {
+      "type": "number",
+      "description": "Baseline probability that an on-target shot becomes a goal before keeper adjustment, as a decimal between 0 and 1."
+    },
+    "corner_base": {
+      "type": "number",
+      "description": "League baseline corners per team per match."
+    },
+    "assist_rate": {
+      "type": "number",
+      "description": "Baseline probability that a goal has a named assister, as a decimal between 0 and 1."
+    },
+    "second_half_factor": {
+      "type": "number",
+      "description": "Relative second-half attacking intensity multiplier versus the first half."
     },
     "home_advantage": {
       "type": "number",
-      "description": "Home-team goal advantage in expected-goals units, not a percentage."
+      "description": "Home-team attacking multiplier applied inside atk_eff. Example: 1.08 means an 8% boost."
     },
-    "validation_targets": {
+    "formation_mods": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Per-formation flat modifier package for attack, defense, shots, corners, and passing.",
+      "required": [
+        "4-4-2",
+        "4-3-3",
+        "5-3-2",
+        "4-2-3-1",
+        "3-4-2-1",
+        "4-5-1",
+        "4-1-4-1",
+        "3-5-2",
+        "4-2-2-2",
+        "3-4-3"
+      ],
+      "properties": {
+        "4-4-2": { "$ref": "#/$defs/formationMods" },
+        "4-3-3": { "$ref": "#/$defs/formationMods" },
+        "5-3-2": { "$ref": "#/$defs/formationMods" },
+        "4-2-3-1": { "$ref": "#/$defs/formationMods" },
+        "3-4-2-1": { "$ref": "#/$defs/formationMods" },
+        "4-5-1": { "$ref": "#/$defs/formationMods" },
+        "4-1-4-1": { "$ref": "#/$defs/formationMods" },
+        "3-5-2": { "$ref": "#/$defs/formationMods" },
+        "4-2-2-2": { "$ref": "#/$defs/formationMods" },
+        "3-4-3": { "$ref": "#/$defs/formationMods" }
+      }
+    },
+    "factor_tier_magnitudes": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "blind_roi",
-        "informed_win_rate_min",
-        "informed_win_rate_max"
+        "minor",
+        "moderate",
+        "major"
       ],
-      "description": "Validation targets for future simulation checks. Rates remain decimal fractions, not percentages.",
       "properties": {
-        "blind_roi": {
-          "type": "number",
-          "description": "Expected blind betting return on investment as a decimal fraction. Example: -0.08 means -8%."
-        },
-        "informed_win_rate_min": {
-          "type": "number",
-          "description": "Lower bound for informed betting win rate as a decimal fraction. Example: 0.55 means 55%."
-        },
-        "informed_win_rate_max": {
-          "type": "number",
-          "description": "Upper bound for informed betting win rate as a decimal fraction. Example: 0.60 means 60%."
-        }
+        "minor": { "$ref": "#/$defs/decimalFraction" },
+        "moderate": { "$ref": "#/$defs/decimalFraction" },
+        "major": { "$ref": "#/$defs/decimalFraction" }
+      },
+      "description": "Standardized factor effect magnitudes m used in (1 ± m)."
+    },
+    "max_factors_per_match": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Maximum number of active hidden factors in a single match."
+    },
+    "factor_count_weights": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/decimalFraction" },
+      "minItems": 1,
+      "description": "Probability mass function over 0..max_factors_per_match active factors."
+    },
+    "factor_rarity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "striker knock",
+        "striker ruled out",
+        "keeper hungover",
+        "keeper elite form",
+        "playmaker suspended",
+        "hot streak",
+        "cold streak",
+        "training bust-up",
+        "model pro",
+        "winning morale",
+        "losing crisis",
+        "cup rotation",
+        "surprise formation",
+        "new-manager bounce",
+        "pay dispute",
+        "waterlogged pitch",
+        "high wind",
+        "derby",
+        "dead rubber"
+      ],
+      "properties": {
+        "striker knock": { "$ref": "#/$defs/positiveWeight" },
+        "striker ruled out": { "$ref": "#/$defs/positiveWeight" },
+        "keeper hungover": { "$ref": "#/$defs/positiveWeight" },
+        "keeper elite form": { "$ref": "#/$defs/positiveWeight" },
+        "playmaker suspended": { "$ref": "#/$defs/positiveWeight" },
+        "hot streak": { "$ref": "#/$defs/positiveWeight" },
+        "cold streak": { "$ref": "#/$defs/positiveWeight" },
+        "training bust-up": { "$ref": "#/$defs/positiveWeight" },
+        "model pro": { "$ref": "#/$defs/positiveWeight" },
+        "winning morale": { "$ref": "#/$defs/positiveWeight" },
+        "losing crisis": { "$ref": "#/$defs/positiveWeight" },
+        "cup rotation": { "$ref": "#/$defs/positiveWeight" },
+        "surprise formation": { "$ref": "#/$defs/positiveWeight" },
+        "new-manager bounce": { "$ref": "#/$defs/positiveWeight" },
+        "pay dispute": { "$ref": "#/$defs/positiveWeight" },
+        "waterlogged pitch": { "$ref": "#/$defs/positiveWeight" },
+        "high wind": { "$ref": "#/$defs/positiveWeight" },
+        "derby": { "$ref": "#/$defs/positiveWeight" },
+        "dead rubber": { "$ref": "#/$defs/positiveWeight" }
+      },
+      "description": "Relative without-replacement selection weights for hidden factors."
+    },
+    "pricing_sim_count": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monte-Carlo simulation count used to price public odds."
+    },
+    "correct_score_cap": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Maximum enumerated goals per side before Any Other Score absorbs the residual."
+    },
+    "over_under_lines": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 1,
+      "description": "Goal totals lines offered for Over/Under markets."
+    },
+    "handicap_lines": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 1,
+      "description": "Supported Asian handicap half and whole lines only."
+    },
+    "validation_fixture_count": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Number of fixtures in the validation harness."
+    },
+    "edge_threshold": {
+      "type": "number",
+      "description": "Minimum expected-value edge required before the informed bettor places a 1-unit stake."
+    },
+    "blind_roi": {
+      "type": "number",
+      "description": "Derived blind betting ROI target. For a 1.10 book, this is 1/1.10 - 1 = -0.0909."
+    },
+    "blind_roi_band": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 2,
+      "maxItems": 2,
+      "description": "Inclusive lower and upper ROI bounds for the blind bettor gate."
+    },
+    "informed_roi_min": {
+      "type": "number",
+      "description": "Minimum acceptable informed bettor ROI."
+    },
+    "even_money_odds_range": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 2,
+      "maxItems": 2,
+      "description": "Inclusive decimal-odds window for the even-money subset win-rate report."
+    },
+    "informed_win_rate_min": {
+      "type": "number",
+      "description": "Lower bound for the even-money informed win-rate subset."
+    },
+    "informed_win_rate_max": {
+      "type": "number",
+      "description": "Upper bound for the even-money informed win-rate subset."
+    },
+    "min_even_money_bets": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Minimum qualifying even-money bets before the win-rate gate becomes binding."
+    }
+  },
+  "$defs": {
+    "decimalFraction": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "positiveWeight": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "formationMods": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "atkMult",
+        "defMult",
+        "shotMult",
+        "cornerMult",
+        "passMult"
+      ],
+      "properties": {
+        "atkMult": { "type": "number" },
+        "defMult": { "type": "number" },
+        "shotMult": { "type": "number" },
+        "cornerMult": { "type": "number" },
+        "passMult": { "type": "number" }
       }
     }
   }

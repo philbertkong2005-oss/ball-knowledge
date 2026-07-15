@@ -4,6 +4,12 @@
 unity/.vscode/
 .pre-commit-cache/
 __pycache__/
+
+# .NET build outputs and local package caches (prototype/)
+[Bb]in/
+[Oo]bj/
+.nuget/
+*.user
 *.py[cod]
 *.pyo
 *.pyd

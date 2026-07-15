@@ -1,0 +1,434 @@
+[
+  {
+    "name": "Harbour FC",
+    "nameZh": "海港足球會",
+    "ATK": 82,
+    "DEF": 78,
+    "height": 64,
+    "baseFormation": "4-3-3",
+    "teamForm": 1.05,
+    "namedPlayers": [
+      {
+        "id": "harbour-keeper-yuen",
+        "name": "Marcus Yuen",
+        "nameZh": "袁文基",
+        "role": "keeper",
+        "reliability": 81,
+        "conditionFlavor": "discipline"
+      },
+      {
+        "id": "harbour-striker-lau",
+        "name": "Danny Lau",
+        "nameZh": "劉振鋒",
+        "role": "attacker",
+        "finishing": 87,
+        "involvement": 89,
+        "conditionFlavor": "form"
+      },
+      {
+        "id": "harbour-winger-ng",
+        "name": "Patrick Ng",
+        "nameZh": "吳柏勤",
+        "role": "attacker",
+        "finishing": 77,
+        "involvement": 76,
+        "conditionFlavor": "form"
+      },
+      {
+        "id": "harbour-forward-cheung",
+        "name": "Louis Cheung",
+        "nameZh": "張志朗",
+        "role": "attacker",
+        "finishing": 74,
+        "involvement": 72,
+        "conditionFlavor": "discipline"
+      },
+      {
+        "id": "harbour-playmaker-ho",
+        "name": "Victor Ho",
+        "nameZh": "何耀城",
+        "role": "playmaker",
+        "passing": 84,
+        "conditionFlavor": "form"
+      }
+    ]
+  },
+  {
+    "name": "Eastport Rovers",
+    "nameZh": "東港流浪",
+    "ATK": 71,
+    "DEF": 60,
+    "height": 59,
+    "baseFormation": "4-2-3-1",
+    "teamForm": 1.0,
+    "namedPlayers": [
+      {
+        "id": "eastport-keeper-chan",
+        "name": "Eddie Chan",
+        "nameZh": "陳志安",
+        "role": "keeper",
+        "reliability": 64,
+        "conditionFlavor": "discipline"
+      },
+      {
+        "id": "eastport-striker-fok",
+        "name": "Edison Fok",
+        "nameZh": "霍耀新",
+        "role": "attacker",
+        "finishing": 91,
+        "involvement": 93,
+        "conditionFlavor": "form"
+      },
+      {
+        "id": "eastport-winger-lam",
+        "name": "Kelvin Lam",
+        "nameZh": "林啟賢",
+        "role": "attacker",
+        "finishing": 66,
+        "involvement": 68,
+        "conditionFlavor": "discipline"
+      },
+      {
+        "id": "eastport-runner-lo",
+        "name": "Ivor Lo",
+        "nameZh": "盧煒堯",
+        "role": "attacker",
+        "finishing": 63,
+        "involvement": 65,
+        "conditionFlavor": "form"
+      },
+      {
+        "id": "eastport-playmaker-fung",
+        "name": "Desmond Fung",
+        "nameZh": "馮子峰",
+        "role": "playmaker",
+        "passing": 78,
+        "conditionFlavor": "form"
+      }
+    ]
+  },
+  {
+    "name": "Victoria Athletic",
+    "nameZh": "維港體育",
+    "ATK": 58,
+    "DEF": 82,
+    "height": 68,
+    "baseFormation": "5-3-2",
+    "teamForm": 1.01,
+    "namedPlayers": [
+      {
+        "id": "victoria-keeper-sze",
+        "name": "Harris Sze",
+        "nameZh": "施家浩",
+        "role": "keeper",
+        "reliability": 84,
+        "conditionFlavor": "form"
+      },
+      {
+        "id": "victoria-striker-kwok",
+        "name": "Simon Kwok",
+        "nameZh": "郭兆邦",
+        "role": "attacker",
+        "finishing": 72,
+        "involvement": 74,
+        "conditionFlavor": "discipline"
+      },
+      {
+        "id": "victoria-forward-luk",
+        "name": "Martin Luk",
+        "nameZh": "陸文傑",
+        "role": "attacker",
+        "finishing": 66,
+        "involvement": 64,
+        "conditionFlavor": "form"
+      },
+      {
+        "id": "victoria-runner-yip",
+        "name": "Francis Yip",
+        "nameZh": "葉志豪",
+        "role": "attacker",
+        "finishing": 61,
+        "involvement": 60,
+        "conditionFlavor": "discipline"
+      },
+      {
+        "id": "victoria-playmaker-tse",
+        "name": "Alan Tse",
+        "nameZh": "謝志安",
+        "role": "playmaker",
+        "passing": 70,
+        "conditionFlavor": "discipline"
+      }
+    ]
+  },
+  {
+    "name": "Stonecutters FC",
+    "nameZh": "石匠島足球會",
+    "ATK": 79,
+    "DEF": 54,
+    "height": 57,
+    "baseFormation": "3-4-3",
+    "teamForm": 1.03,
+    "namedPlayers": [
+      {
+        "id": "stonecutters-keeper-wong",
+        "name": "Danny Wong",
+        "nameZh": "黃德明",
+        "role": "keeper",
+        "reliability": 58,
+        "conditionFlavor": "discipline"
+      },
+      {
+        "id": "stonecutters-striker-au",
+        "name": "Ray Au",
+        "nameZh": "區家駿",
+        "role": "attacker",
+        "finishing": 84,
+        "involvement": 86,
+        "conditionFlavor": "form"
+      },
+      {
+        "id": "stonecutters-winger-pang",
+        "name": "Julian Pang",
+        "nameZh": "彭志軒",
+        "role": "attacker",
+        "finishing": 76,
+        "involvement": 79,
+        "conditionFlavor": "discipline"
+      },
+      {
+        "id": "stonecutters-forward-ko",
+        "name": "Felix Ko",
+        "nameZh": "高耀威",
+        "role": "attacker",
+        "finishing": 73,
+        "involvement": 74,
+        "conditionFlavor": "form"
+      },
+      {
+        "id": "stonecutters-playmaker-ip",
+        "name": "Tony Ip",
+        "nameZh": "葉東尼",
+        "role": "playmaker",
+        "passing": 81,
+        "conditionFlavor": "form"
+      }
+    ]
+  },
+  {
+    "name": "Tai Fung SC",
+    "nameZh": "大豐體育會",
+    "ATK": 72,
+    "DEF": 67,
+    "height": 61,
+    "baseFormation": "4-2-2-2",
+    "teamForm": 0.99,
+    "namedPlayers": [
+      {
+        "id": "taifung-keeper-pun",
+        "name": "Gordon Pun",
+        "nameZh": "潘國棟",
+        "role": "keeper",
+        "reliability": 69,
+        "conditionFlavor": "discipline"
+      },
+      {
+        "id": "taifung-striker-chow",
+        "name": "Stanley Chow",
+        "nameZh": "周兆麟",
+        "role": "attacker",
+        "finishing": 79,
+        "involvement": 82,
+        "conditionFlavor": "form"
+      },
+      {
+        "id": "taifung-forward-lui",
+        "name": "Oscar Lui",
+        "nameZh": "雷子謙",
+        "role": "attacker",
+        "finishing": 68,
+        "involvement": 71,
+        "conditionFlavor": "discipline"
+      },
+      {
+        "id": "taifung-runner-yam",
+        "name": "Howard Yam",
+        "nameZh": "任耀康",
+        "role": "attacker",
+        "finishing": 64,
+        "involvement": 76,
+        "conditionFlavor": "form"
+      },
+      {
+        "id": "taifung-playmaker-shum",
+        "name": "Julian Shum",
+        "nameZh": "岑偉樂",
+        "role": "playmaker",
+        "passing": 77,
+        "conditionFlavor": "discipline"
+      }
+    ]
+  },
+  {
+    "name": "Central United",
+    "nameZh": "中央聯",
+    "ATK": 66,
+    "DEF": 66,
+    "height": 62,
+    "baseFormation": "4-4-2",
+    "teamForm": 1.0,
+    "namedPlayers": [
+      {
+        "id": "central-keeper-hui",
+        "name": "Martin Hui",
+        "nameZh": "許文傑",
+        "role": "keeper",
+        "reliability": 69,
+        "conditionFlavor": "discipline"
+      },
+      {
+        "id": "central-striker-to",
+        "name": "Sam To",
+        "nameZh": "杜志堅",
+        "role": "attacker",
+        "finishing": 74,
+        "involvement": 77,
+        "conditionFlavor": "form"
+      },
+      {
+        "id": "central-forward-yu",
+        "name": "Terence Yu",
+        "nameZh": "余家駿",
+        "role": "attacker",
+        "finishing": 67,
+        "involvement": 69,
+        "conditionFlavor": "discipline"
+      },
+      {
+        "id": "central-runner-poon",
+        "name": "Adrian Poon",
+        "nameZh": "潘浩然",
+        "role": "attacker",
+        "finishing": 65,
+        "involvement": 66,
+        "conditionFlavor": "form"
+      },
+      {
+        "id": "central-playmaker-sum",
+        "name": "Nicky Sum",
+        "nameZh": "沈啟安",
+        "role": "playmaker",
+        "passing": 72,
+        "conditionFlavor": "discipline"
+      }
+    ]
+  },
+  {
+    "name": "Kowloon Quarry",
+    "nameZh": "九龍石礦",
+    "ATK": 63,
+    "DEF": 69,
+    "height": 84,
+    "baseFormation": "4-1-4-1",
+    "teamForm": 1.02,
+    "namedPlayers": [
+      {
+        "id": "quarry-keeper-fan",
+        "name": "Eric Fan",
+        "nameZh": "范志文",
+        "role": "keeper",
+        "reliability": 73,
+        "conditionFlavor": "discipline"
+      },
+      {
+        "id": "quarry-striker-mak",
+        "name": "Jason Mak",
+        "nameZh": "麥子豪",
+        "role": "attacker",
+        "finishing": 73,
+        "involvement": 75,
+        "conditionFlavor": "form"
+      },
+      {
+        "id": "quarry-forward-lok",
+        "name": "Keith Lok",
+        "nameZh": "駱敬業",
+        "role": "attacker",
+        "finishing": 66,
+        "involvement": 65,
+        "conditionFlavor": "discipline"
+      },
+      {
+        "id": "quarry-runner-fung",
+        "name": "Matthew Fung",
+        "nameZh": "馮卓賢",
+        "role": "attacker",
+        "finishing": 62,
+        "involvement": 63,
+        "conditionFlavor": "form"
+      },
+      {
+        "id": "quarry-playmaker-sze",
+        "name": "Harris Sze",
+        "nameZh": "施家浩",
+        "role": "playmaker",
+        "passing": 71,
+        "conditionFlavor": "discipline"
+      }
+    ]
+  },
+  {
+    "name": "Aberdeen Fishermen",
+    "nameZh": "香港仔漁民",
+    "ATK": 54,
+    "DEF": 58,
+    "height": 65,
+    "baseFormation": "4-5-1",
+    "teamForm": 0.98,
+    "namedPlayers": [
+      {
+        "id": "aberdeen-keeper-li",
+        "name": "Dennis Li",
+        "nameZh": "李志遠",
+        "role": "keeper",
+        "reliability": 62,
+        "conditionFlavor": "discipline"
+      },
+      {
+        "id": "aberdeen-striker-wu",
+        "name": "Tommy Wu",
+        "nameZh": "胡志聰",
+        "role": "attacker",
+        "finishing": 68,
+        "involvement": 72,
+        "conditionFlavor": "form"
+      },
+      {
+        "id": "aberdeen-forward-chan",
+        "name": "Alan Chan",
+        "nameZh": "陳家輝",
+        "role": "attacker",
+        "finishing": 59,
+        "involvement": 61,
+        "conditionFlavor": "discipline"
+      },
+      {
+        "id": "aberdeen-runner-leung",
+        "name": "Benny Leung",
+        "nameZh": "梁炳年",
+        "role": "attacker",
+        "finishing": 57,
+        "involvement": 60,
+        "conditionFlavor": "form"
+      },
+      {
+        "id": "aberdeen-playmaker-cheung",
+        "name": "Louis Cheung",
+        "nameZh": "張振朗",
+        "role": "playmaker",
+        "passing": 67,
+        "conditionFlavor": "discipline"
+      }
+    ]
+  }
+]
