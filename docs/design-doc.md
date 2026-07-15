@@ -113,3 +113,14 @@ The load-bearing system, prototyped text-only in Phase 1 before anything else:
 - All numbers live in `design/constants.json` — never hard-coded.
 
 中文摘要：泊松入球模型＋含抽水的賠率（只用昨日公開資訊計算）。驗證標準：盲賭約輸8%、全情報55–60%勝率。所有數字放調參檔，永不寫死。
+
+## Narrative Authoring Track (parallel to engine work)
+
+The story, characters, unique events, dialogue, quests, and relationship/choice branching are the designer's (Phil's) primary creative contribution and the game's differentiator. This work is **separated into two stages** so it can start early without jumping the engine gates:
+
+- **Authoring (starts now, Phase 1 onward):** written in **Twine** — free, browser-based, visual boxes-and-arrows branching, no code and no Unity required. The designer *sees* the whole story map and can grow it freely on paper. Source lives in `narrative/` as `.twee` text files (plain text, git-diffable, version-controlled like everything else). This is fuel and costs nothing to expand.
+- **Wiring into the game (Phase 3–5):** the authored branches are integrated into Unity through a **purpose-built narrative tool** — evaluation favors **articy:draft X** (visual node editor for characters/dialogue/quests/relationships with a Unity importer, closest to the designer's mental model) or a writer-first scripting tool (Ink / Yarn Spinner). **xNode was considered and rejected** — it is a generic node-graph framework requiring a programmer to build the entire dialogue/quest runtime in C#, wrong for a non-coder + Codex workflow. Final tool choice is a Phase 3 decision made deliberately, not in passing.
+
+**Scope guardrail:** writing may grow freely at any time, but *integrating* narrative into Unity stays behind Gate 3 (the core day loop must be proven fun first). A rich branching quest tree is worthless if one day of the core loop isn't fun yet.
+
+中文摘要：故事／角色／對白／任務／關係分支是設計者（Phil）的主要創作貢獻與遊戲賣點，分兩階段：**創作**（現在起，用免費視覺化的 Twine 寫，無需代碼或 Unity，原始檔放 `narrative/` 的 `.twee`）；**接入遊戲**（第3–5階段，用專門敘事工具，傾向 articy:draft X 或 Ink／Yarn Spinner；xNode 已評估並否決，因為它需要程式員自建系統）。護城河守則：寫作可隨時擴張，但接入 Unity 要留在第三關卡之後——核心循環未證明好玩前，再靚的任務樹都等於零。

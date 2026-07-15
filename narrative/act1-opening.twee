@@ -1,0 +1,83 @@
+:: StoryTitle
+Ball Knowledge — Act 1
+
+:: StoryData
+{
+  "ifid": "B411K-NOW1-EDGE-0001",
+  "format": "Harlowe",
+  "format-version": "3.3.9",
+  "start": "Shelter Wake"
+}
+
+:: Shelter Wake
+Rain on corrugated iron. You wake on a cot in St. Jude's shelter, back aching. Match day.
+
+Fat Keung's boys collected from two beds down last night — you heard the whole thing through the wall. You owe him $500,000. Fifty thousand of it is due tomorrow.
+
+鐵皮屋頂的雨聲。你在聖猶大中心的帆布床上醒來。今日有波賽。你欠肥強五十萬，聽日要還五萬。
+
+It's 6 AM. What do you do with your morning?
+
+[[Trek to the training ground->Training Ground]]
+[[Tea café gossip and breakfast->Tea Cafe]]
+[[Sleep two more hours->Oversleep]]
+
+:: Training Ground
+You slip out into the drizzle at 6:15, an hour east to the wire fence behind Harbour FC's pitch. At 9:00 the squad jogs out.
+
+The #9 — the striker the paper called "out of form" — is burying every finish, top corner, both feet. Whatever the paper says, this man is sharp.
+
+主隊9號前鋒，報紙話狀態低迷，操射門隻隻入死角。呢條友狀態爆棚。
+
+A kid in an oversized Harbour jacket collects stray balls by the fence. He clocks you watching.
+
+[[Talk to the ball kid->Ball Kid]]
+[[Head for the betting shop->Betting Shop]]
+
+:: Ball Kid
+"You bet, uncle?" he says. "Then you'll want to know — I do ball-boy for Eastport too. Their keeper was at the Golden Crown last night. My cousin works the bar. Says he was still ordering at 2 AM."
+
+He didn't have to tell you that. Remember this kid.
+
+「阿叔你賭波？東港隻門將琴晚飲到凌晨兩點。」佢冇必要話你知。記住呢個細路。
+
+(set: $ballKidFavour to 1)
+(set: $knowsKeeperDrunk to true)
+
+[[Head for the betting shop->Betting Shop]]
+
+:: Tea Cafe
+Instant milk tea and a bun. The uncles argue over the form guide. Someone mutters that Harbour's #9 has been "lively in training" — but you can't tell if it's real or just talk.
+
+茶餐廳奶茶配包。阿叔們嘈馬經。有人話主隊9號「操得幾生猛」——但你分唔到係真料定係吹水。
+
+(set: $rumourOnly to true)
+
+[[Head for the betting shop->Betting Shop]]
+
+:: Oversleep
+You pull the thin blanket up and sleep. When you wake it's nearly noon — no time to gather anything. Whatever you bet today, you bet blind.
+
+你瞓返。醒返已經晏晝。今日落乜注都係盲賭。
+
+[[Head for the betting shop->Betting Shop]]
+
+:: Betting Shop
+Lucky Star Betting. Smoke, radio static, old men arguing. The board still reads yesterday's paper:
+
+Harbour 2.75 / Draw 3.10 / Eastport 2.20.
+
+(if: $knowsKeeperDrunk is true)[You know what the board doesn't: a hot home striker AND a hungover away keeper. Harbour at 2.75 is value.]
+
+幸運星投注站。賠率板仲照琴日份報紙開。
+
+[[Bet Harbour to win->Bet Placed]]
+[[Walk away, save your money->Bet Placed]]
+
+:: Bet Placed
+<!-- This is where your branching continues. Add passages for the radio, the walk home, Settling Day. Drag new arrows from here. -->
+<!-- 這裡繼續你的分支。加段落寫電台、走佬、找數日。從這裡拉新箭頭。 -->
+
+To be written by you. This starter ends here — open it in Twine and grow the story.
+
+輪到你寫。這個起步檔到此為止——用 Twine 打開，把故事長出來。
