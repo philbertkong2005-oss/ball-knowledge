@@ -94,3 +94,17 @@ Proofs re-run by Claude (Codex output treated as advisory):
 4. Hook-block drill: junk constants edit + commit attempt → commit BLOCKED by hook (repo still has zero commits) ✅; good file restored, validated, re-staged.
 
 State: 18 files staged, no commits, no GitHub repo, no push — awaiting human gate.
+
+## Phase 0 Closure — 2026-07-14
+
+All exit criteria met:
+- Preflight passed after real fixes (installed Python 3.12.10 + GitHub CLI via winget; git identity set)
+- Repo skeleton, docs, constants schema+file+guide, requirements-dev.txt, .pre-commit-config.yaml committed (21d7cd9)
+- Pre-commit hook demonstrably blocked a junk constants edit (zero-commit drill during Act 3 verification)
+- CI green on GitHub (run 29284359016, success)
+- Private GitHub repo live: philbertkong2005-oss/ball-knowledge; main + good-* tags pushed
+- Unity 6.3 LTS project committed; authoritative editor pin unity/ProjectSettings/ProjectVersion.txt = 6000.3.19f1 (04d927c)
+- .venv smoke command passes (validator exit 0)
+- Developer personally executed BOTH rollback drills: unpushed junk edit -> git reset --hard to tag (learned bare `git reset` != `--hard` on the way); pushed junk commit b37ef65 -> git revert faf509d, both pushed
+
+Phase 0 CLOSED. Next: Phase 1 — text-only Python match engine in prototype/ (separate plan).
