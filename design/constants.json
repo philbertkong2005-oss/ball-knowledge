@@ -6,11 +6,11 @@
   "bookmaker_overround": 1.1,
   "shot_base": 12.8,
   "on_target_base": 0.34,
-  "conversion_base": 0.31,
+  "conversion_base": 0.205,
   "corner_base": 5.1,
   "assist_rate": 0.72,
   "second_half_factor": 1.12,
-  "home_advantage": 1.08,
+  "home_advantage": 1.24,
   "formation_mods": {
     "4-4-2": {
       "atkMult": 1.0,

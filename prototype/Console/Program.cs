@@ -25,8 +25,43 @@ internal static class ProgramEntry
             "match" => RunMatch(engine, teams, filteredArgs.Skip(1).ToArray()),
             "validate" => RunValidate(engine, teams),
             "board" => RunBoard(engine, teams, filteredArgs.Skip(1).ToArray()),
+            "stats" => RunStats(engine, teams, filteredArgs.Skip(1).ToArray()),
             _ => 1,
         };
+    }
+
+    // Tuning dashboard: simulate N matches across all fixtures, report realism metrics.
+    private static int RunStats(MatchEngine engine, IReadOnlyList<TeamDefinition> teams, string[] args)
+    {
+        var n = 3000;
+        for (var i = 0; i + 1 < args.Length; i++)
+        {
+            if (args[i] == "--n" && int.TryParse(args[i + 1], out var parsed)) n = parsed;
+        }
+
+        double totalGoals = 0, homeGoals = 0, awayGoals = 0;
+        int home = 0, draw = 0, away = 0, over25 = 0, btts = 0;
+        for (var i = 0; i < n; i++)
+        {
+            var h = i % teams.Count;
+            var a = (i / teams.Count + h + 1) % teams.Count;
+            if (a == h) a = (a + 1) % teams.Count;
+            var m = engine.SimulateMatch(teams[h], teams[a], 100000 + i * 13);
+            var hg = m.FullTimeHomeGoals;
+            var ag = m.FullTimeAwayGoals;
+            totalGoals += hg + ag; homeGoals += hg; awayGoals += ag;
+            if (hg > ag) home++; else if (hg == ag) draw++; else away++;
+            if (hg + ag > 2) over25++;
+            if (hg > 0 && ag > 0) btts++;
+        }
+
+        Console.WriteLine($"Stats over {n} matches (all fixtures):");
+        Console.WriteLine($"  Avg total goals : {totalGoals / n:F2}   (real football ~2.6-2.8)");
+        Console.WriteLine($"  Avg home / away : {homeGoals / n:F2} / {awayGoals / n:F2}");
+        Console.WriteLine($"  Home / Draw / Away wins : {100.0 * home / n:F1}% / {100.0 * draw / n:F1}% / {100.0 * away / n:F1}%   (real ~45/27/28)");
+        Console.WriteLine($"  Over 2.5 goals  : {100.0 * over25 / n:F1}%   (real ~50%)");
+        Console.WriteLine($"  Both teams score: {100.0 * btts / n:F1}%   (real ~50%)");
+        return 0;
     }
 
     // Prints the FULL odds board (every market + every outcome) for a fixture, in American odds.
