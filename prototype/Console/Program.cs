@@ -97,16 +97,17 @@ internal static class ProgramEntry
     private static int RunMatch(MatchEngine engine, IReadOnlyList<TeamDefinition> teams, string[] args)
     {
         var seed = 12345;
+        var homeIdx = 0;
+        var awayIdx = 1;
         for (var i = 0; i < args.Length - 1; i++)
         {
-            if (args[i] == "--seed" && int.TryParse(args[i + 1], out var parsed))
-            {
-                seed = parsed;
-            }
+            if (args[i] == "--seed" && int.TryParse(args[i + 1], out var parsed)) seed = parsed;
+            if (args[i] == "--home" && int.TryParse(args[i + 1], out var h)) homeIdx = h;
+            if (args[i] == "--away" && int.TryParse(args[i + 1], out var a)) awayIdx = a;
         }
 
-        var match = engine.SimulateMatch(teams[0], teams[1], seed);
-        var board = engine.PricePublicMarkets(teams[0], teams[1]);
+        var match = engine.SimulateMatch(teams[homeIdx], teams[awayIdx], seed);
+        var board = engine.PricePublicMarkets(teams[homeIdx], teams[awayIdx]);
 
         Console.WriteLine("Ball Knowledge Match Demo");
         Console.WriteLine($"Seed: {seed}");
