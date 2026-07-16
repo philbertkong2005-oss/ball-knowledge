@@ -601,7 +601,13 @@ public sealed class MatchEngine
 
         foreach (var line in _config.HandicapLines)
         {
-            markets.Add(BuildHandicapBook(line, handicaps[line], simulationCount));
+            var handicapBook = BuildHandicapBook(line, handicaps[line], simulationCount);
+            // A real book only offers handicap lines where both sides are sensibly bettable.
+            // Drop degenerate lines (e.g. giving the favourite a head start) whose either side pays below the floor.
+            if (handicapBook.Outcomes.All(o => o.Odds >= _config.MinOfferedOdds))
+            {
+                markets.Add(handicapBook);
+            }
         }
 
         markets.Add(BuildClosedBook(

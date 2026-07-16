@@ -116,6 +116,9 @@ public sealed record EngineConfig
     [JsonPropertyName("bookmaker_overround")]
     public required double BookmakerOverround { get; init; }
 
+    [JsonPropertyName("min_offered_odds")]
+    public required double MinOfferedOdds { get; init; }
+
     [JsonPropertyName("shot_base")]
     public required double ShotBase { get; init; }
 

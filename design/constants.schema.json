@@ -10,6 +10,7 @@
     "weekly_debt_interest",
     "catch_vig",
     "bookmaker_overround",
+    "min_offered_odds",
     "shot_base",
     "on_target_base",
     "conversion_base",
@@ -58,6 +59,11 @@
     "bookmaker_overround": {
       "type": "number",
       "description": "Bookmaker overround as a multiplier, not a percentage. Example: 1.10 means a 110% book."
+    },
+    "min_offered_odds": {
+      "type": "number",
+      "minimum": 1,
+      "description": "Minimum decimal odds a market outcome may have to be offered. Handicap lines whose either side falls below this are not shown (a real book only offers sensible lines around the expected margin). Example: 1.10."
     },
     "shot_base": {
       "type": "number",

@@ -5,6 +5,7 @@
 - `weekly_debt_interest`: Weekly debt interest as a decimal fraction, so `0.10` means `10%`, not `10`.
 - `catch_vig`: Collector vig as a decimal fraction, so `0.30` means `30%`, not `30`.
 - `bookmaker_overround`: Bookmaker overround as a multiplier, so `1.10` means a `110%` book.
+- `min_offered_odds`: Minimum decimal odds an outcome may have to be offered. Asian-handicap lines whose either side would pay below this (e.g. giving the favourite a head start) are dropped, like a real book. Example: `1.10`.
 - `shot_base`: League baseline shots per team per match before team-strength, formation, and factor adjustments.
 - `on_target_base`: Baseline probability that one shot is on target, as a decimal between `0` and `1`.
 - `conversion_base`: Baseline probability that one on-target shot becomes a goal before the keeper adjustment.

@@ -4,6 +4,7 @@
   "weekly_debt_interest": 0.1,
   "catch_vig": 0.3,
   "bookmaker_overround": 1.1,
+  "min_offered_odds": 1.1,
   "shot_base": 12.8,
   "on_target_base": 0.34,
   "conversion_base": 0.205,
