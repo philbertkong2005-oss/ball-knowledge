@@ -277,3 +277,40 @@ Proof of correctness: blind loses the ~9% house edge (matches hand-math for a 1.
 Committed 1bbc908, tags phase1-complete + good-20260715-2140. 9/9 xUnit tests pass.
 
 Deferred to later (logged, not blocking): #3 intel-power design taste (informed +44% passes spec floor; dial factors down for a more modest feel if desired), Wave-2 markets (corners/shots/saves/assists), anti-repetition systems, sabotage world, promo tokens. Next natural milestone: Phase 2 (greybox district in Unity).
+
+## Round 1 — Codex (Phase 2 spec)
+
+1. [Critical] The Unity hookup is not viable as written: [phase2-greybox.md](</C:/Users/philb/Projects/ball-knowledge/docs/phase2-greybox.md:35>) says Unity will reference `BallKnowledge.MatchEngine` unchanged, but the actual library targets only `net8.0` in [BallKnowledge.MatchEngine.csproj](</C:/Users/philb/Projects/ball-knowledge/prototype/MatchEngine/BallKnowledge.MatchEngine.csproj:4>), while the Unity project is a separate Unity 6 editor project in [ProjectVersion.txt](</C:/Users/philb/Projects/ball-knowledge/unity/ProjectSettings/ProjectVersion.txt:1>) with no defined DLL/package/asmdef ingestion path. Fix: explicitly specify one bridge mechanism before implementation starts: either a Unity-compatible prebuilt DLL under `Assets/Plugins` or a local package, with build-only multi-targeting allowed but the Phase 1 public API frozen.
+
+2. [Critical] The plan directly invites a frozen-contract violation: [phase2-greybox.md](</C:/Users/philb/Projects/ball-knowledge/docs/phase2-greybox.md:38>) allows “extend `constants.json` (schema v3, validator updated),” but Phase 1 froze the engine contract around the existing config shape and schema rewrite in [phase1-match-engine.md](</C:/Users/philb/Projects/ball-knowledge/docs/phase1-match-engine.md:26>). Fix: ban edits to `design/constants.json`, `constants.schema.json`, and `teams.json` for Phase 2 and put all greybox-only tunables in a separate `greybox.json` with its own validator.
+
+3. [High] The core loop is nondeterministic in a way that can make Gate 2 literally unplayable: [phase2-greybox.md](</C:/Users/philb/Projects/ball-knowledge/docs/phase2-greybox.md:45>) assumes the player wins a bet and gets `$2,000+`, but the plan never defines the fixture, market, seed, stake, payout, or whether this is guaranteed on the first run. Fix: define a single canned Gate-2 fixture and seeded winning outcome so every test session reaches the cash-carry walk without relying on luck.
+
+4. [High] One of the “objective” checks is not testable the way the plan claims: [phase2-greybox.md](</C:/Users/philb/Projects/ball-knowledge/docs/phase2-greybox.md:55>) says `$2,000` should get you stopped more than `$0` “over the same walk,” but with one patrol and stochastic spotting, a few manual walks prove nothing. Fix: require an automated seeded simulation/log that runs many corridor traversals at `$0` and `$2000` and asserts a higher mean stop rate.
+
+5. [High] Gate 2’s primary pass rule is too gameable to be a gate: [phase2-greybox.md](</C:/Users/philb/Projects/ball-knowledge/docs/phase2-greybox.md:54>) asks whether testers voluntarily do the walk a second time, which can happen because the build is short, confusing, or because they lost, not because it felt tense. Fix: replace it with a fixed playtest script and explicit pass rubric tied to first-run behavior and a forced tension rating.
+
+6. [High] The catch-stop economy is underspecified because the debt system it pays into is deferred: [phase2-greybox.md](</C:/Users/philb/Projects/ball-knowledge/docs/phase2-greybox.md:17>) and [55](</C:/Users/philb/Projects/ball-knowledge/docs/phase2-greybox.md:55>) say seized cash goes “toward debt + vig,” but the slice does not define a visible debt balance, starting debt, or post-stop feedback, so the punishment may feel like arbitrary money deletion. Fix: add a minimal visible debt ledger and before/after stop summary so `pay+vig` has concrete state change in Phase 2.
+
+7. [Medium] The stealth rules are still loose enough that Codex will guess wrong: [phase2-greybox.md](</C:/Users/philb/Projects/ball-knowledge/docs/phase2-greybox.md:13>) promises “vision-based hiding,” [15](</C:/Users/philb/Projects/ball-knowledge/docs/phase2-greybox.md:15>) promises cone spotting, and [55](</C:/Users/philb/Projects/ball-knowledge/docs/phase2-greybox.md:55>) says hiding breaks chase, but there is no exact LOS, range, grace-period, or reacquire rule. Fix: specify one concrete detection model and one concrete chase-break rule in numbers.
+
+8. [Medium] The workflow is mismatched to a beginner using a non-clicking agent: [phase2-greybox.md](</C:/Users/philb/Projects/ball-knowledge/docs/phase2-greybox.md:37>) offloads scene wiring to Phil, but there is no serialized scene contract, prefab list, inspector checklist, or screenshot checkpoint, so editor mistakes will look like code bugs and Codex cannot verify them. Fix: require a literal editor checklist naming every GameObject, component, tag/layer, serialized field, and expected screenshot after each setup step.
+
+9. [Medium] The CI line is understated to the point of being misleading: [phase2-greybox.md](</C:/Users/philb/Projects/ball-knowledge/docs/phase2-greybox.md:64>) treats Unity CI as a small extension, but the current workflow is only a Python constants validator in [validate.yml](</C:/Users/philb/Projects/ball-knowledge/.github/workflows/validate.yml:1>) and there is no existing Unity build/test pipeline. Fix: either defer Unity CI out of Gate 2 or specify the exact runner, editor invocation, licensing assumption, and test command as a separate task.
+
+10. [Medium] The plan still has avoidable scope creep for a first Unity slice: [phase2-greybox.md](</C:/Users/philb/Projects/ball-knowledge/docs/phase2-greybox.md:15>) allows “1–2 patrollers,” and [64](</C:/Users/philb/Projects/ball-knowledge/docs/phase2-greybox.md:64>) pulls CI into the same phase as first-person controls, stealth, stash, betting UI, engine reuse, and config sync. Fix: lock Phase 2 to exactly one patroller and make CI a follow-up after the walk is already proven locally.
+
+VERDICT: REVISE
+### Claude's response (Phase 2, Round 1)
+
+Accepted all 10 findings:
+1. Unity bridge specified: multi-target MatchEngine to net8.0;netstandard2.1 (packaging only, API/math frozen, re-verify Phase 1 proof), ship as DLL in Assets/Plugins referenced via asmdef.
+2. Frozen-contract door closed: constants.json/schema/teams BANNED from Phase 2 edits; all greybox tunables in separate design/greybox.json with own validator.
+3. Deterministic Gate-2 cash: one canned fixture + fixed seed chosen so the bet always wins, fixed payout in greybox.json.
+4. Stop-rate check is now an automated seeded corridor simulation ($0 vs $2000, many traversals, asserts higher mean), not manual walks.
+5. Gate 2 primary rewritten: fixed playtest script + forced 1-5 first-run tension rating + rubric (median >=4/5 AND half describe a moment); voluntary replay demoted to secondary.
+6. Minimal VISIBLE debt ledger added + before/after stop summary so pay+vig is concrete state change.
+7. Concrete detection model in greybox.json: cone 35 deg/18m, LOS raycast, 0.8s time-to-detect shrinking with cash-heat, chase run x1.05, 4s LOS-loss chase-break.
+8. Mandatory editor setup checklist deliverable (every GameObject/component/tag/layer/serialized field/screenshot per step).
+9. Unity CI deferred OUT of Gate 2 to a follow-up task (runner/license/-runTests unspecified for now); Python validators keep running.
+10. Locked to exactly ONE patroller; CI removed from this phase.
