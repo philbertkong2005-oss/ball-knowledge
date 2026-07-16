@@ -327,3 +327,12 @@ VERDICT: REVISE
 Accepted both:
 1. Freeze redefined by OUTCOMES (public API + behaviour + identical Gate-1 numbers), not file-immutability. Explicitly ALLOW compat plumbing to compile netstandard2.1 (multi-target, System.Text.Json package ref, IsExternalInit/RequiredMember shims under conditional compile so net8.0 untouched). BAN semantic logic/signature/math changes without re-review. Mandatory: re-run Phase 1 proof after the bridge change; any moved number = semantic change = revert.
 2. StreamingAssets: removed the manual-copy option; now ONE repeatable sync (tools/sync_streamingassets.py or editor menu action) that copies both files + logs success; never hand-edited; runnable in CI to assert copies match design/.
+
+## Round 3 — Codex confirmation (Phase 2)
+
+No material findings remain. Freeze correctly defined by unchanged public API + behaviour + identical Phase-1 proof outputs (not file immutability); StreamingAssets is one repeatable sync, manual copy banned. Remaining risks are implementation risks, not spec defects. Plan is specific enough to implement and protects the frozen Phase 1 contract at the right place: outcomes.
+
+VERDICT: APPROVED
+
+---
+Converged: Phase 2 spec APPROVED after 3 review rounds (10 -> 2 -> 0 findings). docs/phase2-greybox.md is the frozen build contract. Awaiting user sign-off before build.
