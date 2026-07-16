@@ -1,13 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <!-- Multi-target: net8.0 for the Phase 1 console/tests (unchanged), netstandard2.1 so the
+       SAME engine can ship as a managed DLL into Unity (Phase 2 bridge). Packaging change only;
+       public API, behaviour, and Gate-1 outputs stay frozen (verified by re-running the Phase 1 proof). -->
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFrameworks>net8.0;netstandard2.1</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <InternalsVisibleTo Include="BallKnowledge.Tests" />
+  </ItemGroup>
+
+  <!-- netstandard2.1 lacks these BCL pieces the engine relies on; supply them as compile-time
+       compatibility plumbing so the SAME source compiles for Unity. net8.0 is untouched. -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
 
 </Project>
