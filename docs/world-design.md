@@ -12,8 +12,17 @@
 
 - **Identity evolution is the selling point (Structure A):** each act the player's primary identity genuinely changes — Bettor → Bookie → Fixer. Betting ability is **retained in all three acts** (secondary verb in Acts 2–3; in Act 3 it is the payoff step of every fix).
 - **Act 2 is a pure bookie act.** Footballers and core team members are **untouchable in Act 2**; intimidation was cut as a mechanic entirely. "Changing the truth" is saved whole for Act 3.
-- **Act 2 entry = triple gate:** ① debt principal cleared + ② connection levels with key NPCs reached ("trust" is unified into the NPC connection system, not a separate concept) + ③ player XP level reached.
+- **Act 2 entry = triple gate:** ① debt principal cleared + ② connection levels with key NPCs reached ("trust" is unified into the NPC connection system, not a separate concept) + ③ player XP level reached. **The key NPCs for gate ② are the arcade owner and the shelter mate.**
 - Act fun statements: Act 1 = detective info-edge + survival tension (prey). Act 2 = "house always wins" power flip, book-balancing vs sharps (predator). Act 3 = heist-like fixing operations, you *make* the truth.
+
+### 1.1 Act 2 arc — the Fat Keung takedown (LOCKED)
+- **All 3 legit bet shops in town 1 are run by Fat Keung.** The player owes him money AND wins bets out of his shops — you repay him with his own money; his shops ban you (temporarily) because you genuinely bleed him.
+- **The arcade owner is a lieutenant under Fat Keung.** The player's Act 2 book opens illegally in his arcade back room (protected turf), and building connection with him doubles as **the conspiracy**: the player and the arcade boss take Fat Keung down together (fixed narrative, not a player choice).
+- **The takedown = seizing the 3 legit bet shops** (+ mopping up Fat Keung's docks office afterward). Each seized shop's **licence must be re-registered at the town hall** (card fee + time) — the seizure has a paperwork tail.
+- **Spoils split:** the arcade boss takes the gang/territory side; the player takes the entire betting side. **Guardrail (stamped): the player's underworld role caps forever at "the enforcement arm of the betting business"** — collect the book's own debts, protect its venues; a territory/racket-management system never exists. Fat Keung's collectors become shop employees (the men who hunted you in Act 1 end up on your payroll).
+- **Expansion timeline:** towns 2–3 open **only after the takedown**; the player expands the shop network alone (with the absorbed crew). **Act 3 begins ≈ when the player operates every bet shop across all 3 towns.** The big city is reserved as Act 3's fixer stage.
+
+中文摘要：3間正行投注站全部係肥強經營——你贏嘅錢係佢嘅錢。街機舖老闆係肥強手下，同你密謀拆佢。拆佢=接管3間舖（牌照逐間過名）。分贓：佢攞地盤，你攞晒賭業。護欄：玩家黑道角色永遠封頂喺執行臂，地盤管理系統永不存在。拆咗先開鎮2、3；操晒3鎮所有盤口≈第3幕開始。
 
 中文摘要：身份進化係賣點（賭客→莊家→造馬者），落注三幕保留。第2幕係純莊家幕，球員不可掂。入幕=三閘：債清+關鍵NPC關係+等級。
 
@@ -30,16 +39,18 @@
 ### 2.2 Act 1 town — four zones
 | Zone | Contents | Risk profile |
 |---|---|---|
-| **Downtown core** | bank, town hall, police station, hospital, bet shop #1 (flagship), general store #1, pharmacy, barber, newsstand, hotel, general bar, realtor, car dealer, phone booths | police-heavy: safest with cash, deadliest with contraband (search central) |
+| **Downtown core** | bank, town hall, police station, hospital, bet shop #1 (flagship), general store #1, newsstand, hotel, general bar, realtor, car dealer, phone booths | police-heavy: safest with cash, deadliest with contraband (search central) |
 | **Old harbour / docks** | docks & fish market, black-market fence, Fat Keung's office, arcade + illegal bookie, bet shop #2, shelter #2, supporters' bar A, laundromat (first buyable front candidate) | gang turf: contraband walks free, cash bleeds. Monthly payment day = cash run into the lion's den |
-| **Residential fringe** | NPC houses, rentable rooms (housing ladder), general store #2, gas stop #1 + fast food, park (slip-scavenging hotspot, unsafe sleep), shelter #1 (start home), supporters' bar B, phone booths | neutral; max gang heat patrols wherever the player lives |
+| **Residential fringe** | NPC houses, rentable rooms (housing ladder), **bet shop #3**, general store #2, gas stop #1 + fast food, park (slip-scavenging hotspot, unsafe sleep), shelter #1 (start home), supporters' bar B, phone booths | neutral; max gang heat patrols wherever the player lives |
 | **Rural outskirts** | training ground (Act 1 watch through fence → Act 3 infiltrate), stadium (town edge, on bus line), natural area + campground (hunting?? unlocked), general store #3, gas stops #2–3 + fast food, treasure boxes concentrated | no factions but far — trips cost time/energy while cash-heat ticks |
 
 - **Transport spine:** one bus line linking zones; taxis downtown & at gas stops; **one closed metro station "to the city" that opens in Act 2** (expansion foreshadowed in concrete).
 - **ATMs on streets across every zone EXCEPT the camp/natural area.** Deposit & withdraw at any ATM once the $500 card exists. The bank building keeps card setup + later business banking.
 - Zone symmetry: police zone and gang zone mirror each other — **what you carry decides where is safe.**
 - Tension distances: ① overflow cash ↔ your stash (big-win days: the dangerous walk is home, not to the bank), ② stealing is easy, *fencing* means hauling contraband across town, ③ morning training-ground intel ↔ racing back to bet before odds move.
-- Counts: 3 bet shops, 2 shelters, 3 general stores, 3 gas stops + fast food, 3 bars total (2 supporters' + 1 general).
+- Counts: 3 bet shops (one per non-rural zone — ban rotation costs real legwork; all three are Fat Keung's, see §1.1), 2 shelters, 3 general stores, 3 gas stops + fast food, 3 bars total (2 supporters' + 1 general).
+- **Barber and pharmacy were cut** — their functions fold into general stores: **general stores sell medicine and clothing/disguise gear** (one store per zone, so even buying a disguise has legwork).
+- **Treasure boxes/stashes:** diegetically **under-bridge stashes and plain unopened boxes**; free to open (no lockpick requirement); densest in rural zone. **Loot pool: rare gun, 100% profit token, car key (car location revealed)** — unique finds give good XP. Car keys spawn Act 2+.
 
 中文摘要：4鎮各2隊共用1場。第1幕單鎮四區：downtown（警多）、碼頭（黑幫地頭）、住宅、郊野。帶咩決定邊度安全。ATM遍佈全區除營地。
 
@@ -52,7 +63,7 @@
 - **Bank/card** — safe, unlimited, big/legit purchases are card-only.
 - Cash on body has **no dirty/clean tag** — the deposit cap alone represents "some of it is dirty."
 - **The valve:** cash→bank conversion is capped per day. **$500 credit-card setup (bought with cash — the bootstrap) unlocks conversion; buying businesses widens the cap (= laundering).** Card = unlock, business = accelerate.
-- Withdrawal limits: **TBD (open)** — lean is unlimited, matching Schedule 1's one-way valve.
+- **Withdrawals: unlimited** (one-way valve, matching Schedule 1). Withdrawing turns safe money back into hot cash — the player punishes themselves.
 
 ### 3.2 Payment channels
 | Source | Channel |
@@ -106,6 +117,15 @@
 ### 3.9 Profit tokens
 - Illegal bookie (arcade back room) offers profit tokens **regularly**; legal shops require special means to obtain them. (Doc pillar unchanged: tokens amplify reward, never probability.)
 
+### 3.10 Arcade & minigames
+- Machines are **pay-to-play skill/fun games with no betting** (e.g. batting machine, penalty-shootout minigame) — a pure entertainment expense, zero competition with the betting core.
+- **Prize pool (skill rewards, never money):** gift trinkets (feed the NPC gifting system), game achievements, occasional profit tokens, unique clothes, bonus bet items. Tuning flag: token/bonus-bet prizes need rarity caps so arcade skill never becomes a token farm.
+- **Act 2 dual identity (accepted):** the arcade is a legal business (income → bank) AND the front for the player's illegal book behind it → **widens the deposit valve (laundering front)**. The player's first laundering front was standing there all along.
+
+### 3.11 Global rule — every item is sellable
+- No junk-tier items. Where depends on the item: normal goods → general stores/market; flagged/stolen → fence only; meat & hide → market / fish market.
+- **Guardrail (tuning):** sellable ≠ profitable. Every non-betting income (hunting, scavenging, odds-and-ends) prices below what betting earns — universal sellability is texture and freedom, never a second career.
+
 中文摘要：兩種錢一條閥：$500卡解鎖存款（有上限），買生意開大閥。打工全剷（同核心競爭）。債$100k，月供入本金，逾期嗰期+10%，現金還。20分鐘=1日。XP多源，輸注XP低到唔值得farm。NPC關係每人獨立，送禮/買料/賣嘢/傾偈養關係。
 
 ---
@@ -148,7 +168,15 @@ Two predators, two logics: police care about your *crimes*, the gang cares about
 - **Weapons:** punch ring, knife, pistol (bat cut). Sources: **steal from police/gang, treasure boxes, or extreme black-market price** — not normally sold. Every police officer carries a pistol. Gang loadouts mixed (gun/knife/ring). **Gunshots draw both police and gang to investigate.** Weapons are search contraband.
 - **Furniture:** bed quality (faster recovery), food storage, cooking, drawers (stash capacity), decoration, **TV & radio (live match results at home)**.
 - **Gold bars: cut.**
-- **Treasure boxes:** scattered world loot (unique hidden items = good XP; a gun source). Contents = open thread.
+- **Treasure boxes:** see §2.2 (form, loot pool, free to open).
+- **Hunting (natural area):** role = **food supply, not income** — meat is mainly a cheap cooking ingredient; meat and hide are sellable (global rule §3.11) but priced as texture, never a career. Tool: **gun** (hunting is naturally gated behind rare gun acquisition).
+
+### 5.1 Driving & fuel
+- **Real driving:** the player drives to most places; **hitting people with the car is a crime like any other** (assault-class, heat if witnessed — universal verbs hold).
+- **Availability: from Act 2, price-gated** — cars are card-only big assets, so laundered savings are the natural gate. First car = the "I made it out of the shelter era" beat. Treasure-box car keys spawn Act 2+.
+- **Fuel: real meter.** The car runs dry; park at a gas stop to auto-refuel (paid). **Run dry mid-road → walk to a gas stop for a jerry can.**
+- **The car is outdoors:** the cash-carry gang-heat tick (+1/hr over $500) keeps running while driving — a car never shelters your money.
+- **Boot = weak stash:** police pull-overs search the vehicle (contraband in the boot still busts you); boot cash still counts as carried for gang heat. Convenience, never immunity.
 
 中文摘要：格仔袋可升級，身上vs收藏分開。三bar：肚餓>80慢回血，瞓覺回血回energy。煮飯=1菜1肉1碳水半價，食物過期。衫=偽裝值+幾道dress門。武器：拳環/刀/槍，唔賣（偷/寶箱/黑市天價），槍聲引雙方。金條剷。
 
@@ -207,13 +235,16 @@ Walk, run, jump, crawl/hide (bush), eat, sleep, buy/sell items-assets-info, plac
 
 ## 8. Open / parked threads
 
-| Thread | State |
-|---|---|
-| Arcade minigames economics | parked — proposal on the table: house-edge games (winnable short-term, losing long-term; Act 2 the player collects the edge). NOT yet accepted |
-| Hunting in natural area | tentative ("??") — new verb, needs gun/trap/noise rules |
-| Driving / fuel system | implied by car dealer + 3 gas stops + vehicle upgrades — big mechanic, needs its own session |
-| Treasure box contents & placement | open |
-| Key-NPC roster for connection gates | open (doc has ball kid + shelter mate as Act 1 relationship NPCs) |
-| Bank withdrawal limits | TBD — lean unlimited (Schedule 1 one-way valve) |
-| Monthly minimum amount, per-crime heat values, gift caps, food expiry times, slot counts | tuning table, spec stage |
-| "Fine vs jail" exact thresholds, bounty fine sizes | tuning |
+All design-level threads are resolved (arcade minigames §3.10, hunting §5, driving §5.1, treasure boxes §2.2, withdrawal §3.1, key NPCs §1, Fat Keung arc §1.1). Remaining items are **tuning-table work for the spec stage**:
+
+| Tuning item |
+|---|
+| Monthly minimum payment amount (vs income curve) |
+| Per-crime police-heat values |
+| Fine/jail thresholds, bounty fine sizes, jail durations |
+| Gift caps / diminishing returns (anti-spam) |
+| Food expiry times, slot counts, bag upgrade sizes |
+| Arcade prize rarity caps (tokens/bonus bets) |
+| Deposit-cap baseline & per-business widening amounts |
+| Fuel prices, car prices, scouting reveal rates (home vs away watch) |
+| Full NPC roster beyond the named key NPCs (insiders, fence, cops) — story pass |
