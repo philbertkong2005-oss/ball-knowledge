@@ -18,12 +18,20 @@
 The game escalates through three acts. **Identity evolution is the selling point** — each act the player's primary identity genuinely changes. **Betting is retained in all three acts** (secondary verb in Acts 2–3; in Act 3 it is the payoff step of every fix). See [`world-design.md` §1](world-design.md) for the authoritative statement.
 
 1. **Act 1 — The Bettor.** Deep in debt, you gather information the odds board doesn't reflect yet, walk your bets to the shop, and dodge the collectors hunting you. You *consume* odds. *(Fun: detective info-edge + survival tension — you are prey.)*
-2. **Act 2 — The Bookie.** You move behind the counter: setting lines, balancing the book against sharps, employing people you know. You *set* odds. *(Fun: the "house always wins" power flip — you are predator.)* **Act 2 is a PURE bookie act — footballers and core team members are untouchable; "changing the truth" is saved whole for Act 3.**
+2. **Act 2 — The Bookie.** You move behind the counter: setting lines, balancing the book against sharps. You *set* odds. *(Fun: the "house always wins" power flip — you are predator.)* **Act 2 is a PURE bookie act — footballers and core team members are untouchable; "changing the truth" is saved whole for Act 3.**
 3. **Act 3 — The Fixer.** With connections you reach the sport itself. You *control* the outcomes behind the odds. *(Fun: heist-like fixing operations.)*
 
-**Act 2 entry = triple gate** (supersedes the older "debt cleared and trust earned"): ① debt principal cleared **+** ② connection levels with key NPCs reached **+** ③ player XP level reached. "Trust" is not a separate concept — it is unified into the NPC connection system ([`world-design.md` §1, §3.8](world-design.md)). Money alone can never open Act 2.
+**Act 2 entry = triple gate** (supersedes the older "debt cleared and trust earned"): ① debt principal cleared **+** ② connection levels with the **key NPCs — the arcade owner and the shelter mate** — reached **+** ③ player XP level reached. "Trust" is not a separate concept — it is unified into the NPC connection system ([`world-design.md` §1, §3.8](world-design.md)). Money alone can never open Act 2.
 
-Acts 2 and 3 remain paper designs until Act 1 is proven (see the roadmap's PM rules). Systems are designed to invert across acts rather than be discarded — the loan-shark pressure you fled in Act 1 becomes the collection network you operate in Act 2; the intel sources you paid become the sharps you fear.
+**Act 2's spine — the Fat Keung takedown (LOCKED, [`world-design.md` §1.1](world-design.md)):** all three legit bet shops in town 1 are **Fat Keung's** — so you repay him with his own money, and his shops ban you *because you genuinely bleed him*. The **arcade owner is his lieutenant**; your illegal book opens in his back room, and building that connection **is the conspiracy** — together you take Fat Keung down (fixed narrative, not a player choice). The takedown **seizes the three shops** (each licence re-registered at the town hall — a paperwork tail), and the spoils split: he takes the gang/territory side, **you take the entire betting side.**
+
+> 🚧 **Stamped guardrail:** the player's underworld role **caps forever at "the enforcement arm of the betting business"** — collect the book's own debts, protect its venues. **A territory/racket-management system never exists.** This is what keeps the game about betting rather than drifting into a crime-empire sim.
+
+**Act boundaries:** towns 2–3 open **only after the takedown**; **Act 3 begins ≈ when the player operates every bet shop across all 3 towns**, with the big city reserved as Act 3's fixer stage.
+
+Acts 2 and 3 remain paper designs until Act 1 is proven (see the roadmap's PM rules). Systems invert across acts rather than being discarded — most concretely: **Fat Keung's collectors, the men who hunted you in Act 1, end up on your payroll**; the intel sources you paid become the sharps you fear.
+
+中文摘要（第2幕主線）：3間正行投注站全部係肥強嘅——你用佢啲錢還佢，佢啲舖封你因為你真係贏到佢流血。街機舖老闆係佢手下，你嘅地下盤口開喺佢後房，同佢建立關係**就係密謀**——一齊拆肥強（固定劇情，非玩家選擇）。拆咗＝接管3間舖（牌照要喺市政廳逐間過名）。分贓：佢攞地盤，你攞晒賭業。🚧**蓋章護欄：玩家黑道角色永遠封頂喺「賭業嘅執行臂」，地盤管理系統永不存在。** 拆咗先開鎮2、3；操晒3鎮所有盤口≈第3幕開始。第1幕追你嘅收數佬，最終出現喺你糧單上。
 
 中文摘要：三幕式——賭客（獵物）→ 莊家（獵人）→ 操盤者。落注三幕保留。**第2幕係純莊家幕，球員不可掂**。入第2幕＝三閘（債清＋關鍵NPC關係＋等級），取代舊有嘅「債清＋信任」；「信任」已統一入NPC關係系統。詳見 world-design §1。
 
@@ -95,7 +103,7 @@ Relationships are now a **first-class system and the master key to progression**
 - **Per-NPC independent ratings.** Higher connection unlocks that NPC's **verbs**: hiring, giving information, accepting bribes, and other activities.
 - **Levelled by:** gifting (items, food incl. self-cooked, **intel you gathered**), buying info from them, selling to them, plain engagement. *(Tuning flag: gifts need a daily cap / diminishing returns — anti-spam.)*
 - **Connection is load-bearing twice over:** it is **gate ② of the Act 2 triple gate** ([§1](world-design.md)), and **the master key to all Act 3 access** — both the break-in and welcomed-in routes require it, and bribing refs/players only works at high connection ([§6.2](world-design.md)).
-- **The ball kid + shelter mate** remain Act 1's named relationship NPCs; the full key-NPC roster for the connection gates is an **open thread** ([§8](world-design.md)).
+- **The key NPCs for gate ② are named ([§1](world-design.md)): the arcade owner and the shelter mate.** The arcade owner is the load-bearing one — he is Fat Keung's lieutenant, your book's landlord, and your co-conspirator in the Act 2 takedown, so *connection with him literally is the Act 2 plot* ([§1.1](world-design.md)). The ball kid remains an Act 1 relationship NPC; the wider roster (insiders, fence, cops) is a **story pass**, not a design gap ([§8](world-design.md)).
 - **Rule retained: opportunistic, never grindy** — favor moments occur inside things the player already does, not a standing-still friendship meter.
 
 中文摘要：NPC關係已升為一級系統兼進度萬能匙（以 world-design §3.8 為準，並吸收舊有「信任」概念）。每個NPC獨立評分，解鎖該NPC嘅動詞（請人、畀料、收賄）。靠送禮／買料／賣嘢／傾偈提升；**情報本身就係禮物**。關係係第2幕三閘之②，亦係第3幕所有access嘅萬能匙。執波仔＋中心朋友保留；完整關鍵NPC名單未定。
@@ -106,7 +114,7 @@ Era-appropriate paper vouchers the betting shop hands out — the industry's rea
 
 - **Free bet voucher** (stake refunded on loss — given after losing streaks, the classic hook), **odds boost stamp** (+20% payout on one slip — loyalty reward), **insurance slip** (half stake back — bought at the counter), **accumulator ticket** (unlocks combo bets — shop-trust milestone).
 - **Rules:** tokens amplify reward, never probability (pillar 4 — confirmed unchanged in [`world-design.md` §3.9](world-design.md)). Tokens are a Phase 3 shop feature and are **out of scope for the Phase 1 match engine** — no token model or token validation exists in Phase 1. When tokens are built, their supply must be validated so that blind betting *with* tokens still loses long-term. In Act 2 the player hands these same vouchers to their own clients, completing the lesson.
-- **Where you get them ([§3.9](world-design.md)):** the **illegal bookie** (arcade back room, docks) offers profit tokens **regularly**; **legal shops require special means** to obtain them. The grey economy is the generous one — a deliberate pull toward risk.
+- **Where you get them:** the **illegal bookie** (arcade back room, docks) offers profit tokens **regularly**; **legal shops require special means** ([§3.9](world-design.md)). Two further sources: **treasure boxes/under-bridge stashes** can hold a 100% profit token ([§2.2](world-design.md)), and **arcade skill-game prizes** occasionally award them ([§3.10](world-design.md) — with rarity caps, so arcade skill never becomes a token farm). The grey economy is the generous one — a deliberate pull toward risk.
 - **No real-money purchases. Ever.** (Permanently out of scope.)
 
 中文摘要：遊戲內紙質促銷券（免費注、賠率加成、保險單、過關飛）——只放大回報、永不改變機率，且必須通過驗證數學。永遠沒有真錢課金。
