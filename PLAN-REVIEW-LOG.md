@@ -314,3 +314,16 @@ Accepted all 10 findings:
 8. Mandatory editor setup checklist deliverable (every GameObject/component/tag/layer/serialized field/screenshot per step).
 9. Unity CI deferred OUT of Gate 2 to a follow-up task (runner/license/-runTests unspecified for now); Python validators keep running.
 10. Locked to exactly ONE patroller; CI removed from this phase.
+
+## Round 2 — Codex (Phase 2 spec)
+
+2 findings:
+1. [High] netstandard2.1 bridge defined too rigidly ("packaging only") — the engine's required/init records + System.Text.Json need compat plumbing (polyfills/package refs) to compile there, forcing a false choice between "freeze respected" and "bridge compiles."
+2. [Medium] StreamingAssets sync still allowed a manual "committed copy step" — the silent-drift footgun.
+VERDICT: REVISE
+
+### Claude's response (Phase 2, Round 2)
+
+Accepted both:
+1. Freeze redefined by OUTCOMES (public API + behaviour + identical Gate-1 numbers), not file-immutability. Explicitly ALLOW compat plumbing to compile netstandard2.1 (multi-target, System.Text.Json package ref, IsExternalInit/RequiredMember shims under conditional compile so net8.0 untouched). BAN semantic logic/signature/math changes without re-review. Mandatory: re-run Phase 1 proof after the bridge change; any moved number = semantic change = revert.
+2. StreamingAssets: removed the manual-copy option; now ONE repeatable sync (tools/sync_streamingassets.py or editor menu action) that copies both files + logs success; never hand-edited; runnable in CI to assert copies match design/.
