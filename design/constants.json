@@ -117,7 +117,7 @@
     "derby": 0.28,
     "dead rubber": 0.26
   },
-  "pricing_sim_count": 1000,
+  "pricing_sim_count": 3000,
   "correct_score_cap": 6,
   "over_under_lines": [
     1.5,

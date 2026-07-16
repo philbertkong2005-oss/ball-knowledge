@@ -10,6 +10,20 @@ public sealed class EngineTests
     private readonly IReadOnlyList<TeamDefinition> _teams = TestData.LoadTeams();
 
     [Fact]
+    public void ValidationHarnessRunsWithoutCrashing()
+    {
+        // Regression: min_offered_odds curation can leave a public-board market with no
+        // true-board counterpart (factors shift which handicap lines are offered). The
+        // harness must reconcile the two boards without throwing.
+        var fastConfig = _config with { ValidationFixtureCount = 120, PricingSimCount = 60 };
+        var engine = new Engine(fastConfig);
+
+        var report = engine.RunValidation(_teams, seed: 999);
+
+        Assert.Equal(120, report.FixtureCount);
+    }
+
+    [Fact]
     public void PoissonSamplerTracksMean()
     {
         var rng = new Random(7);

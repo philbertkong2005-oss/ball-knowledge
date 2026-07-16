@@ -141,7 +141,15 @@ public sealed class MatchEngine
 
             foreach (var boardMarket in publicBoard.Markets)
             {
-                var trueMarket = trueBoard.Markets.Single(m => m.MarketId == boardMarket.MarketId);
+                // The public (factors-off) and true (factors-on) boards can offer different
+                // handicap lines after min_offered_odds curation, so a public market may have
+                // no true counterpart. The informed bettor can only price what exists on both.
+                var trueMarket = trueBoard.Markets.SingleOrDefault(m => m.MarketId == boardMarket.MarketId);
+                if (trueMarket is null)
+                {
+                    continue;
+                }
+
                 var best = FindBestSelection(boardMarket, trueMarket);
                 if (best is null || best.Edge <= _config.EdgeThreshold)
                 {
