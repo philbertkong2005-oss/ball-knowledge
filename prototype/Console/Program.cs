@@ -24,8 +24,39 @@ internal static class ProgramEntry
         {
             "match" => RunMatch(engine, teams, filteredArgs.Skip(1).ToArray()),
             "validate" => RunValidate(engine, teams),
+            "board" => RunBoard(engine, teams, filteredArgs.Skip(1).ToArray()),
             _ => 1,
         };
+    }
+
+    // Prints the FULL odds board (every market + every outcome) for a fixture, in American odds.
+    private static int RunBoard(MatchEngine engine, IReadOnlyList<TeamDefinition> teams, string[] args)
+    {
+        var homeIdx = 0;
+        var awayIdx = 1;
+        for (var i = 0; i + 1 < args.Length; i++)
+        {
+            if (args[i] == "--home" && int.TryParse(args[i + 1], out var h)) homeIdx = h;
+            if (args[i] == "--away" && int.TryParse(args[i + 1], out var a)) awayIdx = a;
+        }
+
+        var home = teams[homeIdx];
+        var away = teams[awayIdx];
+        var board = engine.PricePublicMarkets(home, away);
+
+        Console.WriteLine($"Full odds board: {home.Name} (home) vs {away.Name} (away)");
+        Console.WriteLine("Odds shown American / moneyline, with decimal in parentheses. Priced on public info only (no hidden factors).");
+        foreach (var market in board.Markets)
+        {
+            Console.WriteLine();
+            Console.WriteLine($"== {market.DisplayName} ==");
+            foreach (var outcome in market.Outcomes)
+            {
+                Console.WriteLine($"  {outcome.DisplayName,-28} {ToAmerican(outcome.Odds),8}  ({outcome.Odds:F2})");
+            }
+        }
+
+        return 0;
     }
 
     private static int RunMatch(MatchEngine engine, IReadOnlyList<TeamDefinition> teams, string[] args)
