@@ -63,7 +63,7 @@ internal static class ProgramEntry
             Console.WriteLine($"- {market.DisplayName}");
             foreach (var outcome in market.Outcomes.Take(3))
             {
-                Console.WriteLine($"  {outcome.DisplayName}: {outcome.Odds:F2}");
+                Console.WriteLine($"  {outcome.DisplayName}: {ToAmerican(outcome.Odds)} ({outcome.Odds:F2})");
             }
         }
 
@@ -95,6 +95,15 @@ internal static class ProgramEntry
         }
 
         return 0;
+    }
+
+    // Convert decimal odds to American / moneyline format (e.g. 1.29 -> -345, 5.48 -> +448).
+    private static string ToAmerican(double dec)
+    {
+        if (dec <= 1.0) return "n/a";
+        return dec >= 2.0
+            ? $"+{(int)Math.Round((dec - 1.0) * 100)}"
+            : $"-{(int)Math.Round(100.0 / (dec - 1.0))}";
     }
 
     private static async Task<EngineConfig> LoadConfigAsync(string designRoot)
