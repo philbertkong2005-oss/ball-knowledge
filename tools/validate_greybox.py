@@ -51,6 +51,27 @@ def collect_schema_errors(instance: Any, schema: Any) -> list[str]:
     return errors
 
 
+def collect_provenance_errors(data: dict[str, Any]) -> list[str]:
+    """world-design.md §10: every value is doc-cited, TUNE, SCAFFOLD, or verified —
+    enforced in BOTH directions so unmarked scaffolding cannot become the design."""
+    errors: list[str] = []
+
+    provenance = data.get("_provenance", {})
+    leaf_paths = {
+        f"{group}.{key}"
+        for group, values in data.items()
+        if group not in ("schema_version", "_provenance") and isinstance(values, dict)
+        for key in values
+    }
+
+    for path in sorted(leaf_paths - set(provenance)):
+        errors.append(f"_provenance: '{path}' has no provenance entry (doc citation, TUNE, SCAFFOLD, or verified).")
+    for path in sorted(set(provenance) - leaf_paths):
+        errors.append(f"_provenance: entry '{path}' does not match any value in the file.")
+
+    return errors
+
+
 def collect_sane_range_errors(data: dict[str, Any]) -> list[str]:
     errors: list[str] = []
 
@@ -73,6 +94,7 @@ def collect_sane_range_errors(data: dict[str, Any]) -> list[str]:
         "player",
         "must satisfy crouch_speed_ms < walk_speed_ms < run_speed_ms.",
     )
+    ensure(player["mouse_sensitivity"] > 0, "player.mouse_sensitivity", "must be positive.")
 
     ensure(
         0 < detection["vision_half_angle_deg"] < 90,
@@ -87,11 +109,20 @@ def collect_sane_range_errors(data: dict[str, Any]) -> list[str]:
         "must be positive and less than or equal to base_detect_time_s.",
     )
     ensure(
+        detection["detect_curve_exponent"] > 0,
+        "detection.detect_curve_exponent",
+        "must be positive (1.0 = linear).",
+    )
+    ensure(
         detection["chase_speed_mult"] >= 1,
         "detection.chase_speed_mult",
         "must be at least 1.",
     )
-    ensure(detection["chase_break_los_s"] > 0, "detection.chase_break_los_s", "must be positive.")
+    ensure(
+        detection["search_scan_duration_s"] > 0,
+        "detection.search_scan_duration_s",
+        "must be positive.",
+    )
 
     ensure(cash_heat["carry_threshold"] >= 0, "cash_heat.carry_threshold", "must be at least 0.")
     ensure(
@@ -99,13 +130,22 @@ def collect_sane_range_errors(data: dict[str, Any]) -> list[str]:
         "cash_heat.heat_per_hour_over_threshold",
         "must be positive.",
     )
-    ensure(0 < cash_heat["max_heat"] <= 1, "cash_heat.max_heat", "must be between 0 and 1.")
-
-    ensure(catch_stop["bribe_cost"] >= 0, "catch_stop.bribe_cost", "must be at least 0.")
     ensure(
-        0 <= catch_stop["flee_escape_chance"] <= 1,
-        "catch_stop.flee_escape_chance",
-        "must be a decimal fraction between 0 and 1.",
+        cash_heat["heat_decay_per_hour_below_threshold"] > 0,
+        "cash_heat.heat_decay_per_hour_below_threshold",
+        "must be positive.",
+    )
+    ensure(cash_heat["max_heat"] > 0, "cash_heat.max_heat", "must be positive.")
+
+    ensure(
+        catch_stop["fine_per_heat_point"] >= 0,
+        "catch_stop.fine_per_heat_point",
+        "must be at least 0.",
+    )
+    ensure(
+        catch_stop["bribe_fine_multiplier"] >= 1,
+        "catch_stop.bribe_fine_multiplier",
+        "must be at least 1 (wd:§6.4 prices the bribe well above the fine).",
     )
 
     ensure(economy["debt_start"] > 0, "economy.debt_start", "must be positive.")
@@ -123,7 +163,11 @@ def collect_sane_range_errors(data: dict[str, Any]) -> list[str]:
         "must use different canned_bet_home_team and canned_bet_away_team indices.",
     )
 
-    ensure(clock["minutes_per_game_hour"] > 0, "clock.minutes_per_game_hour", "must be positive.")
+    ensure(
+        clock["real_minutes_per_game_day"] > 0,
+        "clock.real_minutes_per_game_day",
+        "must be positive.",
+    )
     ensure(0 <= clock["night_start_hour"] <= 23, "clock.night_start_hour", "must be in 0..23.")
     ensure(0 <= clock["night_end_hour"] <= 23, "clock.night_end_hour", "must be in 0..23.")
 
@@ -138,7 +182,7 @@ def validate(greybox_path: Path) -> list[str]:
     if schema_errors:
         return schema_errors
 
-    return collect_sane_range_errors(data)
+    return collect_provenance_errors(data) + collect_sane_range_errors(data)
 
 
 def main() -> int:

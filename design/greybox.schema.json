@@ -2,10 +2,12 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://ball-knowledge.local/design/greybox.schema.json",
   "title": "Ball Knowledge Greybox Tunables",
+  "description": "Phase 2 greybox tunables. PROCESS RULE (world-design.md §10): every value must carry a _provenance entry — either a doc citation (locked; do not tune without a design session) or TUNE (placeholder; propose a default, feel it in-game, Phil signs off) or SCAFFOLD (mechanism present but missing its designed gate) or verified: (derived by verification, not design). tools/validate_greybox.py enforces completeness in both directions.",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "schema_version",
+    "_provenance",
     "player",
     "detection",
     "cash_heat",
@@ -16,8 +18,16 @@
   "properties": {
     "schema_version": {
       "type": "integer",
-      "const": 1,
-      "description": "Schema version for the Phase 2 greybox tunables file."
+      "const": 2,
+      "description": "Schema version. v2 (2026-07-17): provenance markers mandatory; flee roll and 4s chase-break removed per world-design.md §4.1.2; fine/bribe formula per §4.1.1; speeds per §2.2.2."
+    },
+    "_provenance": {
+      "type": "object",
+      "description": "Authority marker per value, keyed by dotted path (group.key). Prefixes — 'wd:§x' = docs/world-design.md section (LOCKED); 'p2:x' = docs/phase2-greybox.md section (LOCKED); 'TUNE' = open placeholder; 'SCAFFOLD <citation>' = present but missing the designed gate the citation names; 'verified:<date>' = derived by verification. Unmarked scaffolding becomes the design — that is what this map exists to prevent.",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^(wd:§.+|p2:.+|TUNE|SCAFFOLD .+|verified:.+)$"
+      }
     },
     "player": {
       "type": "object",
@@ -32,11 +42,11 @@
       "properties": {
         "walk_speed_ms": {
           "type": "number",
-          "description": "Player walking speed in meters per second."
+          "description": "Player walking speed in meters per second. wd:§2.2.2 locks 2.5 — game speed, not real human 1.4 m/s (at real speed the map diagonal costs 41% of a 20-minute day)."
         },
         "run_speed_ms": {
           "type": "number",
-          "description": "Player running speed in meters per second."
+          "description": "Player sprint speed in meters per second. wd:§2.2.2 locks 5.0. Sprinting burns Energy (§2.2.2 sprint-energy-cash bind) — energy itself is deferred past greybox."
         },
         "crouch_speed_ms": {
           "type": "number",
@@ -51,14 +61,15 @@
     "detection": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Patroller vision, detection, and chase tuning values.",
+      "description": "Gang patroller vision, detection, and chase tuning. Chase model per wd:§4.1.2 — fully manual, no dice: on losing line of sight the patroller walks to the last point it saw the player and scans; search_scan_duration_s without a sighting ends the chase and returns it to patrol. Re-sighting during the scan re-acquires.",
       "required": [
         "vision_half_angle_deg",
         "vision_range_m",
         "base_detect_time_s",
         "min_detect_time_s",
+        "detect_curve_exponent",
         "chase_speed_mult",
-        "chase_break_los_s"
+        "search_scan_duration_s"
       ],
       "properties": {
         "vision_half_angle_deg": {
@@ -71,62 +82,76 @@
         },
         "base_detect_time_s": {
           "type": "number",
-          "description": "Continuous time in seconds needed to detect the player at zero cash heat."
+          "description": "Continuous cone+LOS time in seconds needed to detect the player at zero cash heat."
         },
         "min_detect_time_s": {
           "type": "number",
-          "description": "Minimum continuous detection time floor after cash heat reduces the base time."
+          "description": "Floor the detect time shrinks toward as cash heat rises."
+        },
+        "detect_curve_exponent": {
+          "type": "number",
+          "description": "Shape of the heat->detect-time curve: detect_time = base - (base - min) * (heat / max_heat)^exponent. 1.0 = linear (proposed GANG shape: steady pressure proportional to how hot your pockets are). CONSTRAINT (wd:§8.2): police and gang must NOT share a curve shape — two predators, two logics. The police curve (Phase 3) must be a different shape, proposed stepped/threshold."
         },
         "chase_speed_mult": {
           "type": "number",
-          "description": "Multiplier applied to player run speed when the patroller is chasing."
+          "description": "Multiplier on player run speed while the patroller is chasing."
         },
-        "chase_break_los_s": {
+        "search_scan_duration_s": {
           "type": "number",
-          "description": "Seconds of broken line of sight needed for the patroller to abandon the chase."
+          "description": "Seconds the patroller scans at the player's last-seen point before giving up (wd:§4.1.2: ends the chase, does NOT touch any heat meter). Replaces schema v1's 4s LOS chase-break."
         }
       }
     },
     "cash_heat": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Cash-carry heat parameters that make walking home riskier over time.",
+      "description": "Gang cash-carry heat (wd:§4.2 fuel ②). Greybox carries only the cash component; the overdue-days component is deferred with the monthly debt system.",
       "required": [
         "carry_threshold",
         "heat_per_hour_over_threshold",
+        "heat_decay_per_hour_below_threshold",
         "max_heat"
       ],
       "properties": {
         "carry_threshold": {
           "type": "integer",
-          "description": "Minimum carried cash that starts building outdoor cash heat."
+          "description": "Carrying more cash than this outdoors builds gang heat (wd:§4.2: $500; deliberately the same number as §3.1's card bootstrap)."
         },
         "heat_per_hour_over_threshold": {
           "type": "number",
-          "description": "Cash heat gained per in-game hour while carrying above the threshold outdoors."
+          "description": "Gang heat gained per in-game hour while carrying above the threshold outdoors (wd:§4.2: +1/hour; travel counts, camping counts as indoor)."
+        },
+        "heat_decay_per_hour_below_threshold": {
+          "type": "number",
+          "description": "Gang heat decay per in-game hour whenever carried cash is below the threshold (wd:§4.2: -0.25/hour)."
         },
         "max_heat": {
           "type": "number",
-          "description": "Maximum normalized cash heat value."
+          "description": "Heat meter ceiling. wd:§4.1.1 prices fines against a 0-100 scale (heat 100 -> $2,000)."
         }
       }
     },
     "catch_stop": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Catch-stop resolution values for bribe and flee outcomes.",
+      "description": "Gang-stop resolution. Bribe price per wd:§4.1.1: fine = heat x fine_per_heat_point; bribe = fine x bribe_fine_multiplier; CASH ONLY (wd:§3.3). Flee has NO odds and NO keys here — it is the manual chase in the detection group (wd:§4.1.2). The pay-toward-debt vig is constants.json catch_vig (0.3), which world-design never ratified — flagged back to Phil, do not treat as locked.",
       "required": [
-        "bribe_cost",
-        "flee_escape_chance"
+        "fine_per_heat_point",
+        "bribe_fine_multiplier",
+        "bribe_always_available"
       ],
       "properties": {
-        "bribe_cost": {
-          "type": "integer",
-          "description": "Cash cost of choosing the bribe option at a catch stop."
-        },
-        "flee_escape_chance": {
+        "fine_per_heat_point": {
           "type": "number",
-          "description": "Probability that the flee option succeeds, expressed as a decimal fraction."
+          "description": "Dollars of fine per point of heat (wd:§4.1.1: $20; heat 100 -> $2,000)."
+        },
+        "bribe_fine_multiplier": {
+          "type": "number",
+          "description": "bribe = fine x this (wd:§4.1.1: 2). The structure is locked; the multiplier k is feel-tunable per wd:§8.2."
+        },
+        "bribe_always_available": {
+          "type": "boolean",
+          "description": "SCAFFOLDING. wd:§6.4 gates the bribe on that officer's/collector's connection-corruptibility; NPC connections do not exist in the greybox, so the bribe is offered unconditionally. This flag exists so the gap is explicit — flip to false when the connection gate lands (Phase 3)."
         }
       }
     },
@@ -146,7 +171,7 @@
       "properties": {
         "debt_start": {
           "type": "integer",
-          "description": "Initial on-screen debt ledger amount for the greybox slice."
+          "description": "Initial on-screen debt ledger amount (wd:§3.5: $100,000 principal, confirmed 2026-07-17)."
         },
         "canned_bet_stake": {
           "type": "integer",
@@ -154,11 +179,11 @@
         },
         "canned_bet_payout": {
           "type": "integer",
-          "description": "Winning payout amount returned by the canned Gate-2 bet."
+          "description": "Winning payout amount returned by the canned Gate-2 bet (p2: ~$2,000). NOTE for Phil: the board prices this fixture at 1.29 decimal; a $1,000 stake paying $2,000 implies 2.0 — reconcile when the planning session prices Gate 2."
         },
         "canned_bet_seed": {
           "type": "integer",
-          "description": "Fixed RNG seed used to make the canned Gate-2 bet deterministic. Seed 8 verified 2026-07-17: Harbour FC 2-0 Eastport Rovers on BOTH the netstandard2.1 DLL + Newtonsoft pipeline (Unity's path) and the net8.0 Console."
+          "description": "Fixed RNG seed for the canned Gate-2 bet. Seed 8 verified 2026-07-17: Harbour FC 2-0 Eastport Rovers on BOTH the netstandard2.1 DLL + Newtonsoft pipeline (Unity's path) and the net8.0 Console."
         },
         "canned_bet_outcome": {
           "type": "string",
@@ -178,24 +203,24 @@
     "clock": {
       "type": "object",
       "additionalProperties": false,
-      "description": "In-game clock values for advancing time and defining night hours.",
+      "description": "In-game clock values.",
       "required": [
-        "minutes_per_game_hour",
+        "real_minutes_per_game_day",
         "night_start_hour",
         "night_end_hour"
       ],
       "properties": {
-        "minutes_per_game_hour": {
+        "real_minutes_per_game_day": {
           "type": "number",
-          "description": "Real-time minutes required for one in-game hour to pass."
+          "description": "Real minutes per full 24h in-game day (wd:§3.6: 20). One game hour = this / 24 real minutes (50 real seconds at 20)."
         },
         "night_start_hour": {
           "type": "integer",
-          "description": "Hour of day when night begins, using a 24-hour clock."
+          "description": "Hour of day when night begins, 24-hour clock."
         },
         "night_end_hour": {
           "type": "integer",
-          "description": "Hour of day when night ends, using a 24-hour clock."
+          "description": "Hour of day when night ends, 24-hour clock."
         }
       }
     }

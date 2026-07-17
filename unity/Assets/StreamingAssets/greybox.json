@@ -1,9 +1,39 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
+  "_provenance": {
+    "player.walk_speed_ms": "wd:§2.2.2",
+    "player.run_speed_ms": "wd:§2.2.2",
+    "player.crouch_speed_ms": "TUNE",
+    "player.mouse_sensitivity": "TUNE",
+    "detection.vision_half_angle_deg": "p2:detection",
+    "detection.vision_range_m": "p2:detection",
+    "detection.base_detect_time_s": "p2:detection",
+    "detection.min_detect_time_s": "TUNE",
+    "detection.detect_curve_exponent": "TUNE",
+    "detection.chase_speed_mult": "p2:detection",
+    "detection.search_scan_duration_s": "wd:§4.1.2",
+    "cash_heat.carry_threshold": "wd:§4.2",
+    "cash_heat.heat_per_hour_over_threshold": "wd:§4.2",
+    "cash_heat.heat_decay_per_hour_below_threshold": "wd:§4.2",
+    "cash_heat.max_heat": "wd:§4.1.1",
+    "catch_stop.fine_per_heat_point": "wd:§4.1.1",
+    "catch_stop.bribe_fine_multiplier": "wd:§4.1.1",
+    "catch_stop.bribe_always_available": "SCAFFOLD wd:§6.4",
+    "economy.debt_start": "wd:§3.5",
+    "economy.canned_bet_stake": "TUNE",
+    "economy.canned_bet_payout": "p2:gate2-cash",
+    "economy.canned_bet_seed": "verified:2026-07-17",
+    "economy.canned_bet_outcome": "p2:gate2-cash",
+    "economy.canned_bet_home_team": "p2:gate2-cash",
+    "economy.canned_bet_away_team": "p2:gate2-cash",
+    "clock.real_minutes_per_game_day": "wd:§3.6",
+    "clock.night_start_hour": "TUNE",
+    "clock.night_end_hour": "TUNE"
+  },
   "player": {
-    "walk_speed_ms": 3.5,
-    "run_speed_ms": 6.0,
-    "crouch_speed_ms": 1.75,
+    "walk_speed_ms": 2.5,
+    "run_speed_ms": 5.0,
+    "crouch_speed_ms": 1.25,
     "mouse_sensitivity": 1.0
   },
   "detection": {
@@ -11,17 +41,20 @@
     "vision_range_m": 18.0,
     "base_detect_time_s": 0.8,
     "min_detect_time_s": 0.25,
+    "detect_curve_exponent": 1.0,
     "chase_speed_mult": 1.05,
-    "chase_break_los_s": 4.0
+    "search_scan_duration_s": 30.0
   },
   "cash_heat": {
     "carry_threshold": 500,
-    "heat_per_hour_over_threshold": 0.2,
-    "max_heat": 1.0
+    "heat_per_hour_over_threshold": 1.0,
+    "heat_decay_per_hour_below_threshold": 0.25,
+    "max_heat": 100.0
   },
   "catch_stop": {
-    "bribe_cost": 500,
-    "flee_escape_chance": 0.5
+    "fine_per_heat_point": 20.0,
+    "bribe_fine_multiplier": 2.0,
+    "bribe_always_available": true
   },
   "economy": {
     "debt_start": 100000,
@@ -33,7 +66,7 @@
     "canned_bet_away_team": 1
   },
   "clock": {
-    "minutes_per_game_hour": 2.0,
+    "real_minutes_per_game_day": 20.0,
     "night_start_hour": 20,
     "night_end_hour": 6
   }
