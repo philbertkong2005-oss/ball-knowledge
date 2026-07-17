@@ -120,3 +120,24 @@ One detection model, no guessing (starting values, tunable):
 - Everything under "DEFERRED" above, including Unity CI (a follow-up task).
 - **Any change to the Phase 1 match-engine public API, behaviour, or betting math.** Permitted engine-project changes are limited to build metadata / package refs / compile-time shims needed to compile `netstandard2.1`, verified behaviour-identical by re-running the Phase 1 proof (identical Gate-1 numbers). Any semantic change requires separate re-review.
 - Art, audio, animation, narrative integration, and the full world-design.md world (this slice draws only the three buildings + corridor it needs).
+
+## Amendment — 2026-07-17 (world-design.md revision; see its change table + §10)
+
+The design session revised `docs/world-design.md` (251 → 532 lines). Four changes land on this spec; where they conflict with the body above, **this amendment wins**.
+
+**1. Flee is fully manual — the seeded escape roll is DEAD (wd:§4.1.2).**
+The catch-stop's third choice ("fight-flee (flee = a seeded escape roll)") is replaced: choosing flee starts a **real chase**. Chase model: while the patroller has line of sight it pursues (run-speed × `chase_speed_mult`); on losing sight it walks to the **last point it saw the player** and scans; **`search_scan_duration_s` (30 s) without a sighting ends the chase** and it returns to patrol; re-sighting during the scan re-acquires. This **replaces the 4 s LOS chase-break rule** in §Detection. A probability roll here would break wd:§6.3 (stealth is full-manual vision-based) and pillar 1 (every bet is walked). The Gate-2 observed check "fight-flee rolls escape" becomes: **fight-flee starts a chase; a completed hide (scan expires unseen) ends pursuit; the catch consequences apply only if physically caught.**
+
+**2. Catch-stop pricing is now formula, not flat (wd:§4.1.1 via greybox.json v2).**
+`fine = heat × fine_per_heat_point ($20)`, `bribe = fine × bribe_fine_multiplier (2)`, **cash only** (wd:§3.3). The bribe's designed gate — that collector's connection/corruptibility (wd:§6.4) — does not exist in the greybox, so the bribe is offered unconditionally: **marked scaffolding** (`bribe_always_available: true`, provenance `SCAFFOLD wd:§6.4`). The pay-toward-debt **vig** remains `constants.json catch_vig 0.3`, which world-design **never ratified** — flagged to Phil (wd:§10 item 4); treat as provisional.
+
+**3. Map requirements (wd:§2.2.1–2.2.2) — geometry grows, mechanics do not.**
+- **Real scale from day one: ~700 m corner-to-corner, buildings at real size.** Walk **2.5 m/s**, sprint **5 m/s** (game speed; both in greybox.json, doc-locked).
+- **Six shop-shaped buildings must stand in the map from day one:** Fat Keung's 3 trading bet shops + **3 empty shells ("for lease"), one per non-rural zone** — non-deferrable; retrofitting shells into a finished map is expensive. Shells are grey boxes with a marker, nothing more.
+- **Zone boundaries are gameplay-critical** (district-scoped income, wd:§3.12; the risk mirror): greybox = **flat colour per district, hard edges at boundary streets**, 4 zones per wd:§2.2.
+- **Scope guard:** the greybox's *systemic* content is unchanged — one patroller, one patrolled corridor (docks), shelter + bet shop + gang landmark, the tension loop. The other buildings are inert grey boxes; the map is simply built at its real footprint so nothing is retrofitted later. §Scope's "3 grey buildings" becomes "the 3 *systemic* buildings inside the real-scale zoned map".
+
+**4. greybox.json process rule (wd:§10).**
+Every value carries a `_provenance` entry — doc citation (`wd:§x` / `p2:x`), `TUNE`, `SCAFFOLD <missing gate>`, or `verified:<date>` — enforced both directions by `tools/validate_greybox.py`. Unmarked scaffolding becomes the design; that is what the marker prevents.
+
+中文摘要（2026-07-17修訂）：①**flee冇骰仔**——揀「打逃」＝真追逐：見到你就追,追失咗行去最後見到你嗰點掃描30秒,冇再見到就放棄（wd:§4.1.2）;取代原本4秒斷追規則。②罰款/賄賂改公式:fine=heat×$20,bribe=fine×2,現金only;賄賂應有嘅人脈閘greybox未有→**明標鷹架**;vig 0.3未獲設計文件批准→已上報Phil。③地圖:一開始就起真尺寸（700m對角、行2.5跑5 m/s）、**六座舖形建築**（肥強3間營業+3間吉舖每非郊區1間,唔可以遲啲先加）、四區平色硬邊界;**系統內容不變**——照樣一隻巡邏、一條走廊、嗰個緊張循環。④greybox.json每個值必須標出處/TUNE/鷹架/驗證,validator雙向強制。
