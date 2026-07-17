@@ -1,0 +1,153 @@
+{
+  "schema_version": 2,
+  "starting_debt": 500000,
+  "weekly_debt_interest": 0.1,
+  "catch_vig": 0.3,
+  "bookmaker_overround": 1.1,
+  "min_offered_odds": 1.1,
+  "shot_base": 12.8,
+  "on_target_base": 0.34,
+  "conversion_base": 0.205,
+  "corner_base": 5.1,
+  "assist_rate": 0.72,
+  "second_half_factor": 1.12,
+  "home_advantage": 1.24,
+  "formation_mods": {
+    "4-4-2": {
+      "atkMult": 1.0,
+      "defMult": 1.0,
+      "shotMult": 1.0,
+      "cornerMult": 1.0,
+      "passMult": 0.98
+    },
+    "4-3-3": {
+      "atkMult": 1.06,
+      "defMult": 0.97,
+      "shotMult": 1.05,
+      "cornerMult": 1.03,
+      "passMult": 1.02
+    },
+    "5-3-2": {
+      "atkMult": 0.96,
+      "defMult": 1.06,
+      "shotMult": 0.95,
+      "cornerMult": 0.97,
+      "passMult": 0.96
+    },
+    "4-2-3-1": {
+      "atkMult": 1.03,
+      "defMult": 1.01,
+      "shotMult": 1.01,
+      "cornerMult": 1.0,
+      "passMult": 1.04
+    },
+    "3-4-2-1": {
+      "atkMult": 1.04,
+      "defMult": 0.95,
+      "shotMult": 1.02,
+      "cornerMult": 1.04,
+      "passMult": 1.03
+    },
+    "4-5-1": {
+      "atkMult": 0.95,
+      "defMult": 1.05,
+      "shotMult": 0.94,
+      "cornerMult": 0.96,
+      "passMult": 1.01
+    },
+    "4-1-4-1": {
+      "atkMult": 0.97,
+      "defMult": 1.04,
+      "shotMult": 0.96,
+      "cornerMult": 0.98,
+      "passMult": 1.0
+    },
+    "3-5-2": {
+      "atkMult": 1.02,
+      "defMult": 0.99,
+      "shotMult": 1.0,
+      "cornerMult": 1.02,
+      "passMult": 1.05
+    },
+    "4-2-2-2": {
+      "atkMult": 1.05,
+      "defMult": 0.96,
+      "shotMult": 1.04,
+      "cornerMult": 1.01,
+      "passMult": 0.99
+    },
+    "3-4-3": {
+      "atkMult": 1.08,
+      "defMult": 0.93,
+      "shotMult": 1.08,
+      "cornerMult": 1.05,
+      "passMult": 1.01
+    }
+  },
+  "factor_tier_magnitudes": {
+    "minor": 0.08,
+    "moderate": 0.14,
+    "major": 0.22
+  },
+  "max_factors_per_match": 3,
+  "factor_count_weights": [
+    0.3,
+    0.4,
+    0.22,
+    0.08
+  ],
+  "factor_rarity": {
+    "striker knock": 0.8,
+    "striker ruled out": 0.35,
+    "keeper hungover": 0.55,
+    "keeper elite form": 0.5,
+    "playmaker suspended": 0.42,
+    "hot streak": 0.95,
+    "cold streak": 0.95,
+    "training bust-up": 0.4,
+    "model pro": 0.75,
+    "winning morale": 0.65,
+    "losing crisis": 0.6,
+    "cup rotation": 0.3,
+    "surprise formation": 0.38,
+    "new-manager bounce": 0.32,
+    "pay dispute": 0.34,
+    "waterlogged pitch": 0.25,
+    "high wind": 0.45,
+    "derby": 0.28,
+    "dead rubber": 0.26
+  },
+  "pricing_sim_count": 3000,
+  "correct_score_cap": 6,
+  "over_under_lines": [
+    1.5,
+    2.5,
+    3.5
+  ],
+  "handicap_lines": [
+    -2.0,
+    -1.5,
+    -1.0,
+    -0.5,
+    0.0,
+    0.5,
+    1.0,
+    1.5,
+    2.0
+  ],
+  "validation_fixture_count": 10000,
+  "edge_threshold": 0.025,
+  "blind_roi": -0.0909,
+  "blind_roi_band": [
+    -0.1,
+    -0.08
+  ],
+  "informed_roi_min": 0.05,
+  "even_money_odds_range": [
+    1.8,
+    2.2
+  ],
+  "informed_win_rate_min": 0.55,
+  "informed_win_rate_max": 0.6,
+  "min_even_money_bets": 2000
+}

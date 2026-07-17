@@ -8,3 +8,10 @@ repos:
           - tools/validate_constants.py
         language: system
         files: ^design/constants\.json$
+      - id: validate-greybox
+        name: Validate Ball Knowledge greybox tunables
+        entry: ./.venv/Scripts/python.exe
+        args:
+          - tools/validate_greybox.py
+        language: system
+        files: ^design/greybox\.json$

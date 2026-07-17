@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "player": {
+    "walk_speed_ms": 3.5,
+    "run_speed_ms": 6.0,
+    "crouch_speed_ms": 1.75,
+    "mouse_sensitivity": 1.0
+  },
+  "detection": {
+    "vision_half_angle_deg": 35.0,
+    "vision_range_m": 18.0,
+    "base_detect_time_s": 0.8,
+    "min_detect_time_s": 0.25,
+    "chase_speed_mult": 1.05,
+    "chase_break_los_s": 4.0
+  },
+  "cash_heat": {
+    "carry_threshold": 500,
+    "heat_per_hour_over_threshold": 0.2,
+    "max_heat": 1.0
+  },
+  "catch_stop": {
+    "bribe_cost": 500,
+    "flee_escape_chance": 0.5
+  },
+  "economy": {
+    "debt_start": 100000,
+    "canned_bet_stake": 1000,
+    "canned_bet_payout": 2000,
+    "canned_bet_seed": 0,
+    "canned_bet_home_team": 0,
+    "canned_bet_away_team": 1
+  },
+  "clock": {
+    "minutes_per_game_hour": 2.0,
+    "night_start_hour": 20,
+    "night_end_hour": 6
+  }
+}

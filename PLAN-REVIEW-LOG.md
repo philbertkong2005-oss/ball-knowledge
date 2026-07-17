@@ -358,3 +358,32 @@ Process note: an intermediate check used `strings`, which is NOT installed on th
 Spec amendments (docs/phase2-greybox.md): recorded the rejection + the standing rule "if the Unity DLL ever grows a dependency, that is a bug — fix it with a shim, not a package". Also RESOLVED Unity-side config loading, which the spec had assumed would use System.Text.Json: that route is dead, and Unity's built-in JsonUtility is ALSO ruled out because formation_mods / factor_tier_magnitudes / factor_rarity are dictionaries, which JsonUtility cannot deserialize. Locked: com.unity.nuget.newtonsoft-json + a ContractResolver reading the engine's existing [JsonPropertyName] via GetCustomAttributesData() (mixed key conventions defeat any single naming strategy; a mirror DTO is the fallback, rejected by default as 30+ duplicated fields = drift risk). Added a mandatory Gate-2 supporting check: the canned seeded fixture run inside Unity must produce the identical scoreline + settlement as the Console for the same seed — the cheap end-to-end proof that config deserialised correctly.
 
 Status: step 1 re-verified and now actually loadable. Next: step 2 (tools/sync_streamingassets.py + StreamingAssets), step 3 (design/greybox.json + validator), then the Unity scene.
+
+## Phase 2 — steps 2+3 build: sync + greybox tooling (Codex build, Claude verify, 2026-07-17)
+
+### Round 1 — Codex build (thread 019f6ef2-db70-7062-abc7-9fcc3ec7a974, gpt-5.4 high)
+Contract: tools/sync_streamingassets.py (3-file byte sync + --check drift mode), design/greybox.json
+(structure dictated by Claude, design-weighted values are PLACEHOLDERS pending Phil's planning
+session), design/greybox.schema.json + tools/validate_greybox.py (mirroring the constants
+validator pattern), .pre-commit-config.yaml entry. Scope extension over the spec, deliberate:
+sync covers greybox.json too (spec named only constants+teams; Unity needs greybox at runtime,
+and a 2-of-3 sync would reopen the drift footgun for the third file).
+Codex deviations reported: bare `python` not on sandbox PATH -> used repo .venv interpreter
+(exactly what the hook uses; accepted). No environment improvisation this time.
+
+### Claude's verdict — PASS, zero fix rounds
+Diff read in full: faithful to contract, style-matches validate_constants.py, nothing outside
+scope. Real-env proof (all via .venv python):
+- validate_greybox.py on design/greybox.json: PASS
+- sync --check on Codex's copies: in sync; tampered copy -> exit 1 naming the file; re-sync heals
+- validator failure paths: unknown key -> schema error; run<walk speeds + hour 25 -> both range
+  errors listed, exit 1
+- pre-commit hook fires: "Validate Ball Knowledge greybox tunables... Passed"
+- Frozen files byte-untouched: constants.json / constants.schema.json / teams.json / prototype/
+  diff empty; validate_constants.py still PASS
+Repair tail: NONE needed (hook entry was config-file-only; `pre-commit install` already done in
+Phase 0, hooks run via .pre-commit-config.yaml).
+
+Status: Phase 2 steps 2 and 3 BUILT + VERIFIED. Remaining before the Unity scene: none in
+tooling. Next: Unity project skeleton + asmdef + the C#9-compiles-required-members check, then
+the config loader through EngineJsonContractResolver (BridgeTests is its reference impl).

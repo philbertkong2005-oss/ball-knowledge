@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ball-knowledge.local/design/greybox.schema.json",
+  "title": "Ball Knowledge Greybox Tunables",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "player",
+    "detection",
+    "cash_heat",
+    "catch_stop",
+    "economy",
+    "clock"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1,
+      "description": "Schema version for the Phase 2 greybox tunables file."
+    },
+    "player": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "First-person movement and look tuning values for the greybox slice.",
+      "required": [
+        "walk_speed_ms",
+        "run_speed_ms",
+        "crouch_speed_ms",
+        "mouse_sensitivity"
+      ],
+      "properties": {
+        "walk_speed_ms": {
+          "type": "number",
+          "description": "Player walking speed in meters per second."
+        },
+        "run_speed_ms": {
+          "type": "number",
+          "description": "Player running speed in meters per second."
+        },
+        "crouch_speed_ms": {
+          "type": "number",
+          "description": "Player crouch speed in meters per second."
+        },
+        "mouse_sensitivity": {
+          "type": "number",
+          "description": "Mouse-look sensitivity multiplier for first-person camera control."
+        }
+      }
+    },
+    "detection": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Patroller vision, detection, and chase tuning values.",
+      "required": [
+        "vision_half_angle_deg",
+        "vision_range_m",
+        "base_detect_time_s",
+        "min_detect_time_s",
+        "chase_speed_mult",
+        "chase_break_los_s"
+      ],
+      "properties": {
+        "vision_half_angle_deg": {
+          "type": "number",
+          "description": "Half-angle of the patroller vision cone in degrees."
+        },
+        "vision_range_m": {
+          "type": "number",
+          "description": "Maximum detection range in meters when line of sight is clear."
+        },
+        "base_detect_time_s": {
+          "type": "number",
+          "description": "Continuous time in seconds needed to detect the player at zero cash heat."
+        },
+        "min_detect_time_s": {
+          "type": "number",
+          "description": "Minimum continuous detection time floor after cash heat reduces the base time."
+        },
+        "chase_speed_mult": {
+          "type": "number",
+          "description": "Multiplier applied to player run speed when the patroller is chasing."
+        },
+        "chase_break_los_s": {
+          "type": "number",
+          "description": "Seconds of broken line of sight needed for the patroller to abandon the chase."
+        }
+      }
+    },
+    "cash_heat": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Cash-carry heat parameters that make walking home riskier over time.",
+      "required": [
+        "carry_threshold",
+        "heat_per_hour_over_threshold",
+        "max_heat"
+      ],
+      "properties": {
+        "carry_threshold": {
+          "type": "integer",
+          "description": "Minimum carried cash that starts building outdoor cash heat."
+        },
+        "heat_per_hour_over_threshold": {
+          "type": "number",
+          "description": "Cash heat gained per in-game hour while carrying above the threshold outdoors."
+        },
+        "max_heat": {
+          "type": "number",
+          "description": "Maximum normalized cash heat value."
+        }
+      }
+    },
+    "catch_stop": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Catch-stop resolution values for bribe and flee outcomes.",
+      "required": [
+        "bribe_cost",
+        "flee_escape_chance"
+      ],
+      "properties": {
+        "bribe_cost": {
+          "type": "integer",
+          "description": "Cash cost of choosing the bribe option at a catch stop."
+        },
+        "flee_escape_chance": {
+          "type": "number",
+          "description": "Probability that the flee option succeeds, expressed as a decimal fraction."
+        }
+      }
+    },
+    "economy": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Greybox economy values for the visible debt ledger and the canned Gate-2 bet.",
+      "required": [
+        "debt_start",
+        "canned_bet_stake",
+        "canned_bet_payout",
+        "canned_bet_seed",
+        "canned_bet_home_team",
+        "canned_bet_away_team"
+      ],
+      "properties": {
+        "debt_start": {
+          "type": "integer",
+          "description": "Initial on-screen debt ledger amount for the greybox slice."
+        },
+        "canned_bet_stake": {
+          "type": "integer",
+          "description": "Stake amount used for the deterministic canned Gate-2 bet."
+        },
+        "canned_bet_payout": {
+          "type": "integer",
+          "description": "Winning payout amount returned by the canned Gate-2 bet."
+        },
+        "canned_bet_seed": {
+          "type": "integer",
+          "description": "Fixed RNG seed used to make the canned Gate-2 bet deterministic."
+        },
+        "canned_bet_home_team": {
+          "type": "integer",
+          "description": "Zero-based team index for the canned bet home team."
+        },
+        "canned_bet_away_team": {
+          "type": "integer",
+          "description": "Zero-based team index for the canned bet away team."
+        }
+      }
+    },
+    "clock": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "In-game clock values for advancing time and defining night hours.",
+      "required": [
+        "minutes_per_game_hour",
+        "night_start_hour",
+        "night_end_hour"
+      ],
+      "properties": {
+        "minutes_per_game_hour": {
+          "type": "number",
+          "description": "Real-time minutes required for one in-game hour to pass."
+        },
+        "night_start_hour": {
+          "type": "integer",
+          "description": "Hour of day when night begins, using a 24-hour clock."
+        },
+        "night_end_hour": {
+          "type": "integer",
+          "description": "Hour of day when night ends, using a 24-hour clock."
+        }
+      }
+    }
+  }
+}
