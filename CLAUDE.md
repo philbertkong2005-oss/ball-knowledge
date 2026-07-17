@@ -17,7 +17,7 @@ Solo project. **Phil designs + decides; Codex writes the code; Claude is PM / sp
 
 - **Phase 0** ✅ repo, CI, Unity 6.3 LTS pinned (`6000.3.19f1`), rollback drills done
 - **Phase 1** ✅ **Gate 1 PASSED** (tag `phase1-complete`) — C# match engine; blind ROI −8.29%, informed +44%, even-money win rate 56.4%. Information economy mathematically proven
-- **Phase 2** 🔄 greybox spec written + hardened by one Codex review round; build not started
+- **Phase 2** 🔄 spec **APPROVED** by Codex (3 rounds, see PLAN-REVIEW-LOG.md); build IN PROGRESS — step 1 done (MatchEngine multi-targets `net8.0;netstandard2.1`, DLL at `unity/Assets/Plugins/`, Phase 1 proof re-verified identical)
 - Phase 3+ = day loop, intel ladder, economy (see `world-design.md`)
 
 ## Design pillars (every feature must pass all four)
