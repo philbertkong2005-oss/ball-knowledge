@@ -27,7 +27,8 @@
     "debt_start": 100000,
     "canned_bet_stake": 1000,
     "canned_bet_payout": 2000,
-    "canned_bet_seed": 0,
+    "canned_bet_seed": 8,
+    "canned_bet_outcome": "home",
     "canned_bet_home_team": 0,
     "canned_bet_away_team": 1
   },

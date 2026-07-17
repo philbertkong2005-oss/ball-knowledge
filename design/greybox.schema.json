@@ -139,6 +139,7 @@
         "canned_bet_stake",
         "canned_bet_payout",
         "canned_bet_seed",
+        "canned_bet_outcome",
         "canned_bet_home_team",
         "canned_bet_away_team"
       ],
@@ -157,7 +158,12 @@
         },
         "canned_bet_seed": {
           "type": "integer",
-          "description": "Fixed RNG seed used to make the canned Gate-2 bet deterministic."
+          "description": "Fixed RNG seed used to make the canned Gate-2 bet deterministic. Seed 8 verified 2026-07-17: Harbour FC 2-0 Eastport Rovers on BOTH the netstandard2.1 DLL + Newtonsoft pipeline (Unity's path) and the net8.0 Console."
+        },
+        "canned_bet_outcome": {
+          "type": "string",
+          "enum": ["home", "draw", "away"],
+          "description": "Which 1X2 outcome the canned Gate-2 bet backs; the seed is chosen so this outcome wins."
         },
         "canned_bet_home_team": {
           "type": "integer",
