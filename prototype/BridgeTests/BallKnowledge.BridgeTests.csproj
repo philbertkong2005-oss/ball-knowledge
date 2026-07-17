@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Guards the Unity bridge (Phase 2). Tests bind design/*.json onto the NETSTANDARD2.1
+       build of the engine (the assembly Unity actually loads from Assets/Plugins/) through
+       Newtonsoft.Json (what Unity uses via com.unity.nuget.newtonsoft-json). The shimmed
+       [JsonPropertyName] in NetstandardCompat.cs is invisible to JSON readers unless the
+       loader explicitly reads it, so plain Newtonsoft binds every value as ZERO with no
+       error. These tests fail loudly if that trapdoor ever reopens.
+       Deliberately a SEPARATE project: BallKnowledge.Tests stays exactly 9/9 (the Gate-1
+       landmark). -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <!-- Same major as Unity's com.unity.nuget.newtonsoft-json (Json.NET 13.x). -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <!-- SetTargetFramework pins the reference to the engine's netstandard2.1 output — the
+       exact assembly Unity consumes. A plain ProjectReference would resolve to net8.0,
+       whose [JsonPropertyName] is the real BCL attribute, and every test here would pass
+       vacuously while Unity stays broken. -->
+  <ItemGroup>
+    <ProjectReference Include="..\MatchEngine\BallKnowledge.MatchEngine.csproj"
+                      SetTargetFramework="TargetFramework=netstandard2.1" />
+  </ItemGroup>
+
+</Project>
