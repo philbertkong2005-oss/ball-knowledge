@@ -8,7 +8,7 @@ Solo project. **Phil designs + decides; Codex writes the code; Claude is PM / sp
 | Doc | Authority |
 |---|---|
 | `docs/phase1-match-engine.md` | 🔒 **FROZEN** contract for the match engine (Gate 1 PASSED) |
-| `docs/world-design.md` | Authoritative for **world / economy / items / crime / actions / intel** (Phase 3+) |
+| `docs/world-design.md` | Authoritative for **world / economy / items / crime / actions / intel / bookmaking** (Phase 3+). Rev. 2026-07-17 — see the change table at the top. **§8.1 lists 8 open decisions that need Phil**; **§10 is a `constants.json` build handoff** |
 | `docs/phase2-greybox.md` | Phase 2 build spec (greybox district) |
 | `docs/design-doc.md` | Thin **pointer layer** over the above + pillars/acts. Loses any conflict with them |
 | `PLAN-REVIEW-LOG.md` | Full history: every Codex review round, verdict, and phase closure |
