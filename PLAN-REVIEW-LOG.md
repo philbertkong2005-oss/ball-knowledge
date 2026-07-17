@@ -336,3 +336,25 @@ VERDICT: APPROVED
 
 ---
 Converged: Phase 2 spec APPROVED after 3 review rounds (10 -> 2 -> 0 findings). docs/phase2-greybox.md is the frozen build contract. Awaiting user sign-off before build.
+
+---
+
+## Phase 2 — step 1 amendment: engine DLL made dependency-free (Claude, 2026-07-16)
+
+Trigger: before starting step 2, re-checked the open question left from the spec review — would the netstandard2.1 DLL actually LOAD in Unity? It would not.
+
+Finding (caught pre-build, not in Unity): the engine never calls JsonSerializer — all real (de)serialisation lives in the host (Console/Program.cs:178). Models.cs only carries [JsonPropertyName] as INERT METADATA (56 usages; no converters, no options, no serializer calls). But the package reference still stamped a hard assembly reference into the DLL. Proof: `dotnet publish -f netstandard2.1` emitted 9 DLLs / ~1.1 MB (System.Text.Json, System.Text.Encodings.Web, Microsoft.Bcl.AsyncInterfaces, System.Memory, System.Buffers, System.Numerics.Vectors, System.Runtime.CompilerServices.Unsafe, System.Threading.Tasks.Extensions). Unity already ships several of those => duplicate-assembly conflicts; omit them => Unity cannot resolve the reference and refuses to load the plugin. Plugins/ held ONLY the engine DLL, so as committed at 92f6360 it would have failed to load. IL2CPP reflection-stripping was a second, longer-term risk.
+
+Fix (packaging plumbing only, pre-authorised by the spec's "polyfill shims under conditional compile"): added a JsonPropertyNameAttribute shim to NetstandardCompat.cs under #if NETSTANDARD2_1 and REMOVED the System.Text.Json PackageReference. Models.cs unchanged. net8.0 untouched (still binds the real BCL type).
+
+Verification (real env, Claude):
+- publish emits 1 file, not 9; deps.json dependency list empty; only remaining "System.Text.Json*" string in the DLL is "System.Text.Json.Serialization" = our shim's OWN namespace (a typedef), not an assemblyref.
+- Build succeeds WITH the package removed => proves no real STJ type was ever required.
+- Phase 1 proof re-run: 9/9 tests. validate: blind ROI -8.29% (base -8.29%), informed ROI 44.09% (base +44%), even-money 56.36% on 2014 bets (base 56.36% on 2014 bets), Gate 1 passed: True. IDENTICAL => change is provably non-semantic.
+- Fresh DLL copied to unity/Assets/Plugins/.
+
+Process note: an intermediate check used `strings`, which is NOT installed on this box — it returned a FALSE PASS. Caught and redone with `grep -a`. Lesson: a check that cannot fail is not a check; verify the tool exists before trusting a negative result.
+
+Spec amendments (docs/phase2-greybox.md): recorded the rejection + the standing rule "if the Unity DLL ever grows a dependency, that is a bug — fix it with a shim, not a package". Also RESOLVED Unity-side config loading, which the spec had assumed would use System.Text.Json: that route is dead, and Unity's built-in JsonUtility is ALSO ruled out because formation_mods / factor_tier_magnitudes / factor_rarity are dictionaries, which JsonUtility cannot deserialize. Locked: com.unity.nuget.newtonsoft-json + a ContractResolver reading the engine's existing [JsonPropertyName] via GetCustomAttributesData() (mixed key conventions defeat any single naming strategy; a mirror DTO is the fallback, rejected by default as 30+ duplicated fields = drift risk). Added a mandatory Gate-2 supporting check: the canned seeded fixture run inside Unity must produce the identical scoreline + settlement as the Console for the same seed — the cheap end-to-end proof that config deserialised correctly.
+
+Status: step 1 re-verified and now actually loadable. Next: step 2 (tools/sync_streamingassets.py + StreamingAssets), step 3 (design/greybox.json + validator), then the Unity scene.

@@ -14,10 +14,12 @@
     <InternalsVisibleTo Include="BallKnowledge.Tests" />
   </ItemGroup>
 
-  <!-- netstandard2.1 lacks these BCL pieces the engine relies on; supply them as compile-time
-       compatibility plumbing so the SAME source compiles for Unity. net8.0 is untouched. -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
-    <PackageReference Include="System.Text.Json" Version="8.0.5" />
-  </ItemGroup>
+  <!-- netstandard2.1 lacks BCL pieces the engine relies on (init/required members, and the inert
+       [JsonPropertyName] attribute). These are supplied as compile-time shims in
+       NetstandardCompat.cs rather than by referencing the real System.Text.Json package: the
+       engine never calls JsonSerializer, so a package reference buys nothing while dragging 8
+       transitive DLLs into Unity's Plugins/ (duplicate-assembly conflicts + IL2CPP stripping
+       risk). Result: the Unity DLL has ZERO external dependencies. net8.0 is untouched and binds
+       the real BCL types. Packaging plumbing only — no engine logic, no public API. -->
 
 </Project>

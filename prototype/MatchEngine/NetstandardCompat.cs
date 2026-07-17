@@ -34,4 +34,23 @@ namespace System.Diagnostics.CodeAnalysis
     [AttributeUsage(AttributeTargets.Constructor, AllowMultiple = false, Inherited = false)]
     internal sealed class SetsRequiredMembersAttribute : Attribute { }
 }
+
+namespace System.Text.Json.Serialization
+{
+    using System;
+
+    // The engine only ever uses [JsonPropertyName] as inert metadata — it never calls
+    // JsonSerializer (all (de)serialisation lives in the host: Console/Program.cs, or Unity).
+    // Referencing the real System.Text.Json package for netstandard2.1 would force 8 transitive
+    // BCL DLLs into Unity's Plugins/, several of which Unity already ships => duplicate-assembly
+    // conflicts, plus IL2CPP reflection-stripping risk. Declaring the attribute here instead makes
+    // the Unity DLL dependency-free. Shape matches the real attribute, so Models.cs is unchanged
+    // and the net8.0 build (which uses the real BCL type) is untouched.
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
+    internal sealed class JsonPropertyNameAttribute : Attribute
+    {
+        public JsonPropertyNameAttribute(string name) => Name = name;
+        public string Name { get; }
+    }
+}
 #endif
