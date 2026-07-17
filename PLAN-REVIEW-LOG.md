@@ -387,3 +387,25 @@ Phase 0, hooks run via .pre-commit-config.yaml).
 Status: Phase 2 steps 2 and 3 BUILT + VERIFIED. Remaining before the Unity scene: none in
 tooling. Next: Unity project skeleton + asmdef + the C#9-compiles-required-members check, then
 the config loader through EngineJsonContractResolver (BridgeTests is its reference impl).
+
+## Phase 2 — world-design 2026-07-17 handoff executed (Claude, 2026-07-17)
+
+Work order from the planning session, executed on phase2-bridge-guard:
+- docs committed (08243a9): world-design.md 251->532 + CLAUDE.md authority row.
+- greybox.json v2 (119c7b2): flee roll REMOVED (wd:§4.1.2 manual chase, search_scan 30s replaces
+  4s LOS break); bribe -> wd:§4.1.1 formula with bribe_always_available marked SCAFFOLD wd:§6.4;
+  speeds 2.5/5.0 doc-locked; cash_heat aligned to wd:§4.2 (+1/h, -0.25/h, 0-100 scale);
+  clock re-keyed wd:§3.6; debt_start 100000; detect_curve_exponent added (TUNE, gang=linear
+  proposed; police must differ per wd:§8.2). _provenance map mandatory, validator enforces both
+  directions + format; 3 failure paths verified.
+- phase2-greybox.md amendment (f536998): flee manual, formula catch-stop, real-scale 700m zoned
+  map with 6 shop-shaped buildings day-one (systemic content unchanged), provenance rule.
+- constants.json reconciliation (cd19123): §10 blocker check FIRST — the three fields are
+  declaration-only in Models.cs, values dead. starting_debt -> 100000 committed; FULL proof
+  re-run IDENTICAL (blind -8.29%, informed +44.09%, even-money 56.36% on 2014 bets).
+  §10 items 3-4 (rename/delete) BLOCKED and reported back: the keys are `required` members of
+  frozen EngineConfig — rename/delete = Models.cs edit = frozen public API. Needs a separately
+  reviewed engine-plumbing pass (recommend evicting all three world-economy fields from
+  EngineConfig in one go, verified by identical proof + BridgeTests).
+- OPEN for Phil: catch_vig 0.3 ratification (wd:§10 item 4); canned-bet payout vs 1.29 board
+  odds; heat->detect curve sign-off after feel (gang linear proposed).
