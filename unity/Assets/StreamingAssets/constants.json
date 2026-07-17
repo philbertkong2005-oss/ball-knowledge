@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "starting_debt": 500000,
+  "starting_debt": 100000,
   "weekly_debt_interest": 0.1,
   "catch_vig": 0.3,
   "bookmaker_overround": 1.1,
