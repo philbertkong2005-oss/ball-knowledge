@@ -1,7 +1,9 @@
 {
   "name": "BallKnowledge.Greybox",
   "rootNamespace": "BallKnowledge.Greybox",
-  "references": [],
+  "references": [
+    "Unity.InputSystem"
+  ],
   "includePlatforms": [],
   "excludePlatforms": [],
   "allowUnsafeCode": false,

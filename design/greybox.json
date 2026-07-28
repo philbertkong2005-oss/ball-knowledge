@@ -34,7 +34,7 @@
     "walk_speed_ms": 2.5,
     "run_speed_ms": 5.0,
     "crouch_speed_ms": 1.25,
-    "mouse_sensitivity": 1.0
+    "mouse_sensitivity": 0.12
   },
   "detection": {
     "vision_half_angle_deg": 35.0,
