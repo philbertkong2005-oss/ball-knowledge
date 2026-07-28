@@ -1,0 +1,17 @@
+{
+  "name": "BallKnowledge.Greybox",
+  "rootNamespace": "BallKnowledge.Greybox",
+  "references": [],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": true,
+  "precompiledReferences": [
+    "BallKnowledge.MatchEngine.dll",
+    "Newtonsoft.Json.dll"
+  ],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

@@ -437,3 +437,34 @@ Newtonsoft + EngineJsonContractResolver (BridgeTests is the guard), never by han
 same silent-zeros failure family as Task 0.
 
 Editor confirmation is still the final word, but it is now expected-to-pass, not a coin flip.
+
+## Phase 2 — Task 2 build: engine into Unity (Codex build, Claude verify, 2026-07-17)
+
+### Round 1 — Codex build (gpt-5.4 high)
+Contract: asmdef, resolver copy, greybox DTO, PURE-C# loader (no UnityEngine — deliberately, so
+it is provable before the editor is opened), thin smoke-test MonoBehaviour, non-coder editor
+checklist, and a scratchpad harness that compiles the REAL Unity sources and runs them.
+Codex deviations reported and accepted: (1) resolver not byte-verbatim — file-scoped namespace
+converted to block form, required for C#9; diffed and confirmed semantically identical.
+(2) scratchpad harness restores Newtonsoft from local NuGet cache (no outbound network in
+sandbox). (3) scratchpad writes via shell (apply_patch is repo-scoped).
+
+### Claude's verdict — PASS, zero fix rounds
+Diff read in full; frozen areas untouched (`git diff design/ prototype/` empty).
+Verified in the real env, not from Codex's paste:
+- Harness re-run by Claude: all five expected lines, canned bet seed 8 -> Harbour FC 2-0
+  Eastport Rovers.
+- TAMPER 1 (conversion_base -> 0.999 in the Unity copy): "Config mismatch ... expected
+  0.205/1.24/10" and stops. The check can fail.
+- TAMPER 2 (teams.json removed): MissingStreamingAssetFileException naming the path.
+- Restored via sync; --check green.
+- GAP CLOSED BY CLAUDE: Codex's harness targets net8.0, which does NOT prove Unity's
+  netstandard2.1 API surface. Re-compiled the actual Unity scripts at netstandard2.1 +
+  LangVersion 9.0 (Unity 6.3's exact profile): Build succeeded, 0 warnings.
+- 9/9 + 6/6 tests green; both validators pass.
+KNOWN LIMITATION (not a blocker): the scratchpad harness prints failures but exits 0 — fine for
+a human-facing smoke test, would need an exit code if ever wired into CI. In Unity the failure
+surface is Debug.LogError (red Console entry), which is the intended signal.
+
+Status: everything provable outside the editor is proven. REMAINING: Phil runs
+docs/phase2-unity-checklist.md in the editor — the only step that needs the GUI.
