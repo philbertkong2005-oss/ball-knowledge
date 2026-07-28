@@ -25,10 +25,16 @@ This checklist is for the human who does the Unity editor clicks. Follow the ste
    What it means if it does not: the editor layout is broken; reset layout or reopen the editor.
 
 4. Check that the Newtonsoft package is installed.
-   What to click: in Package Manager, change the dropdown to `In Project`, then click `Newtonsoft Json for Unity`.
+   What to click: in Package Manager, select `In Project` in the left sidebar, then look for `Newtonsoft Json for Unity`.
    What should appear: package `Newtonsoft Json for Unity`, version `3.2.1`, with no install button.
-   What it means if it does not: if the package is missing or a different version is shown, the manifest did not resolve correctly.
+   What it means if it does not: **this is expected if the editor was already open when the project files changed** — Unity only resolves new packages on project load, so it has not noticed the request yet. Do step 4a.
    Screenshot to take: the Package Manager showing `Newtonsoft Json for Unity 3.2.1`.
+
+4a. **If Newtonsoft is NOT in the list — install it explicitly** (observed 2026-07-28; do not skip).
+   What to click: the `+` button at the top-left of the Package Manager window -> `Install package by name...` -> paste `com.unity.nuget.newtonsoft-json` -> `Install`.
+   What should appear: a progress spinner, then `Newtonsoft Json for Unity 3.2.1` in the `In Project` list, then a short recompile.
+   What it means if it does not: if the `+` menu has no "by name" entry, quit Unity completely and reopen the project — package resolution always runs on project load. If it still does not appear, stop and report: `Packages/manifest.json` requests it on line 7, so a failure here is a Unity/registry problem, not a project problem.
+   Why this step exists: the package request lives in `Packages/manifest.json`, but Unity keeps its own resolved list (`packages-lock.json`). An editor that was open during an external file change will not re-read the manifest on its own.
 
 5. Confirm the greybox assembly references are correct.
    What to click: in the `Project` window open `Assets` -> `Scripts`, then click `BallKnowledge.Greybox`.
@@ -118,7 +124,7 @@ This checklist is for the human who does the Unity editor clicks. Follow the ste
 | Problem | What to check | What it usually means |
 | --- | --- | --- |
 | Script will not attach | Open Console and look for red compile errors | Unity scripts did not compile; fix the first red error before trying again |
-| Newtonsoft missing | Package Manager does not show `Newtonsoft Json for Unity 3.2.1` | `Packages/manifest.json` did not resolve or the editor has not finished package restore |
+| Newtonsoft missing | Package Manager does not show `Newtonsoft Json for Unity 3.2.1` | Unity has not re-resolved the manifest (normal if the editor was open when the files changed). Fix with step 4a: `+` -> `Install package by name...` -> `com.unity.nuget.newtonsoft-json`. Quitting and reopening the project also works |
 | `The type or namespace name 'BallKnowledge' could not be found` | Click `Assets/Scripts/BallKnowledge.Greybox` and confirm `Override References` is checked and `BallKnowledge.MatchEngine.dll` plus `Newtonsoft.Json.dll` are both listed | The asmdef is not referencing the engine DLL or Newtonsoft correctly |
 | Zeros in the config line | Compare the first line against `conversion_base=0.205 home_advantage=1.24 formations=10` | The engine JSON resolver is wrong or not being used; default Newtonsoft silently bound zeros |
 | Red errors on import | Read the first red Console entry after opening the project | Package restore, asmdef references, or a syntax/import issue blocked compilation |
