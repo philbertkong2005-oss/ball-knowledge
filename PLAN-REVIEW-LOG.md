@@ -409,3 +409,31 @@ Work order from the planning session, executed on phase2-bridge-guard:
   EngineConfig in one go, verified by identical proof + BridgeTests).
 - OPEN for Phil: catch_vig 0.3 ratification (wd:§10 item 4); canned-bet payout vs 1.29 board
   odds; heat->detect curve sign-off after feel (gang linear proposed).
+
+## Phase 2 — the C#11/Unity compile risk is RETIRED (Claude, 2026-07-17)
+
+The spec's standing risk ("Unity's C#9 compiler may reject the engine's `required`-member types;
+untestable outside the editor") was tested outside the editor after all: a probe project pinned to
+`netstandard2.1` + `LangVersion 9.0`, referencing the DLL exactly as Unity does from Plugins/.
+Five usage patterns compiled clean: naming EngineConfig in a field, as a generic argument (what
+`DeserializeObject<T>` needs), reading a required property, naming TeamDefinition through a
+collection, and `new MatchEngine(config)` + `SimulateMatch(..., 8)`.
+
+TWO CONTROLS, because a check that cannot fail is not a check (the `strings` lesson):
+- Negative control (object-initialiser construction of a required-member type) PASSED when it
+  should have failed -> investigated rather than accepted.
+- Control-for-the-control (`required` written in the probe's OWN source) failed correctly with
+  `CS8773: Feature 'required members' is not available in C# 9.0`, proving LangVersion 9 IS
+  enforced and the probe is real.
+
+ROOT CAUSE of the surprising pass, and why the result is robust: the shim's
+`RequiredMemberAttribute` / `CompilerFeatureRequiredAttribute` are **internal to the engine
+assembly**, so the C#11 feature gate is invisible to any consumer. This is structural, not
+compiler-version-dependent -> Unity's Roslyn will behave the same.
+
+CONSEQUENCE TO CARRY: `required` gives Unity code NO compile-time protection — a hand-built,
+half-filled EngineConfig would compile silently. Unity must therefore ALWAYS build config through
+Newtonsoft + EngineJsonContractResolver (BridgeTests is the guard), never by hand. This is the
+same silent-zeros failure family as Task 0.
+
+Editor confirmation is still the final word, but it is now expected-to-pass, not a coin flip.
