@@ -468,3 +468,37 @@ surface is Debug.LogError (red Console entry), which is the intended signal.
 
 Status: everything provable outside the editor is proven. REMAINING: Phil runs
 docs/phase2-unity-checklist.md in the editor — the only step that needs the GUI.
+
+## Phase 2 — the Unity bridge is VERIFIED IN THE EDITOR (Phil + Claude, 2026-07-28)
+
+Phil ran docs/phase2-unity-checklist.md. Result: PASS on the first full attempt.
+
+Console (5 messages, 0 warnings, 0 ERRORS):
+  [BallKnowledge] Config OK — conversion_base=0.205 home_advantage=1.24 formations=10
+  [BallKnowledge] Teams OK — 8 teams, first=Harbour FC
+  [BallKnowledge] Greybox OK — walk=2.5 sprint=5 carry_threshold=500 debt=100000
+  [BallKnowledge] Canned bet seed=8 -> Harbour FC 2-0 Eastport Rovers  [EXPECTED: 2-0 home win]
+  [BallKnowledge] BRIDGE SMOKE TEST PASSED
+
+Three-way agreement on the same seed: net8.0 Console == netstandard2.1+Newtonsoft harness ==
+Unity editor. That is the config-deserialisation end-to-end proof this log demanded when the
+Newtonsoft route was locked, and it retires the last inference in the bridge: the C#9 compile
+question is now answered by a real editor run.
+
+Inspector confirmed: asmdef Override References checked with both DLLs listed; plugin DLL
+Auto Reference checked, "Targets .NET 4.x".
+
+ONE CHECKLIST DEFECT FOUND AND FIXED (17ce9b4): editing Packages/manifest.json while the editor
+is open does NOT install a package — Unity resolves new requests on project LOAD only, so
+Package Manager showed no Newtonsoft and the checklist offered no recovery. Added step 4a
+(`+` -> Install package by name -> com.unity.nuget.newtonsoft-json) plus the quit/reopen
+fallback. This is exactly the class of failure the mandatory-checklist rule exists to catch:
+an editor-state problem that could have been mistaken for a code bug.
+
+WORKFLOW VERDICT (the Phase 0 question "is non-coder-drives-the-GUI viable?"): YES, on this
+evidence. One genuine snag, diagnosed from a screenshot in one round, fixed in the doc.
+The Godot fallback stays unnecessary.
+
+Tags: gate-phase2-bridge-verified, good-20260728-*.
+Status: Phase 2 Task 2 CLOSED. Next: the greybox map (real-scale 700m, 4 flat-colour zones,
+6 shop-shaped buildings), FPS controller, then the single patroller.
