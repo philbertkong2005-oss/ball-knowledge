@@ -502,3 +502,41 @@ The Godot fallback stays unnecessary.
 Tags: gate-phase2-bridge-verified, good-20260728-*.
 Status: Phase 2 Task 2 CLOSED. Next: the greybox map (real-scale 700m, 4 flat-colour zones,
 6 shop-shaped buildings), FPS controller, then the single patroller.
+
+## Phase 2 — 700m map scale VALIDATED by walking it (Phil + Claude, 2026-07-28)
+
+Task 3 built the FPS controller + a bare 700m scale-reference ground specifically to test
+world-design.md §2.2.2's pacing claim BEFORE any buildings are placed on it. Phil walked the
+full diagonal.
+
+MEASURED vs PREDICTED — the doc's arithmetic survived contact with reality:
+  diagonal distance   predicted ~990 m    measured 992.7 m
+  real time           predicted ~6.6 min  measured 6:44
+  in-game hours       predicted ~7.9 h    measured 8.1 h
+  average speed       configured 2.5 m/s  measured 2.46 m/s (992.7m / 404s)
+The 2.46 vs 2.5 gap is turning + acceleration loss. End position (347.7, 347.5) = the true far
+corner, so the full diagonal was walked. This ALSO proves the controller reads greybox.json
+rather than hard-coded speeds — the non-coder-verifiable proof the HUD exists for.
+
+FELT VERDICT (Phil, first walk): "felt like a commitment, took a lot of patience, and yes wanted
+to hold shift to speed it up". Mouse at 0.12 "felt fine for now" -> provenance moved TUNE ->
+verified:2026-07-28.
+=> §2.2.2's design intent HOLDS: it wanted "a real commitment, not the whole day", and that is
+what the scale delivers. **700m is CONFIRMED; the map may be built at this scale.** The "a lot
+of patience" note is logged as the caution flag on the far end of that judgement — worth
+re-checking once the map has density, since §2.2.2 itself warns "density, not distance, is the
+real test" and an empty plane is the worst case for tedium.
+
+DESIGN ITEM RAISED BY PHIL: unlimited no-cooldown sprint is "too convenient". Phil correctly
+routed this to the planning session rather than deciding it mid-build.
+**Claude's note for that session: world-design.md §2.2.2 ALREADY answers it and the answer is
+load-bearing for Gate 2.** Sprint is not meant to be free — it burns Energy; Energy 0 -> forced
+sleep -> 50% chance of losing 10% of on-body cash (§4.3). The intended dilemma is: walk home
+with a big win and bleed +5.6 gang heat, or sprint for +2.8 and risk dropping unconscious in the
+street with the whole roll in your pocket. So this is a DEFERRED IMPLEMENTATION, not an open
+design question.
+**Consequence to decide before Gate 2:** Energy is currently deferred out of the greybox, so in
+the slice sprint IS free. If the Gate-2 walk can simply be sprinted, the walk-home tension is
+measured with its main cost switched off, and a pass may not mean what it appears to mean.
+Options (planning session's call): (a) implement a minimal Energy drain for the slice, (b) accept
+it and note the caveat on the Gate-2 result, (c) another sprint cost. Not decided here.

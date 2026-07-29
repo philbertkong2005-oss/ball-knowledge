@@ -4,7 +4,7 @@
     "player.walk_speed_ms": "wd:§2.2.2",
     "player.run_speed_ms": "wd:§2.2.2",
     "player.crouch_speed_ms": "TUNE",
-    "player.mouse_sensitivity": "TUNE",
+    "player.mouse_sensitivity": "verified:2026-07-28",
     "detection.vision_half_angle_deg": "p2:detection",
     "detection.vision_range_m": "p2:detection",
     "detection.base_detect_time_s": "p2:detection",
