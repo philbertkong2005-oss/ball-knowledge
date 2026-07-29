@@ -21,7 +21,16 @@
 | §9 | **NEW — the whole bookmaking / odds system** |
 | §10 | **NEW** — `constants.json` build handoff |
 
-中文摘要：本文件記錄2026-07-15/16策劃問答鎖定嘅世界、經濟、物品、犯罪、行動、情報系統設計，**2026-07-17大幅修訂**。同design doc衝突時以本文件為準（注意：第2幕造馬-lite已完全剷走）。**07-17改動**：第2幕拆成兩半（肥強改喺中段先倒，前半同Fanta合資喺佢地頭開地下盤口）、第3幕access同動機（收入天花板）+**大城唔起舖**、**鎮3剷**（3個地點、2+2+4隊、地鐵改第3幕開）、吉舖同地圖比例（700m）、債$100k確認+`constants.json`衝突、**街機唔洗錢**（Fanta永久持有，洗衣舖上位）、舖頭收入公式、罰款/賄賂公式+**flee全手動**、傢俬系統重用、第①層情報改為跨季保留但每季−10、調參表重建（**8個要你拍板嘅決定**）、**全新第9章做莊系統**、第10章交俾build session。
+**2026-07-29 revision (from Phil's SketchUp draft + build feedback):**
+| § | Change |
+|---|---|
+| §1.1 | **Act 2 second half reworked.** Fat Keung's own 3 shops **shutter → the player reopens THEM** (re-register + renovate); no separate "empty shells", the same 3 buildings change state. Fanta takes territory + arcade, not the shop buildings. **3 bet shops in Town 1, not 4** |
+| §2.2.1 | Rewritten to match: **3 shop buildings (state-changing), not 6.** **Filler buildings = the Act-2 buyable laundering-front pool**; tall-building **facade rule** (ground-floor front, sealed floors above). NPC Residential Buildings ≠ shops |
+| §2.1 | Town 2 now gated by a **bridge** (was "the mountain") |
+| §2.2.3 | **Real map = 541 × 641 m** (Phil's draft); 700×700 logged as tested upper bound. Draft wins over the from-scratch coord table |
+| §8.2 | Deposit-valve note updated: **up to ~7 laundering fronts** (the fillers), not ~3 — widening must shrink |
+
+中文摘要：本文件記錄2026-07-15/16策劃問答鎖定嘅世界、經濟、物品、犯罪、行動、情報系統設計，**2026-07-17大幅修訂、2026-07-29再修**。**07-29改動**（來自Phil嘅SketchUp草稿+build回饋）：第2幕後半改成**重開肥強自己嗰3間熄檔舖**（唔係另起吉殼、同3間舖跨幕轉狀態）、**鎮1得3間bet shop唔係4間**、**填充建築=第2幕可買洗錢門面池**（高樓地下鋪做門面、樓上封死）、鎮2改用**橋**封鎖、**真圖=541×641m**（草稿為準）、存款閥門面數升到約7間要縮細每間幅度。**07-17改動**：第2幕拆成兩半（肥強改喺中段先倒，前半同Fanta合資喺佢地頭開地下盤口）、第3幕access同動機（收入天花板）+**大城唔起舖**、**鎮3剷**（3個地點、2+2+4隊、地鐵改第3幕開）、吉舖同地圖比例（700m）、債$100k確認+`constants.json`衝突、**街機唔洗錢**（Fanta永久持有，洗衣舖上位）、舖頭收入公式、罰款/賄賂公式+**flee全手動**、傢俬系統重用、第①層情報改為跨季保留但每季−10、調參表重建（**8個要你拍板嘅決定**）、**全新第9章做莊系統**、第10章交俾build session。同design doc衝突時以本文件為準（注意：第2幕造馬-lite已完全剷走）。**07-17改動**：第2幕拆成兩半（肥強改喺中段先倒，前半同Fanta合資喺佢地頭開地下盤口）、第3幕access同動機（收入天花板）+**大城唔起舖**、**鎮3剷**（3個地點、2+2+4隊、地鐵改第3幕開）、吉舖同地圖比例（700m）、債$100k確認+`constants.json`衝突、**街機唔洗錢**（Fanta永久持有，洗衣舖上位）、舖頭收入公式、罰款/賄賂公式+**flee全手動**、傢俬系統重用、第①層情報改為跨季保留但每季−10、調參表重建（**8個要你拍板嘅決定**）、**全新第9章做莊系統**、第10章交俾build session。
 
 ---
 
@@ -51,17 +60,16 @@
 - **Spoils split:** Fanta takes the gang/territory side; the player takes the entire betting side. **Guardrail (stamped): the player's underworld role caps forever at "the enforcement arm of the betting business"** — collect the book's own debts, protect its venues; a territory/racket-management system never exists.
 - **Fanta keeps the arcade forever** and remains a **permanent partner into Act 3**. The arcade is not a laundering front (§3.10).
 
-**Second half — build, don't seize.**
-- **Fat Keung's 3 shops close and convert to Fanta's other businesses within a week.** The player does not inherit them — Fanta takes the *buildings* (territory), the player takes the *trade* (betting). You watch your partner's name go up on three prime storefronts while you start from empty ones; it seeds distrust for Act 3.
-  - **Do not leave them standing visibly empty and claimable** — that is a false affordance. Fanta's men are in there from day one, "opening soon" in the window. The week is the world moving on, not a window you are failing to catch.
-- The player builds their own shops from the **empty shells that have stood on the map since Act 1** (§2.2): renovate, furnish, register the licence at the town hall (card fee + time), hire staff.
-- **Why this beats seizing:** inheriting 3 working shops makes Act 2 open as a victory lap — debt is already cleared at the gate, so there is no clock. Building from empty spends the Act 1 winnings and makes you cash-poor again. **The sink is the pressure.**
+**Second half — reopen the shops you bled him out of** (rev. 2026-07-29 — supersedes "build from separate shells").
+- **Fat Keung's own 3 legit shops shutter within a week of the takedown, then become the player's to reopen.** They do NOT convert to Fanta's businesses. The player re-registers the licence at the town hall (card fee + time) and renovates each dead shop back into a working book. **There are no separate "empty shells" — the shells ARE Fat Keung's former shops** (one per non-rural zone; the same 3 the player has bet in and been banned from all through Act 1).
+- **The spoils split, restated:** Fanta takes the whole **territory / enforcement side plus the arcade**; the player takes the **betting trade** — which now means three shuttered husks to pour money into. **He got the turnkey half, you got the fixer-uppers.** The distrust beat survives, just re-imaged: Fanta walked away with the easy side while you sink your Act-1 winnings reopening dead shops.
+- **Why reopening still isn't a victory lap:** debt is already cleared at the gate, so there is no clock — the pressure has to come from somewhere, and it comes from the sink. A shuttered shop earns nothing until you pay to re-register and re-fit it. **You come out of the takedown cash-rich and asset-poor; spending it back down IS Act 2's tension.**
 - Fat Keung's collectors are now unemployed and come to **you** — the men who hunted you in Act 1 end up on your payroll.
 - **Staff are a wage line and a capacity unlock, never a management loop.** Hire once, pay wages, done. No quitting, stealing, morale or training — that is a different game.
-- **Depth curve, not uniform depth:** the first shop is fully walked (haul the furniture, hire the man face to face). Later shops progressively delegate. Walked × 6 is tedium; menu × 6 breaks pillar 1.
+- **Depth curve, not uniform depth:** the first shop is fully walked (haul the furniture, hire the man face to face). Later shops progressively delegate. Walked × 3 is a rhythm; menu × 3 breaks pillar 1.
 
 **Expansion timeline.**
-- **Town 2 opens at the midpoint** — the mountain road is the physical gate (§2.1). Town 3 is **cut** (§2.1).
+- **Town 2 opens at the midpoint** — the **bridge** to the east is the physical gate (§2.1). Town 3 is **cut** (§2.1).
 - **The big city is Act 3's stage, and the player never builds shops there** (§1.2). The empire caps at towns 1–2.
 
 ### 1.2 Act 3 — access and gate (rev. 2026-07-17)
@@ -72,7 +80,7 @@
 - **Motive = the ceiling.** `max × Q × C` (§3.12) maxes out. The game shows a flat income line and says there is nothing left to earn. The city is the only frontier and it is closed — entrenched bookies, licences you cannot get. **Fixing is the crowbar.** Pillar 3's debt clock is long gone by Act 3, so the pressure must come from a visible ceiling.
 - **Act 3 gate — mirrors Act 2's triple gate** rather than being a completion checklist: ① every shop across towns 1–2 operating + ② connection (Fanta at max — he opens the city door) + ③ player XP level. **[OPEN: confirm gate ② is Fanta and not an uninvented city NPC.]**
 
-中文摘要（rev. 2026-07-17）：3間正行投注站全部係肥強嘅。**前半幕**：玩家同Fanta（街機老闆，肥強手下）**合資**開地下盤口，喺Fanta後舖、肥強地頭、肥強保護、按比例抽水——**肥強親自保護緊一盤資助佢自己被拆嘅生意**。合資本身就係陰謀；抽水就係拆佢嘅機制動機。**中段拆肥強**：一次過刪走兩條漏水（肥強抽水 + Fanta按分贓退出賭業）→ 玩家由被抽水嘅部分股東變成整條賭業唯一老闆。分贓：Fanta攞地盤（連埋三間舖，一星期內轉行做佢生意），玩家攞賭業。**Fanta永久持有街機、第3幕仍是拍檔。護欄不變：玩家黑道角色永遠封頂喺執行臂。****後半幕自建唔接管**：用第1幕就企喺度嘅吉舖，裝修→買傢俬→過牌照→請人。**點解好過接管**：接管3間現成舖=開場即有收入、債又清咗、係勝利巡遊；自建令你重新變窮，**開支本身就係壓力**。肥強啲收數佬失業，自己搵上門。**員工=人工開支+產能解鎖，永不做管理循環。****中段開鎮2**（山路係實體閘），**鎮3剷**。**第3幕大城唔起舖**——大城係你落注嘅地方，唔係擴張嘅地方；帝國封頂喺鎮1鎮2。第3幕動機=天花板：收入見頂、大城關門、造馬就係撬棍。第3幕入閘鏡像第2幕三閘。
+中文摘要（rev. 2026-07-17）：3間正行投注站全部係肥強嘅。**前半幕**：玩家同Fanta（街機老闆，肥強手下）**合資**開地下盤口，喺Fanta後舖、肥強地頭、肥強保護、按比例抽水——**肥強親自保護緊一盤資助佢自己被拆嘅生意**。合資本身就係陰謀；抽水就係拆佢嘅機制動機。**中段拆肥強**：一次過刪走兩條漏水（肥強抽水 + Fanta按分贓退出賭業）→ 玩家由被抽水嘅部分股東變成整條賭業唯一老闆。分贓（rev. 2026-07-29）：**Fanta攞成個地盤/執行側 + 街機**，玩家攞賭業。**Fanta永久持有街機、第3幕仍是拍檔。護欄不變：玩家黑道角色永遠封頂喺執行臂。****後半幕＝重開你逼到肥強熄檔嘅嗰3間舖**（rev. 2026-07-29，改咗）：肥強自己3間正行舖拆完一星期內熄燈→變成你嘅→重新登記+裝修先開得返。**冇另一批「吉殼」——同3間舖跨幕轉狀態**（Act 1肥強營業→熄檔→你重開）。地下盤口喺**街機後舖**，唔係第4間舖面，所以**係3間，唔係4間**。**點解重開都唔係勝利巡遊**：債喺入閘已清、冇時鐘，壓力來自個sink——熄檔舖要俾錢重登記+重裝先賺到錢；你拆完肥強係現金多、資產少，掟返啲錢落去就係第2幕張力。**分贓疑心beat照在**：Fanta攞現成嗰半、你攞爛尾嗰半。肥強啲收數佬失業，自己搵上門。**員工=人工開支+產能解鎖，永不做管理循環。****填充建築＝第2幕可買嘅洗錢門面池**（laundromat係最平嗰間；高樓＝地下鋪做洗錢、樓上封死）。**中段開鎮2**（**橋**係實體閘），**鎮3剷**。**第3幕大城唔起舖**——大城係你落注嘅地方，唔係擴張嘅地方；帝國封頂喺鎮1鎮2。第3幕動機=天花板：收入見頂、大城關門、造馬就係撬棍。第3幕入閘鏡像第2幕三閘。
 
 中文摘要：身份進化係賣點（賭客→莊家→造馬者），落注三幕保留。第2幕係純莊家幕，球員不可掂。入幕=三閘：債清+關鍵NPC關係+等級。
 
@@ -86,7 +94,7 @@
   - **The city carries 4 teams to preserve the 8-team league** (2 + 2 + 4 = 8). Big city, more clubs — real football geography works this way, and it makes the city feel genuinely bigger, which serves Act 3. **[OPEN: 2 stadiums recommended over 3** — §2.1's rule is one shared ground per two teams; a third ground buys flavour at the cost of a whole location asset.**]**
 - **One location per beat:** Town 1 = Act 1 + Act 2's first half. Town 2 = Act 2's second half. The City = Act 3.
 - **The metro station to the city stays closed through Acts 1–2 and opens in Act 3.** A station you walk past for two acts and never ride is stronger foreshadowing than one that opens halfway. (Supersedes the earlier "opens in Act 2".)
-- **Town 2 is gated by the mountain** — you cannot expand yet because there is a mountain there. Whatever opens the road *is* the Act 2 midpoint reward, and the player will have stared at it for two acts. Same trick as the closed metro: concrete foreshadowing, no UI.
+- **Town 2 is gated by a bridge** (rev. 2026-07-29 — was "the mountain") — Town 2 sits across the water to the east, reached by a bridge that is impassable until the Act 2 midpoint. Whatever opens the bridge *is* the midpoint reward, and the player will have stared at it for two acts. Same trick as the closed metro, and a bridge you cannot cross is even more concrete than a ridge. (In the model the bridge is a symbolic placeholder; geometry to be redone.)
 - Design lean: **small and interactive over big and empty.**
 - **Act 1 local teams:** Aberdeen Fishermen 香港仔漁民 (supporters' bar A, docks) + Eastport Rovers 東港流浪 (supporters' bar B, residential). Keeper Wong (the demo's hungover keeper) is a local.
 
@@ -94,7 +102,7 @@
 | Zone | Contents | Risk profile |
 |---|---|---|
 | **Downtown core** | bank, town hall, police station, hospital, bet shop #1 (flagship), general store #1, newsstand, hotel, general bar, realtor, car dealer, phone booths | police-heavy: safest with cash, deadliest with contraband (search central) |
-| **Old harbour / docks** | docks & fish market, black-market fence, Fat Keung's office, arcade + illegal bookie, bet shop #2, shelter #2, supporters' bar A, **laundromat (THE first buyable laundering front, §2.2.1)** | gang turf: contraband walks free, cash bleeds. Monthly payment day = cash run into the lion's den |
+| **Old harbour / docks** | docks & fish market, black-market fence, Fat Keung's office, arcade + illegal bookie, bet shop #2, shelter #2, supporters' bar A, **laundromat (first of the filler laundering-front pool, §2.2.1)** | gang turf: contraband walks free, cash bleeds. Monthly payment day = cash run into the lion's den |
 | **Residential fringe** | NPC houses, rentable rooms (housing ladder), **bet shop #3**, general store #2, gas stop #1 + fast food, park (slip-scavenging hotspot, unsafe sleep), shelter #1 (start home), supporters' bar B, phone booths | neutral; max gang heat patrols wherever the player lives |
 | **Rural outskirts** | training ground (Act 1 watch through fence → Act 3 infiltrate), stadium (town edge, on bus line), natural area + campground (hunting?? unlocked), general store #3, gas stops #2–3 + fast food, treasure boxes concentrated | no factions but far — trips cost time/energy while cash-heat ticks |
 
@@ -104,10 +112,12 @@
 - Tension distances: ① overflow cash ↔ your stash (big-win days: the dangerous walk is home, not to the bank), ② stealing is easy, *fencing* means hauling contraband across town, ③ morning training-ground intel ↔ racing back to bet before odds move.
 - Counts: 3 bet shops (one per non-rural zone — ban rotation costs real legwork; all three are Fat Keung's, see §1.1), 2 shelters, 3 general stores, 3 gas stops + fast food, 3 bars total (2 supporters' + 1 general).
 
-#### 2.2.1 Empty shop shells (rev. 2026-07-17) — **non-deferrable**
-- **3 empty shop shells stand on the Act 1 map from day one**, "for lease" in the window — one per non-rural zone. They are what the player buys and builds in Act 2's second half (§1.1). **[OPEN: Phil said 2–3; 3 recommended** — it mirrors §2.2's existing one-per-zone bet-shop geography, keeps the legwork symmetry, and maps 1:1 onto the NPC area groups in §3.12. Two leaves an orphan zone.**]**
-- **Six shop-shaped buildings must exist in the Act 1 map: Fat Keung's 3 trading + 3 shells standing empty.** Retrofitting shop shells into a finished map is expensive — this is decided now or paid for later.
-- **The laundromat (docks) is promoted to *the* first buyable laundering front**, replacing the arcade (§3.10). It is load-bearing, not flavour.
+#### 2.2.1 Shop buildings & laundering fronts (rev. 2026-07-29)
+- **3 bet-shop buildings total in Town 1** — one per non-rural zone (docks, downtown, residential). In Act 1 all three trade as **Fat Keung's** legit shops (the ones the player bets in and gets banned from). Post-takedown they **shutter, then reopen as the player's** after re-registration + renovation (§1.1). **There is no separate set of empty shells — the same 3 buildings change state across the acts.** (Supersedes the earlier "6 shop-shaped buildings / 3 FK + 3 separate shells".) The illegal Act-2-first-half book runs from the **arcade back room**, not a fourth shopfront — so it is **3 bet shops, not 4** (confirmed 2026-07-29).
+- **Filler buildings are the Act-2 buyable laundering-front pool** (rev. 2026-07-29) — not visual dead space. §3.1 makes "buying businesses widens the deposit cap = laundering" a core valve; the filler buildings are the businesses you buy to widen it. This makes every filler interactive (§2.1's "small and interactive over big and empty") and answers where the launderable businesses come from. The **laundromat** (docks) is simply the **first / cheapest** of this pool — the tutorial front (§3.10).
+- **Facade rule for tall buildings:** a tall filler has its laundering business on the **ground floor only; every floor above is sealed and non-enterable.** Skyline density without walkable interiors — a hard scope fence against multi-floor interior building.
+- **⚠️ Consequence for the deposit valve (§8.2):** ~5 fillers + 1 tall + laundromat ≈ **up to 7 laundering fronts**, where the valve was scoped for ~3. Per-business widening must shrink accordingly or the valve blows open. Tuning note, not a blocker.
+- **NPC Residential Buildings** (the model's `Shop___Residential_Building` group — **rename in SketchUp**) are pure population/housing texture, **not shops** and not fronts.
 
 #### 2.2.2 Scale (rev. 2026-07-17)
 - **~700m corner to corner, buildings at real-life size.** Bounded by water and mountain — no invisible walls.
@@ -125,7 +135,9 @@
 
 **Companion diagram:** [`docs/assets/town1-gate2-layout.svg`](assets/town1-gate2-layout.svg) — top-down, generated from the coordinate tables below. The tables are authoritative; the SVG visualises them.
 
-**Coordinate system.** Unity world units = metres. Origin `(0,0)` at the **town crossroads** (map centre). **X = east(+)/west(−), Z = north(+)/south(−).** Map spans X ∈ [−350, +350], Z ∈ [−350, +350] — the empirically-walked 700×700 (§2.2.2; diagonal measured 992.7m). Building positions are **centres**; footprints are `W×D` (X-extent × Z-extent) in metres.
+**Coordinate system.** Unity world units = metres. Origin `(0,0)` at the **town crossroads** (map centre). **X = east(+)/west(−), Z = north(+)/south(−).** Building positions are **centres**; footprints are `W×D` (X-extent × Z-extent) in metres.
+
+**⚠️ Scale note (rev. 2026-07-29):** the coordinate tables below are the *from-scratch spec* on a 700×700 footprint. **Phil's actual SketchUp draft is 541 × 641 m** (839 m diagonal) and is the layout being built — deliberately smaller than the empirically-walked 700×700 (§2.2.2) so the town reads *dense* rather than as an empty corridor (§2.2.2's own warning: "density, not distance, is the real test"). **700×700 is logged as the tested upper bound, not the target.** The `town1-AS-READ-from-obj` render captures the real draft; where this table and the draft disagree, **the draft wins** — these coordinates are a reference to reconcile against, not an override.
 
 ##### Zone arrangement (the mirror)
 Four quadrants meeting at the crossroads. **The two faction zones are point-reflections of each other through the origin** — same structure, inverted danger. This is the §2.2 "police zone and gang zone mirror each other" made concrete:
@@ -154,6 +166,7 @@ The slice: walk from home, place the canned bet, walk the winnings home — thro
 - **Why the walk carries tension both ways:** the canned payout (§ decision e) returns **>$500 to hand**, so the **walk home crosses the gang cash-threshold** (§4.2) — the corridor is dangerous on the way out (if already carrying) and on the way back (winnings). The empty shell at `(−150, −70)` sits *on the route*, so the player sees a "for lease" Act-2 hook on their very first Gate-2 walk.
 
 ##### Building placement
+> **⚠️ Superseded for exact positions by Phil's 541×641 draft (rev. 2026-07-29).** These 700×700 coordinates are a from-scratch reference. Two model changes override the tables below: (1) **the "Empty shell — X" rows are gone** — per §2.2.1 there are only **3 bet-shop buildings**, which trade as Fat Keung's in Act 1 and become the player's shells post-takedown (no separate shells to place); (2) positions come from the draft. **What stays authoritative here is the Gate-2 *design logic*** — one patrolled docks corridor, a single patroller, 3 hiding spots, the walk that crosses the $500 threshold, the water/mountain mirror — which the build session **re-anchors onto the draft's actual shelter and docks-bet-shop positions** (the next reconciliation task).
 
 **Docks (gang) — SW.** Corridor X=−175.
 | Building | Centre | Footprint |
@@ -483,7 +496,7 @@ Walk, run, jump, crawl/hide (bush), eat, sleep, buy/sell items-assets-info, plac
 | Tuning item | Status |
 |---|---|
 | Monthly minimum payment amount (vs income curve) | **Do first.** Derivable on paper from §3.6; everything else is denominated in it |
-| Deposit-cap baseline & per-business widening | **Do second.** Derivable once the payment curve exists. **Note: scoped for ~3 businesses; the player now builds 3–6, so per-business widening must shrink or the valve blows open** |
+| Deposit-cap baseline & per-business widening | **Do second.** Derivable once the payment curve exists. **⚠️ Note (rev. 2026-07-29): the laundering fronts are the filler buildings (§2.2.1) — ~5 fillers + 1 tall + laundromat ≈ up to 7 fronts, not the ~3 originally scoped. Per-business widening must shrink accordingly, and consider diminishing returns per additional front, or the valve blows wide open.** |
 | Heat→detect-time curve shape | Genuine feel-tuning. **Police and gang must not share a curve** — §4 says two predators, two logics; one shape makes them one system with two labels |
 | `k` in `bribe = fine × k` (§4.1.1) | Structure is decided; only `k` is free. Feel-test it |
 | Per-crime police-heat values | Needs real walking distances — measure, don't guess |
@@ -597,7 +610,7 @@ Keeper drunk → Team A loses → **you want maximum money on Team A**, because 
 **What that buys, for free:**
 - **You enter Act 2 a rookie bookmaker who genuinely knows two teams.** Your book prices the derby tight and bleeds a wide range on everything else. That is the first half's tension, and nobody had to design it.
 - **Ranges tighten by attendance, never by money.** Pillar 4 holds without a rule.
-- **To push your local teams past 65 you must watch them away** — which means leaving town, which is exactly what the Act 2 midpoint opens. **The familiarity ladder pulls you out of town at the moment the mountain road opens.** Knowledge is geography, delivered by the calendar.
+- **To push your local teams past 65 you must watch them away** — which means leaving town, which is exactly what the Act 2 midpoint opens. **The familiarity ladder pulls you out of town at the moment the bridge to Town 2 opens.** Knowledge is geography, delivered by the calendar.
 - **City teams cap at 40/85 through Acts 1–2** (away ×3 = +30, tier ② = +10). **Harbour FC is unpriceable until Act 3** — every fixture involving the giant is a wide range your own book must eat, and the edge therefore lives entirely with the small clubs you have stood on the terraces watching. Pillar 2 as a number.
 - **Then the irony lands:** Act 3 opens the metro, +45 arrives, Harbour jumps to 85 — **your book is finally safe at the exact moment you start manufacturing the results.** Three acts spent learning to price the truth, and the reward is that you no longer need it.
 
