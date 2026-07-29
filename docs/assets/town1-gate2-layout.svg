@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 720" font-family="sans-serif">
+<style>
+text{fill:#222} .bl{font-size:8px;text-anchor:middle;fill:#111}
+.z-dock{fill:#e8d5c0} .z-down{fill:#cfe0ee} .z-res{fill:#d7ead2} .z-rur{fill:#eae6cf}
+.water{fill:#a9cfe6} .mount{fill:#c7bfae}
+.bld{fill:#fff;stroke:#555;stroke-width:1}
+.shell{fill:#fff2b0;stroke:#c9a800;stroke-width:1.5}
+.key{fill:#ffd9d9;stroke:#c0392b;stroke-width:1.5}
+.pitch{fill:#bfe3b0;stroke:#4a8a3a;stroke-width:1}
+.road{stroke:#f4efe0;stroke-width:12} .corr{stroke:#e6a0a0;stroke-width:10}
+.patrol{stroke:#c0392b;stroke-width:2;stroke-dasharray:6 4;fill:none}
+.zt{font-size:15px;font-weight:bold;text-anchor:middle}
+.hd{font-size:11px;text-anchor:middle}
+</style>
+<rect x="10" y="360" width="350" height="350" class="z-dock"/>
+<rect x="360" y="10" width="350" height="350" class="z-down"/>
+<rect x="10" y="10" width="350" height="350" class="z-res"/>
+<rect x="360" y="360" width="350" height="350" class="z-rur"/>
+<rect x="10" y="680" width="700" height="40" class="water"/>
+<rect x="10" y="10" width="40" height="700" class="water"/>
+<rect x="10" y="10" width="700" height="40" class="mount"/>
+<rect x="680" y="10" width="40" height="700" class="mount"/>
+<line x1="10" y1="360" x2="710" y2="360" class="road"/>
+<line x1="360" y1="710" x2="360" y2="10" class="road"/>
+<line x1="185" y1="380" x2="185" y2="635" class="corr"/>
+<text x="130" y="390" class="zt" fill="#8a6a45">DOCKS · gang</text>
+<text x="590" y="30" class="zt" fill="#3a5a7a">DOWNTOWN · police</text>
+<text x="130" y="30" class="zt" fill="#4a7a3a">RESIDENTIAL</text>
+<text x="590" y="390" class="zt" fill="#8a7a3a">RURAL</text>
+<text x="25" y="698" style="font-size:9px" fill="#2a6a8a">HARBOUR (water)</text>
+<text x="540" y="17" style="font-size:9px" fill="#6a5a3a">MOUNTAIN → Town 2 / City</text>
+<rect x="205" y="522" width="10" height="15" class="key"/>
+<text x="210" y="546" class="bl">betshop#2</text>
+<rect x="205" y="422" width="10" height="15" class="shell"/>
+<text x="210" y="446" class="bl">SHELL</text>
+<rect x="234" y="582" width="12" height="15" class="bld"/>
+<text x="240" y="606" class="bl">FatKeung</text>
+<rect x="148" y="490" width="15" height="20" class="bld"/>
+<text x="155" y="519" class="bl">arcade</text>
+<rect x="141" y="585" width="8" height="10" class="bld"/>
+<text x="145" y="604" class="bl">fence</text>
+<rect x="92" y="430" width="15" height="20" class="bld"/>
+<text x="100" y="459" class="bl">shelter#2</text>
+<rect x="245" y="454" width="10" height="12" class="bld"/>
+<text x="250" y="475" class="bl">barA</text>
+<rect x="151" y="409" width="8" height="12" class="bld"/>
+<text x="155" y="430" class="bl">laundr.</text>
+<rect x="70" y="638" width="40" height="25" class="bld"/>
+<text x="90" y="672" class="bl">fishmkt</text>
+<rect x="182" y="310" width="15" height="20" class="key"/>
+<text x="190" y="339" class="bl">SHELTER#1</text>
+<rect x="265" y="242" width="10" height="15" class="bld"/>
+<text x="270" y="266" class="bl">betshop#3</text>
+<rect x="245" y="178" width="10" height="15" class="shell"/>
+<text x="250" y="202" class="bl">SHELL</text>
+<rect x="190" y="224" width="10" height="12" class="bld"/>
+<text x="195" y="245" class="bl">store#2</text>
+<rect x="62" y="292" width="15" height="15" class="bld"/>
+<text x="70" y="316" class="bl">gas#1</text>
+<rect x="65" y="130" width="50" height="40" class="bld"/>
+<text x="90" y="179" class="bl">park</text>
+<rect x="155" y="79" width="10" height="12" class="bld"/>
+<text x="160" y="100" class="bl">barB</text>
+<rect x="246" y="105" width="8" height="10" class="bld"/>
+<text x="250" y="124" class="bl">houses</text>
+<rect x="274" y="51" width="12" height="18" class="bld"/>
+<text x="280" y="78" class="bl">rooms</text>
+<rect x="424" y="271" width="12" height="18" class="bld"/>
+<text x="430" y="298" class="bl">betshop#1</text>
+<rect x="470" y="288" width="10" height="15" class="shell"/>
+<text x="475" y="312" class="bl">SHELL</text>
+<rect x="470" y="198" width="20" height="25" class="bld"/>
+<text x="480" y="232" class="bl">bank</text>
+<rect x="532" y="140" width="25" height="30" class="bld"/>
+<text x="545" y="179" class="bl">townhall</text>
+<rect x="590" y="58" width="30" height="35" class="bld"/>
+<text x="605" y="102" class="bl">police</text>
+<rect x="432" y="110" width="25" height="30" class="bld"/>
+<text x="445" y="149" class="bl">hospital</text>
+<rect x="505" y="259" width="10" height="12" class="bld"/>
+<text x="510" y="280" class="bl">store#1</text>
+<rect x="412" y="228" width="5" height="5" class="bld"/>
+<text x="415" y="242" class="bl">news</text>
+<rect x="455" y="179" width="10" height="12" class="bld"/>
+<text x="460" y="200" class="bl">bar</text>
+<rect x="520" y="89" width="10" height="12" class="bld"/>
+<text x="525" y="110" class="bl">realtor</text>
+<rect x="622" y="175" width="25" height="20" class="bld"/>
+<text x="635" y="204" class="bl">cardealer</text>
+<rect x="680" y="320" width="20" height="20" class="bld"/>
+<text x="690" y="349" class="bl">METRO(closed)</text>
+<rect x="530" y="570" width="150" height="120" class="pitch"/>
+<text x="605" y="699" class="bl">STADIUM</text>
+<rect x="435" y="488" width="70" height="45" class="pitch"/>
+<text x="470" y="542" class="bl">training</text>
+<rect x="500" y="458" width="20" height="25" class="bld"/>
+<text x="510" y="492" class="bl">teamfac.</text>
+<rect x="455" y="440" width="20" height="30" class="bld"/>
+<text x="465" y="479" class="bl">hotel</text>
+<rect x="620" y="440" width="60" height="60" class="bld"/>
+<text x="650" y="509" class="bl">campground</text>
+<rect x="410" y="424" width="10" height="12" class="bld"/>
+<text x="415" y="445" class="bl">store#3</text>
+<rect x="502" y="408" width="15" height="15" class="bld"/>
+<text x="510" y="432" class="bl">gas#2</text>
+<rect x="582" y="568" width="15" height="15" class="bld"/>
+<text x="590" y="592" class="bl">gas#3</text>
+<circle cx="210" cy="280" r="2.5" fill="#555"/>
+<circle cx="260" cy="170" r="2.5" fill="#555"/>
+<circle cx="445" cy="255" r="2.5" fill="#555"/>
+<circle cx="555" cy="200" r="2.5" fill="#555"/>
+<rect x="657" y="527" width="6" height="6" fill="#caa" transform="rotate(45 660 530)"/>
+<rect x="672" y="417" width="6" height="6" fill="#caa" transform="rotate(45 675 420)"/>
+<rect x="632" y="657" width="6" height="6" fill="#caa" transform="rotate(45 635 660)"/>
+<circle cx="185" cy="375" r="3" fill="#2a2" stroke="#fff"/>
+<circle cx="270" cy="345" r="3" fill="#2a2" stroke="#fff"/>
+<circle cx="435" cy="340" r="3" fill="#2a2" stroke="#fff"/>
+<circle cx="510" cy="385" r="3" fill="#2a2" stroke="#fff"/>
+<circle cx="615" cy="560" r="3" fill="#2a2" stroke="#fff"/>
+<path d="M185,380 L185,635" class="patrol"/>
+<circle cx="160" cy="525" r="5" fill="none" stroke="#c0392b" stroke-width="1.5"/>
+<text x="160" y="518" class="bl" fill="#c0392b">hide1</text>
+<circle cx="208" cy="565" r="5" fill="none" stroke="#c0392b" stroke-width="1.5"/>
+<text x="208" y="558" class="bl" fill="#c0392b">hide2</text>
+<circle cx="185" cy="625" r="5" fill="none" stroke="#c0392b" stroke-width="1.5"/>
+<text x="185" y="618" class="bl" fill="#c0392b">hide3</text>
+<path d="M190,320 L200,525" stroke="#c0392b" stroke-width="2.5" fill="none" marker-end="url(#arw)"/>
+<defs><marker id="arw" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#c0392b"/></marker></defs>
+<circle cx="360" cy="360" r="4" fill="#333"/><text x="360" y="353" class="bl">crossroads (0,0)</text>
+<text x="360" y="16" class="hd">Ball Knowledge — Town 1 (Aberdeen) Act-1 layout · 700×700m · wd:§2.2.3</text>
+<text x="360" y="30" class="bl">red = Gate-2: SHELTER#1 → betshop#2 through the one patrolled docks corridor · yellow = empty shells · green ● = bus stops</text>
+<line x1="470" y1="700" x2="570" y2="700" stroke="#333" stroke-width="2"/><text x="520" y="695" class="bl">100 m</text>
+<path d="M700,60 L700,30" stroke="#333" stroke-width="2" marker-end="url(#arw)"/><text x="700" y="72" class="bl">N</text>
+</svg>

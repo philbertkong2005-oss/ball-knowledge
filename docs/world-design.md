@@ -121,6 +121,108 @@
 - **Barber and pharmacy were cut** — their functions fold into general stores: **general stores sell medicine and clothing/disguise gear** (one store per zone, so even buying a disguise has legwork).
 - **Treasure boxes/stashes:** diegetically **under-bridge stashes and plain unopened boxes**; free to open (no lockpick requirement); densest in rural zone. **Loot pool: rare gun, 100% profit token, car key (car location revealed)** — unique finds give good XP. Car keys spawn Act 2+.
 
+#### 2.2.3 Act 1 town layout — geometry & Gate-2 (NEW 2026-07-28, build-unblocking)
+
+**Companion diagram:** [`docs/assets/town1-gate2-layout.svg`](assets/town1-gate2-layout.svg) — top-down, generated from the coordinate tables below. The tables are authoritative; the SVG visualises them.
+
+**Coordinate system.** Unity world units = metres. Origin `(0,0)` at the **town crossroads** (map centre). **X = east(+)/west(−), Z = north(+)/south(−).** Map spans X ∈ [−350, +350], Z ∈ [−350, +350] — the empirically-walked 700×700 (§2.2.2; diagonal measured 992.7m). Building positions are **centres**; footprints are `W×D` (X-extent × Z-extent) in metres.
+
+##### Zone arrangement (the mirror)
+Four quadrants meeting at the crossroads. **The two faction zones are point-reflections of each other through the origin** — same structure, inverted danger. This is the §2.2 "police zone and gang zone mirror each other" made concrete:
+
+| Quadrant | Zone | Corner character |
+|---|---|---|
+| **SW** X[−350,0] Z[−350,0] | **Docks (gang)** | **Water/water corner** — the gang owns the harbour (S + W edges are waterfront) |
+| **NE** X[0,350] Z[0,350] | **Downtown (police)** | **Mountain/mountain corner** — the police are inland/civic (N + E edges are mountain) |
+| **NW** X[−350,0] Z[0,350] | **Residential (neutral)** | water W, mountain N — transitional; **player lives here** |
+| **SE** X[0,350] Z[−350,0] | **Rural (outskirts)** | water S, mountain E — transitional; the football district + stadium |
+
+- **Water** wraps the **SW corner** (whole S edge Z<−320, whole W edge X<−320). **Mountain** wraps the **NE corner** (whole N edge Z>320, whole E edge X>320). No invisible walls — you are stopped by harbour or ridge.
+- **Gang at the water, police at the mountain** is the thematic payoff of the mirror: smuggling turf on the docks, civic power inland. Carrying contraband you avoid the NE (police); carrying cash you avoid the SW (gang); the safe thread between them is the NW↔SE neutral diagonal through the crossroads.
+- **Zone legibility (§2.2.2):** flat colour per quadrant, hard colour edge at the boundary streets (Z=0 and X=0 axes). The player must *feel* the crossing.
+- **Mountain road to Town 2** exits the NE corner beside the (closed, Act-1) metro station — the mountain physically gates expansion (§2.1).
+
+##### Gate-2 geometry (THIS is the test)
+The slice: walk from home, place the canned bet, walk the winnings home — through the one patrolled gang corridor.
+
+- **Start — Shelter #1 (home):** `(−170, 40)`, residential, ~40m north of the docks boundary.
+- **Destination — Bet shop #2 (Fat Keung's):** `(−150, −170)`, docks, east side of the corridor.
+- **The route:** due south, crossing the **Z=0 residential→docks boundary at X≈−175** (the colour change = "you just entered gang turf"), down the corridor to the shop. **211m one way** (~84s / ~1.7 game-hours at walk 2.5 m/s); round trip ~3.4 game-hours.
+- **The ONE patrolled corridor:** a single **N–S street centred X=−175, Z from −20 (boundary) to −275 (harbour front), 10m wide.** It is the only through-route: warehouses + water box it on the west, warehouses + the fence/Fat Keung's office on the east, so you cannot detour around the patroller.
+- **Patroller path:** one gang NPC walking `(−175, −20) ⇄ (−175, −275)` end to end (the single patroller this greybox task builds).
+- **Hiding spots (3), along the corridor:** alley recess `(−200, −165)` (west) · shipping-container stack `(−152, −205)` (east) · under-bridge stash `(−175, −265)` (harbour end, doubles as a §2.2 treasure spot). These are the line-of-sight breaks that make §6.3 manual stealth + §4.1.2 flee playable.
+- **Why the walk carries tension both ways:** the canned payout (§ decision e) returns **>$500 to hand**, so the **walk home crosses the gang cash-threshold** (§4.2) — the corridor is dangerous on the way out (if already carrying) and on the way back (winnings). The empty shell at `(−150, −70)` sits *on the route*, so the player sees a "for lease" Act-2 hook on their very first Gate-2 walk.
+
+##### Building placement
+
+**Docks (gang) — SW.** Corridor X=−175.
+| Building | Centre | Footprint |
+|---|---|---|
+| Bet shop #2 (FK, Gate-2 dest.) | (−150, −170) | 10×15 |
+| **Empty shell — docks** | (−150, −70) | 10×15 |
+| Fat Keung's office | (−120, −230) | 12×15 |
+| Arcade + illegal bookie | (−205, −140) | 15×20 |
+| Black-market fence | (−215, −230) | 8×10 |
+| Shelter #2 | (−260, −80) | 15×20 |
+| Supporters' bar A (Aberdeen) | (−110, −100) | 10×12 |
+| Laundromat (1st front) | (−205, −55) | 8×12 |
+| Fish market / sheds (waterfront) | (−270, −290) | 40×25 |
+
+**Residential (neutral) — NW.**
+| Building | Centre | Footprint |
+|---|---|---|
+| **Shelter #1 (START)** | (−170, 40) | 15×20 |
+| Bet shop #3 | (−90, 110) | 10×15 |
+| **Empty shell — residential** | (−110, 175) | 10×15 |
+| General store #2 | (−165, 130) | 10×12 |
+| Gas stop #1 + fast food | (−290, 60) | 15×15 |
+| Park (scavenge / unsafe sleep) | (−270, 210) | 50×40 |
+| Supporters' bar B (Eastport) | (−200, 275) | 10×12 |
+| NPC houses (×6) | ~(−110, 250) | 8×10 each |
+| Rentable rooms | (−80, 300) | 12×18 |
+| Phone booths | (−150, 80); (−100, 190) | 2×2 |
+
+**Downtown (police) — NE.**
+| Building | Centre | Footprint |
+|---|---|---|
+| Bet shop #1 (flagship) | (70, 80) | 12×18 |
+| **Empty shell — downtown** | (115, 65) | 10×15 |
+| Bank | (120, 150) | 20×25 |
+| Town hall (licence reg.) | (185, 205) | 25×30 |
+| Police station & prison | (245, 285) | 30×35 |
+| Hospital | (85, 235) | 25×30 |
+| General store #1 | (150, 95) | 10×12 |
+| Newsstand | (55, 130) | 5×5 |
+| General bar | (100, 175) | 10×12 |
+| Realtor | (165, 265) | 10×12 |
+| Car dealer | (275, 175) | 25×20 |
+| Metro station (closed) | (330, 30) | 20×20 |
+| Phone booths | (85, 105); (195, 160) | 2×2 |
+
+**Rural (outskirts) — SE.** Football district clustered NW of the quadrant (decision a).
+| Building | Centre | Footprint |
+|---|---|---|
+| Stadium (town edge, bus line) | (245, −270) | 150×120 |
+| Training ground (pitch) | (110, −150) | 70×45 |
+| Team facility | (150, −110) | 20×25 |
+| Away-team hotel | (105, −95) | 20×30 |
+| Natural area + campground | (290, −110) | 60×60 |
+| General store #3 | (55, −70) | 10×12 |
+| Gas stop #2 + fast food | (150, −55) | 15×15 |
+| Gas stop #3 + fast food | (230, −215) | 15×15 |
+| Treasure boxes (concentrated) | (300,−170); (315,−60); (275,−300) | — |
+
+##### Streets & transport
+- **Widths:** main spine (the two axis roads through the crossroads) **12m**; zone through-streets **8m**; **docks corridor 10m**; alleys / side streets **4–6m**.
+- **Bus line:** spine along the axes — E–W road at Z≈0, N–S road at X≈0, meeting at the crossroads; stops at each zone `(−175,−15)` docks · `(−90,15)` residential · `(75,20)` downtown · `(150,−25)` rural, plus a **stadium spur** to `(255,−200)`.
+- **ATMs:** streetside in all zones **except** the rural natural-area/campground (§2.2).
+
+##### Decisions recorded on this layout
+- **(a) Football cluster — KEEP IT, in rural** (§8.1 #4 resolved). Stadium + training ground + team facility + away-team hotel form one coherent "football district" at the SE edge (Act 1: watch through the fence; Act 3: infiltrate all three; away teams sleep next to the ground — real). **The hotel moved out of downtown into this cluster.** **No bet shop sits in or near it** — the nearest is bet shop #1 downtown, ~233m away, so the §2.2 morning-intel *race* (tension ③) survives. This is exactly §8.1 #4's recommendation: the thing that moves is the bet shop, not the pitch.
+- **(b) `catch_vig = 0.30` ratified** into §4.2 (§10 item 4 closed). Owner: **wd:§4.2**.
+
+中文摘要（§2.2.3）：第1幕地圖幾何，解鎖build。**座標系**：Unity單位=米，原點(0,0)喺鎮中心十字路口，X東西/Z南北，全圖±350（=實測行過嘅700×700）。**四區佈局=鏡像**：黑幫碼頭喺SW（水/水角，佔海港）、警察downtown喺NE（山/山角，內陸civ）——兩個勢力區係穿過原點嘅點對稱，同構but危險相反；住宅(NW)同郊野(SE)係中間過渡帶。水包住SW角、山包住NE角，山路喺NE出鎮2。**Gate-2幾何（就係個測試）**：由庇護所#1 (−170,40) 行去碼頭投注站#2 (−150,−170)，向南過Z=0邊界（顏色一變＝入咗黑幫地頭），落一條**唯一巡邏走廊**（X=−175、10m闊、被貨倉同水夾住冇得繞）；**一個巡邏兵** (−175,−20)⇄(−175,−275)；**3個匿藏點**（西巷、貨櫃堆、橋底）。派彩>$500入手→**返程過黑幫現金門檻**→出入都有張力。吉舖(−150,−70)喺條路上，第一次行就見到「吉舖招租」第2幕鈎。**建築座標表**見上（碼頭/住宅/downtown/郊野四區全部中心座標+footprint）。**街闊**：主幹12m、區內街8m、碼頭走廊10m、巷4–6m。巴士線沿兩條軸。**已記決定**：(a)足球區保留、擺郊野、酒店由downtown搬入，**唔擺投注站**（保住晨早情報賽跑）；(b)`catch_vig=0.30`正式收入§4.2。
+
 中文摘要：4鎮各2隊共用1場。第1幕單鎮四區：downtown（警多）、碼頭（黑幫地頭）、住宅、郊野。帶咩決定邊度安全。ATM遍佈全區除營地。
 
 ---
@@ -273,6 +375,7 @@ bribe = fine(heat) × 2    (heat 100 → $4,000)
 - Fuel ①: **days overdue** on the monthly payment. Fuel ②: **carrying >$500 cash outdoors, +1/hour** (travel counts; camping counts as indoor). The two components are independent.
 - Effect: higher chance of being spotted & stopped by gang members.
 - **Gang stop — choose:** bribe / hand over all on-body cash toward debt **+ vig** / fight back & flee.
+- **Vig = 0.30** (ratified 2026-07-28, §10 item 4 closed; this section now OWNS the constant `catch_vig`). Defined as a **30% surcharge added to remaining debt on the amount seized**: seize $1,000 → $1,000 comes off principal, $300 is added back as penalty, so getting caught with cash carried costs you a net $300 for the privilege. Loan-shark logic; it is a punishment for carrying, not a payment plan. **This is a life-sim value and does NOT belong in the match engine's `EngineConfig`** (see §10 item 5).
 - **Losing the fight:** all cash to debt + vig, health loss, out cold half a day, wake outside the hospital.
 - **Max:** gang patrols near the player's fixed address and sleep spots. **Sleeping in the same spot 2+ nights = stakeout** (shelters ×2 / hotel / camping = rotation gameplay).
 - Clears: overdue component drops **instantly** on clearing the overdue amount; cash component decays **-0.25/hour whenever below $500**.
@@ -522,10 +625,40 @@ Keeper drunk → Team A loses → **you want maximum money on Team A**, because 
 
 **Owner:** build session. **Blocker:** must be verified before any of it is touched.
 
-1. **⚠️ Confirm `starting_debt`, `weekly_debt_interest` and `catch_vig` are dead to the match engine and the `validate` harness.** If `validate` reads them, the **Phase 1 freeze applies and nothing moves.** Everything below is contingent on this check.
-2. `starting_debt: 500000` → **`100000`** (§3.5).
-3. `weekly_debt_interest: 0.1` → **rename + re-semantic.** §3.5 specifies a monthly minimum with +10% on the *missed installment*, not weekly interest on the principal.
-4. `catch_vig: 0.3` → either §4.2 ratifies 0.3 as the gang-stop vig, or the constant goes.
+1. **⚠️ Confirm `starting_debt`, `weekly_debt_interest` and `catch_vig` are dead to the match engine and the `validate` harness.** If `validate` reads them, the **Phase 1 freeze applies and nothing moves.** Everything below is contingent on this check. **UPDATE 2026-07-28: `starting_debt 500000→100000` is DONE and the full proof re-ran identical (commit `cd19123`) — which proves that field is inert to the engine+harness. The other two are its siblings.**
+2. ~~`starting_debt: 500000` → `100000`~~ **DONE** (§3.5).
+3. `weekly_debt_interest: 0.1` → **rename + re-semantic.** §3.5 specifies a monthly minimum with +10% on the *missed installment*, not weekly interest on the principal. → moves to a life-sim economy value owned by **wd:§3.5** (suggested `overdue_installment_penalty: 0.10`).
+4. ~~`catch_vig: 0.3` → §4.2 ratifies or the constant goes.~~ **RATIFIED 2026-07-28 at 0.30, owned by wd:§4.2** (§4.2 now defines it as a 30% surcharge on the seized amount). The *value* is settled; item 5 governs where it *lives*.
+
+### 10.1 The engine-eviction pass (decision c) — **APPROVED, conditioned**
+
+The build session reports items 3–4 are **blocked by the Phase 1 freeze**: `starting_debt`, `weekly_debt_interest` and `catch_vig` are `required` members of the FROZEN engine's `EngineConfig`, so renaming/deleting them edits the frozen public API. Recommendation: one separately-reviewed pass that evicts all three world-economy fields from `EngineConfig` at once, verified by an identical Phase 1 proof.
+
+**Verdict: APPROVE.** These three are life-sim values that were mis-parked in a match engine — they never belonged there, and every future economy change (monthly payment, deposit cap, …) otherwise either can't touch them or forces an engine edit. The surface is small now (3 fields); it only grows if deferred. The `cd19123` result already demonstrates the class is inert (a value change left the proof byte-identical).
+
+**Conditions (all four, or it does not ship):**
+1. **Its own `/codex-review` plan** — reviewed as an isolated engine-plumbing change, not folded into map/greybox work.
+2. **Scope = exactly these three fields** (+ their `required` markers, JSON, and any test references). **Zero** changes to match math, event logic, or the pricing pipeline.
+3. **Full Phase 1 proof re-runs byte-identical** — 9/9 + 6/6, both validators, `validate`. If any number moves, revert; the field was NOT inert and the freeze holds.
+4. **Tag before and after** (`pre-engine-eviction` / `post-engine-eviction`).
+
+**This is a one-way door — treat it as one.** It is the *only* sanctioned reason to touch the frozen engine, and only because the fields are provably not engine state. **Relocation, not deletion:** the values move to the greybox economy block with provenance — `starting_debt`→wd:§3.5, `overdue_installment_penalty`→wd:§3.5, `catch_vig`→wd:§4.2.
+
+### 10.2 Build-session items d & e (recorded — build decisions, not §8.1 design locks)
+
+- **(d) Gate-2 sprint integrity — RECOMMEND (a)-partial: implement the sprint→stamina *drain* now, defer the *consequence*.** §2.2.2's Energy is the designed counterweight, but Energy is deferred out of the slice, so free unlimited sprint lets the player blow past the single patroller and **Gate 2 would measure the corridor tension with its counterweight switched off** — a gate that passes without testing what it exists to test. Implement a **bounded sprint** (sprint depletes a stamina reserve → forced back to walk until it regenerates), which is a **strict subset of §2.2.2 Energy** (nothing thrown away — it becomes Energy's sprint-drain input when Energy lands) and restores the "can't just sprint the whole corridor" pressure. **Defer the full consequence** (Energy 0 → forced sleep → 50% cash-loss) with the rest of the survival system, and **stamp the Gate-2 result: "walk-home-with-winnings cash-loss tension deferred; re-verify when Energy lands."** Drain/regen rates = **TUNE** (feel-test), owner **wd:§2.2.2**. *Fallback if build capacity is tight:* (b) accept free sprint and stamp the caveat loudly — but a gate with a known trivialising exploit is a weak gate, so (a)-partial is the rec.
+- **(e) Canned Gate-2 payout — it's a correctness bug, not a design choice: pay off the real odds.** The board prices the fixture (~1.29 decimal); the payout MUST be `stake × board_odds`, not the hardcoded 2.0. Fix = **option (1): compute the payout from the board odds** the engine already produces — do not store a payout constant. Keep the fixture (Harbour heavy favourite is a legitimate Act-1 bet) and the $1,000 stake: the ~$1,290 returned to hand **already exceeds the $500 gang threshold**, so the Gate-2 walk-home tension (§2.2.3) is live without a fixture change. No new stored value; provenance = derived-from-engine.
+
+### 10.3 Provenance ledger — values locked/moved this round (for greybox.json citation)
+
+| Value | Disposition | Cite |
+|---|---|---|
+| `catch_vig` | 0.30, ratified | `wd:§4.2` |
+| `starting_debt` | 100000, done | `wd:§3.5` |
+| `overdue_installment_penalty` | 0.10 (replaces `weekly_debt_interest`), pending eviction | `wd:§3.5` |
+| Town-1 building coords / footprints / street widths | locked | `wd:§2.2.3` |
+| Sprint stamina drain/regen | to implement | `wd:§2.2.2`, **TUNE** |
+| Gate-2 payout | derived from board odds | (no constant) |
 
 **Process note for `greybox.json`:** three of five recently-flagged "value gaps" were already decided in this document — the build session **cannot tell locked from open** because the file does not say. **Every value should be either doc-cited or marked `TUNE`** (`cash_carry_threshold` → `§4.2`; `heat_detect_curve` → `TUNE`). `tools/validate_constants.py` is the natural enforcement point. Same rule for scaffolding: an ungated bribe or a placeholder flee roll is **fine as scaffolding and must be marked as scaffolding** — otherwise it is the design by the time anyone checks.
 
