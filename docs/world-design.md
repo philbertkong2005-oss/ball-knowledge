@@ -144,6 +144,30 @@
 
 **The draft is rough placement, not final.** Building positions are indicative; the ground between buildings is filled with **parking lots and pedestrian sidewalks** (part of the walkable density, not empty plane). Treat the coordinate tables as *relationships and footprints to preserve*, not survey points — the build session reconciles the Gate-2 design onto the real draft rather than copying either verbatim.
 
+##### Gate-2 & bet shops — ANCHORED to the v0.1 draft (2026-07-29, authoritative over the 700×700 tables below)
+*Coordinates are metres relative to the draft's ground centre; +X = east (toward the bridge/Town 2), +Z = north. Ground = 541 × 641.*
+
+**Bet-shop spread — reposition to one-per-zone** (v0.1 had all three clustered on the west strip, which trivialises ban-rotation legwork §3.6 and the Gate-2 cross-turf walk):
+
+| Shop | v0.1 position | **Move to** | Serves | Note |
+|---|---|---|---|---|
+| `bet_shop3` | (−88, −106) | **keep (−88, −106)** | **Docks / gang** | by Fat Keung + harbour; the Gate-2 destination |
+| `bet_shop2` | (−104, 76) | **(−25, 115)** | **Downtown / civic** | into the police/bank/city-hall band = the flagship shop |
+| `bet_shop1` | (−106, −38) | **(30, −20)** | **Residential** | the central-east NPC-house pocket; ~90 m from the shelter so the local bet is still a walk |
+
+Pairwise separation after the move: docks↔downtown **230 m**, docks↔residential **146 m**, downtown↔residential **146 m** — every ban-rotation is a real ≥1.5-game-hour walk, and the three sit in three distinct population centres.
+
+**Gate-2 walk (re-anchored):**
+- **Start — the shelter:** `Shelter2` at **(−11, 25)** (central; the natural approach to the gang crossing). *(Designate this the Act-1 start home for the slice; `Shelter1` at (−5, 146) is the northern rotation spot.)*
+- **Destination — `bet_shop3` (docks)** at **(−88, −106)**. Walk length **152 m** SSW.
+- **The route threads Fat Keung's turf:** from the shelter it passes the **arcade (−35, −45)** and **Fat Keung's office (−84, −88)** — the gang cluster is the west-central-south block, so the walk crosses it by geometry, no scripting.
+- **Patroller path:** one gang NPC pacing **(−20, 10) ⇄ (−85, −100)** along the corridor.
+- **Hiding spots (3):** **(−40, −40)** (behind the arcade) · **(−55, −70)** (filler-building recess) · **(−78, −92)** (alley by Fat Keung's office).
+- The canned payout returns >$500 to hand, so the **walk home crosses the $500 gang threshold** — corridor is live both directions (§4.2).
+- **⚠️ Snap to the real streets:** the corridor/patroller/hiding coordinates above are the *design intent* placed on the draft; the build session nudges them onto the actual `Street1` mesh + sidewalks/parking between the shelter and `bet_shop3` so the patroller walks a real road, not open ground.
+
+**Render:** `docs/assets/town1-proposed-3shop-spread.svg` shows all of the above on the v0.1 map.
+
 ##### Zone arrangement (the mirror)
 Four quadrants meeting at the crossroads. **The two faction zones are point-reflections of each other through the origin** — same structure, inverted danger. This is the §2.2 "police zone and gang zone mirror each other" made concrete:
 

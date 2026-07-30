@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 562 503" font-family="sans-serif">
+<style>text{font-size:7px;text-anchor:middle;fill:#111}.t{font-size:11px}.big{font-size:9px;font-weight:bold}</style>
+<rect width="562" height="503" fill="#f7f4ec"/>
+<text x="281" y="14" class="t">Town 1 v0.1 — PROPOSED 3-shop spread (one per zone) + Gate-2 anchor</text>
+<rect x="457" y="169" width="131" height="124" fill="#bfe3b0" stroke="#999" stroke-width="0.6"/>
+<text x="522" y="231">train4</text>
+<rect x="-9" y="89" width="98" height="135" fill="#bfe3b0" stroke="#999" stroke-width="0.6"/>
+<text x="40" y="156">pitch</text>
+<rect x="219" y="382" width="78" height="105" fill="#bfe3b0" stroke="#999" stroke-width="0.6"/>
+<text x="258" y="434">train3</text>
+<rect x="117" y="138" width="74" height="37" fill="#cfe0ee" stroke="#999" stroke-width="0.6"/>
+<text x="154" y="156">Hospital1</text>
+<rect x="155" y="400" width="50" height="37" fill="#cfe0ee" stroke="#999" stroke-width="0.6"/>
+<text x="180" y="419">Hotel1</text>
+<rect x="9" y="242" width="76" height="22" fill="#a9cfe6" stroke="#999" stroke-width="0.6"/>
+<text x="47" y="253">Harbour1</text>
+<rect x="149" y="95" width="40" height="40" fill="#cfe0ee" stroke="#999" stroke-width="0.6"/>
+<text x="169" y="115">City hall1</text>
+<rect x="150" y="438" width="52" height="30" fill="#efe9dd" stroke="#999" stroke-width="0.6"/>
+<text x="176" y="453">Team Facility1</text>
+<rect x="201" y="28" width="32" height="32" fill="#efe9dd" stroke="#999" stroke-width="0.6"/>
+<text x="217" y="44">Shelter1</text>
+<rect x="196" y="149" width="32" height="32" fill="#efe9dd" stroke="#999" stroke-width="0.6"/>
+<text x="212" y="166">Shelter2</text>
+<rect x="175" y="19" width="22" height="43" fill="#cfe0ee" stroke="#999" stroke-width="0.6"/>
+<text x="186" y="40">police1</text>
+<rect x="265" y="139" width="14" height="54" fill="#efe9dd" stroke="#999" stroke-width="0.6"/>
+<text x="272" y="166">Camp ground1</text>
+<rect x="161" y="200" width="24" height="26" fill="#e8d5c0" stroke="#999" stroke-width="0.6"/>
+<text x="172" y="213">Filler tall building1</text>
+<rect x="195" y="95" width="25" height="20" fill="#cfe0ee" stroke="#999" stroke-width="0.6"/>
+<text x="208" y="105">Bank1</text>
+<rect x="242" y="41" width="17" height="17" fill="#efe9dd" stroke="#999" stroke-width="0.6"/>
+<rect x="141" y="244" width="17" height="17" fill="#efe9dd" stroke="#999" stroke-width="0.6"/>
+<rect x="129" y="424" width="17" height="17" fill="#efe9dd" stroke="#999" stroke-width="0.6"/>
+<rect x="175" y="229" width="25" height="12" fill="#e8d5c0" stroke="#999" stroke-width="0.6"/>
+<rect x="116" y="201" width="24" height="12" fill="#e8d5c0" stroke="#999" stroke-width="0.6"/>
+<rect x="235" y="198" width="24" height="12" fill="#e8d5c0" stroke="#999" stroke-width="0.6"/>
+<rect x="119" y="92" width="24" height="12" fill="#e8d5c0" stroke="#999" stroke-width="0.6"/>
+<rect x="76" y="47" width="15" height="15" fill="#efe9dd" stroke="#999" stroke-width="0.6"/>
+<rect x="145" y="381" width="15" height="15" fill="#efe9dd" stroke="#999" stroke-width="0.6"/>
+<rect x="131" y="271" width="15" height="15" fill="#e8d5c0" stroke="#999" stroke-width="0.6"/>
+<text x="138" y="279">FatKeung1</text>
+<rect x="213" y="200" width="15" height="15" fill="#efe9dd" stroke="#999" stroke-width="0.6"/>
+<rect x="186" y="200" width="11" height="12" fill="#e8d5c0" stroke="#999" stroke-width="0.6"/>
+<rect x="204" y="227" width="11" height="12" fill="#e8d5c0" stroke="#999" stroke-width="0.6"/>
+<rect x="172" y="256" width="11" height="12" fill="#e8d5c0" stroke="#999" stroke-width="0.6"/>
+<rect x="186" y="257" width="11" height="12" fill="#e8d5c0" stroke="#999" stroke-width="0.6"/>
+<rect x="233" y="150" width="11" height="12" fill="#e8d5c0" stroke="#999" stroke-width="0.6"/>
+<rect x="199" y="201" width="11" height="12" fill="#e8d5c0" stroke="#999" stroke-width="0.6"/>
+<rect x="247" y="152" width="10" height="10" fill="#eee" stroke="#999" stroke-width="0.6"/>
+<rect x="145" y="49" width="10" height="10" fill="#eee" stroke="#999" stroke-width="0.6"/>
+<rect x="159" y="49" width="10" height="10" fill="#eee" stroke="#999" stroke-width="0.6"/>
+<rect x="115" y="243" width="10" height="10" fill="#eee" stroke="#999" stroke-width="0.6"/>
+<rect x="90" y="308" width="10" height="10" fill="#eee" stroke="#999" stroke-width="0.6"/>
+<rect x="64" y="276" width="10" height="10" fill="#eee" stroke="#999" stroke-width="0.6"/>
+<rect x="80" y="70" width="10" height="10" fill="#eee" stroke="#999" stroke-width="0.6"/>
+<rect x="130" y="48" width="10" height="10" fill="#eee" stroke="#999" stroke-width="0.6"/>
+<rect x="93" y="271" width="10" height="10" fill="#eee" stroke="#999" stroke-width="0.6"/>
+<rect x="117" y="39" width="10" height="10" fill="#eee" stroke="#999" stroke-width="0.6"/>
+<rect x="234" y="172" width="10" height="10" fill="#eee" stroke="#999" stroke-width="0.6"/>
+<rect x="221" y="244" width="10" height="10" fill="#eee" stroke="#999" stroke-width="0.6"/>
+<rect x="221" y="226" width="10" height="10" fill="#eee" stroke="#999" stroke-width="0.6"/>
+<rect x="249" y="170" width="10" height="10" fill="#eee" stroke="#999" stroke-width="0.6"/>
+<rect x="79" y="291" width="10" height="10" fill="#eee" stroke="#999" stroke-width="0.6"/>
+<rect x="106" y="259" width="8" height="9" fill="#efe9dd" stroke="#999" stroke-width="0.6"/>
+<rect x="62" y="66" width="8" height="9" fill="#efe9dd" stroke="#999" stroke-width="0.6"/>
+<rect x="126" y="309" width="4" height="6" fill="#efe9dd" stroke="#999" stroke-width="0.6"/>
+<rect x="219" y="256" width="4" height="6" fill="#efe9dd" stroke="#999" stroke-width="0.6"/>
+<rect x="107" y="124" width="4" height="6" fill="#efe9dd" stroke="#999" stroke-width="0.6"/>
+<rect x="224" y="93" width="4" height="6" fill="#efe9dd" stroke="#999" stroke-width="0.6"/>
+<rect x="126" y="292" width="18" height="11" fill="none" stroke="#c9a" stroke-width="1" stroke-dasharray="3 2"/>
+<line x1="135" y1="297" x2="135" y2="297" stroke="#c99" stroke-width="1" marker-end="url(#a)"/>
+<rect x="110" y="110" width="18" height="11" fill="none" stroke="#c9a" stroke-width="1" stroke-dasharray="3 2"/>
+<line x1="119" y1="115" x2="198" y2="76" stroke="#c99" stroke-width="1" marker-end="url(#a)"/>
+<rect x="107" y="223" width="18" height="11" fill="none" stroke="#c9a" stroke-width="1" stroke-dasharray="3 2"/>
+<line x1="116" y1="228" x2="253" y2="211" stroke="#c99" stroke-width="1" marker-end="url(#a)"/>
+<line x1="212" y1="166" x2="135" y2="297" stroke="#e6a0a0" stroke-width="9" opacity="0.5"/>
+<path d="M203,181 L138,291" stroke="#c0392b" stroke-width="1.6" stroke-dasharray="6 4" fill="none"/>
+<circle cx="183" cy="231" r="4" fill="none" stroke="#c0392b" stroke-width="1.3"/>
+<circle cx="168" cy="261" r="4" fill="none" stroke="#c0392b" stroke-width="1.3"/>
+<circle cx="145" cy="283" r="4" fill="none" stroke="#c0392b" stroke-width="1.3"/>
+<rect x="126" y="292" width="18" height="11" fill="#ffd9d9" stroke="#c0392b" stroke-width="1.6"/>
+<text x="135" y="289" class="big" fill="#c0392b">DOCKS</text>
+<text x="135" y="310" fill="#c0392b">(-88,-106)</text>
+<rect x="189" y="71" width="18" height="11" fill="#ffd9d9" stroke="#c0392b" stroke-width="1.6"/>
+<text x="198" y="68" class="big" fill="#c0392b">DOWNTOWN</text>
+<text x="198" y="89" fill="#c0392b">(-25,115)</text>
+<rect x="244" y="206" width="18" height="11" fill="#ffd9d9" stroke="#c0392b" stroke-width="1.6"/>
+<text x="253" y="203" class="big" fill="#c0392b">RESID</text>
+<text x="253" y="224" fill="#c0392b">(30,-20)</text>
+<text x="212" y="146" class="big" fill="#1a6">SHELTER (start)</text>
+<defs><marker id="a" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0L6,3L0,6Z" fill="#c99"/></marker></defs>
+<line x1="422" y1="490.6725" x2="522" y2="490.6725" stroke="#333" stroke-width="2"/><text x="472" y="486.6725">100 m</text>
+</svg>
